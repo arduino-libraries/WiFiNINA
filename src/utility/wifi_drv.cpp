@@ -1078,4 +1078,69 @@ void WiFiDrv::analogWrite(uint8_t pin, uint8_t value)
     SpiDrv::spiSlaveDeselect();
 }
 
+int8_t WiFiDrv::downloadFile(const char* url, uint8_t url_len, const char *filename, uint8_t filename_len)
+{
+	WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(DOWNLOAD_FILE, PARAM_NUMS_2);
+    SpiDrv::sendParam((uint8_t*)url, url_len, NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)filename, filename_len, LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 6 + url_len + filename_len;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(DOWNLOAD_FILE, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return _data;
+}
+
+int8_t WiFiDrv::fileOperation(uint8_t operation, const char *filename, uint8_t filename_len, size_t offset, uint8_t* buffer, uint8_t len)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(operation, PARAM_NUMS_3);
+    SpiDrv::sendParam((uint8_t*)&offset, sizeof(offset), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&len, sizeof(len), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)filename, filename_len, (operation == WRITE_FILE) ? NO_LAST_PARAM : LAST_PARAM);
+    if (operation == WRITE_FILE) {
+        SpiDrv::sendParam((uint8_t*)buffer, len, LAST_PARAM);
+    }
+
+    // pad to multiple of 4
+    int commandSize = 7 + sizeof(offset) + sizeof(len) + filename_len;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    SpiDrv::waitResponseCmd(operation, PARAM_NUMS_1, (operation == WRITE_FILE) ? &_data : buffer, &_dataLen);
+
+    SpiDrv::spiSlaveDeselect();
+    return _dataLen;
+}
+
 WiFiDrv wiFiDrv;

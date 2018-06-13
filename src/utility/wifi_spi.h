@@ -101,6 +101,13 @@ enum {
     SET_PIN_MODE		= 0x50,
     SET_DIGITAL_WRITE	= 0x51,
     SET_ANALOG_WRITE	= 0x52,
+
+    // regular format commands
+    WRITE_FILE			= 0x53,
+    READ_FILE			= 0x54,
+    DELETE_FILE			= 0x55,
+    EXISTS_FILE			= 0x56,
+    DOWNLOAD_FILE		= 0x57,
 };
 
 

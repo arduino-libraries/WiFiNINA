@@ -34,6 +34,7 @@ extern "C" {
 #include "WiFiClient.h"
 #include "WiFiSSLClient.h"
 #include "WiFiServer.h"
+#include "WiFiStorage.h"
 
 class WiFiClass
 {
