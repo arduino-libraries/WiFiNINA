@@ -8,6 +8,11 @@ public:
 	static bool begin();
 
 	static WiFiStorageFile open(const char *filename);
+
+	static bool exists(const char *filename) {
+		size_t len;
+		return (WiFiDrv::existsFile(filename, strlen(filename), &len) > 0);
+	}
 	static bool exists(const char *filename, size_t* len) {
 		return (WiFiDrv::existsFile(filename, strlen(filename), len) > 0);
 	}
