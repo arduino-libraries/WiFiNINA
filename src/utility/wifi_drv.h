@@ -1,5 +1,6 @@
 /*
   wifi_drv.h - Library for Arduino Wifi shield.
+  Copyright (C) 2018 Arduino AG (http://www.arduino.cc/)
   Copyright (c) 2011-2014 Arduino.  All right reserved.
 
   This library is free software; you can redistribute it and/or
@@ -24,6 +25,7 @@
 #include "utility/wifi_spi.h"
 #include "IPAddress.h"
 #include "WiFiUdp.h"
+#include "WiFiClient.h"
 
 // Key index length
 #define KEY_IDX_LEN     1
@@ -37,8 +39,6 @@ class WiFiDrv
 private:
 	// settings of requested network
 	static char 	_networkSsid[WL_NETWORKS_LIST_MAXNUM][WL_SSID_MAX_LENGTH];
-	static int32_t 	_networkRssi[WL_NETWORKS_LIST_MAXNUM];
-	static uint8_t 	_networkEncr[WL_NETWORKS_LIST_MAXNUM];
 
 	// firmware version string in the format a.b.c
 	static char 	fwVersion[WL_FW_VER_LENGTH];
@@ -72,6 +72,8 @@ public:
      */
     static void wifiDriverInit();
 
+    static void wifiDriverDeinit();
+
     /*
      * Set the desired network which the connection manager should try to
      * connect to.
@@ -82,7 +84,7 @@ public:
      * param ssid_len: Lenght of ssid string.
      * return: WL_SUCCESS or WL_FAILURE
 	 */
-    static int8_t wifiSetNetwork(char* ssid, uint8_t ssid_len);
+    static int8_t wifiSetNetwork(const char* ssid, uint8_t ssid_len);
 
     /* Start Wifi connection with passphrase
      * the most secure supported mode will be automatically selected
@@ -94,7 +96,7 @@ public:
      * param len: Lenght of passphrase string.
      * return: WL_SUCCESS or WL_FAILURE
      */
-    static int8_t wifiSetPassphrase(char* ssid, uint8_t ssid_len, const char *passphrase, const uint8_t len);
+    static int8_t wifiSetPassphrase(const char* ssid, uint8_t ssid_len, const char *passphrase, const uint8_t len);
 
     /* Start Wifi connection with WEP encryption.
      * Configure a key into the device. The key type (WEP-40, WEP-104)
@@ -107,7 +109,10 @@ public:
      * param len: Lenght of key string.
      * return: WL_SUCCESS or WL_FAILURE
      */
-    static int8_t wifiSetKey(char* ssid, uint8_t ssid_len, uint8_t key_idx, const void *key, const uint8_t len);
+    static int8_t wifiSetKey(const char* ssid, uint8_t ssid_len, uint8_t key_idx, const void *key, const uint8_t len);
+
+    static int8_t wifiSetApNetwork(const char* ssid, uint8_t ssid_len);
+    static int8_t wifiSetApPassphrase(const char* ssid, uint8_t ssid_len, const char *passphrase, const uint8_t len);
 
     /* Set ip configuration disabling dhcp client
         *
@@ -129,6 +134,8 @@ public:
            * param dns_server2: Static DNS server2 configuration
            */
     static void setDNS(uint8_t validParams, uint32_t dns_server1, uint32_t dns_server2);
+
+    static void setHostname(const char* hostname);
 
     /*
      * Disconnect from the network
@@ -177,7 +184,7 @@ public:
      *
      * return: ssid string
      */
-    static char* getCurrentSSID();
+    static const char* getCurrentSSID();
 
     /*
      * Return the current BSSID associated with the network.
@@ -223,7 +230,7 @@ public:
 	 *
      * return: ssid string of the specified item on the networks scanned list
      */
-    static char* getSSIDNetoworks(uint8_t networkItem);
+    static const char* getSSIDNetoworks(uint8_t networkItem);
 
     /*
      * Return the RSSI of the networks discovered during the scanNetworks
@@ -243,6 +250,10 @@ public:
      */
     static uint8_t getEncTypeNetowrks(uint8_t networkItem);
 
+    static uint8_t* getBSSIDNetowrks(uint8_t networkItem, uint8_t* bssid);
+
+    static uint8_t getChannelNetowrks(uint8_t networkItem);
+
     /*
      * Resolve the given hostname to an IP address.
      * param aHostname: Name to be resolved
@@ -256,10 +267,25 @@ public:
      * Get the firmware version
      * result: version as string with this format a.b.c
      */
-    static char* getFwVersion();
+    static const char* getFwVersion();
+
+    static uint32_t getTime();
+
+    static void setPowerMode(uint8_t mode);
+
+    static int8_t wifiSetApNetwork(const char* ssid, uint8_t ssid_len, uint8_t channel);
+    static int8_t wifiSetApPassphrase(const char* ssid, uint8_t ssid_len, const char *passphrase, const uint8_t len, uint8_t channel);
+
+    static int16_t ping(uint32_t ipAddress, uint8_t ttl);
+
+    static void debug(uint8_t on);
+    static float getTemperature();
+    static void pinMode(uint8_t pin, uint8_t mode);
+    static void digitalWrite(uint8_t pin, uint8_t value);
+    static void analogWrite(uint8_t pin, uint8_t value);
 
     friend class WiFiUDP;
-
+    friend class WiFiClient;
 };
 
 extern WiFiDrv wiFiDrv;

@@ -17,12 +17,14 @@
  */
 
 #include <SPI.h>
-#include <WiFi.h>
+#include <WiFi1010.h>
 #include <WiFiUdp.h>
 
 int status = WL_IDLE_STATUS;
-char ssid[] = "mynetwork";  //  your network SSID (name)
-char pass[] = "mypassword";       // your network password
+#include "arduino_secrets.h" 
+///////please enter your sensitive data in the Secret tab/arduino_secrets.h
+char ssid[] = SECRET_SSID;        // your network SSID (name)
+char pass[] = SECRET_PASS;    // your network password (use for WPA, or use as key for WEP)
 int keyIndex = 0;            // your network key Index number (needed only for WEP)
 
 unsigned int localPort = 2390;      // local port to listen for UDP packets
@@ -43,15 +45,15 @@ void setup() {
     ; // wait for serial port to connect. Needed for native USB port only
   }
 
-  // check for the presence of the shield:
-  if (WiFi.status() == WL_NO_SHIELD) {
-    Serial.println("WiFi shield not present");
-    // don't continue:
+  // check for the WiFi module:
+  if (WiFi.status() == WL_NO_MODULE) {
+    Serial.println("Communication with WiFi module failed!");
+    // don't continue
     while (true);
   }
 
   String fv = WiFi.firmwareVersion();
-  if (fv != "1.1.0") {
+  if (fv != "1.0.0") {
     Serial.println("Please upgrade the firmware");
   }
 

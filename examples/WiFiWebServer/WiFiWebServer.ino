@@ -2,13 +2,11 @@
   WiFi Web Server
 
  A simple web server that shows the value of the analog input pins.
- using a WiFi shield.
 
  This example is written for a network using WPA encryption. For
  WEP or WPA, change the Wifi.begin() call accordingly.
 
  Circuit:
- * WiFi shield attached
  * Analog inputs attached to pins A0 through A5 (optional)
 
  created 13 July 2010
@@ -19,11 +17,13 @@
  */
 
 #include <SPI.h>
-#include <WiFi.h>
+#include <WiFi1010.h>
 
 
-char ssid[] = "yourNetwork";      // your network SSID (name)
-char pass[] = "secretPassword";   // your network password
+#include "arduino_secrets.h" 
+///////please enter your sensitive data in the Secret tab/arduino_secrets.h
+char ssid[] = SECRET_SSID;        // your network SSID (name)
+char pass[] = SECRET_PASS;    // your network password (use for WPA, or use as key for WEP)
 int keyIndex = 0;                 // your network key Index number (needed only for WEP)
 
 int status = WL_IDLE_STATUS;
@@ -37,15 +37,15 @@ void setup() {
     ; // wait for serial port to connect. Needed for native USB port only
   }
 
-  // check for the presence of the shield:
-  if (WiFi.status() == WL_NO_SHIELD) {
-    Serial.println("WiFi shield not present");
-    // don't continue:
+  // check for the WiFi module:
+  if (WiFi.status() == WL_NO_MODULE) {
+    Serial.println("Communication with WiFi module failed!");
+    // don't continue
     while (true);
   }
 
   String fv = WiFi.firmwareVersion();
-  if (fv != "1.1.0") {
+  if (fv != "1.0.0") {
     Serial.println("Please upgrade the firmware");
   }
 

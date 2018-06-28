@@ -1,5 +1,6 @@
 /*
   spi_drv.cpp - Library for Arduino Wifi shield.
+  Copyright (C) 2018 Arduino AG (http://www.arduino.cc/)
   Copyright (c) 2011-2014 Arduino.  All right reserved.
 
   This library is free software; you can redistribute it and/or
@@ -19,60 +20,102 @@
 
 #include "Arduino.h"
 #include <SPI.h>
-#include "utility/spi_drv.h"                   
+#include "utility/spi_drv.h"
 #include "pins_arduino.h"
 //#define _DEBUG_
 extern "C" {
 #include "utility/debug.h"
 }
 
-#define DATAOUT     11 // MOSI
-#define DATAIN      12 // MISO
-#define SPICLOCK    13 // sck
-#define SLAVESELECT 10 // ss
-#define SLAVEREADY  7  // handshake pin
-#define WIFILED     9  // led on wifi shield
+static uint8_t SLAVESELECT = 10; // ss
+static uint8_t SLAVEREADY  = 7;  // handshake pin
+static uint8_t SLAVERESET  = 5;  // reset pin
 
-#define DELAY_SPI(X) { int ii=0; do { asm volatile("nop"); } while (++ii < (X*F_CPU/16000000)); }
-#define DELAY_TRANSFER() DELAY_SPI(10)
+static bool inverted_reset = false;
+
+#define DELAY_TRANSFER()
+
+#ifndef SPIWIFI
+#define SPIWIFI SPI
+#endif
+
+bool SpiDrv::initialized = false;
 
 void SpiDrv::begin()
 {
-	  SPI.begin();
-	  pinMode(SLAVESELECT, OUTPUT);
-	  pinMode(SLAVEREADY, INPUT);
-	  pinMode(WIFILED, OUTPUT);
 
-	  // digitalWrite(SCK, LOW);
-	  // digitalWrite(MOSI, LOW);
-	  digitalWrite(SS, HIGH);
-	  digitalWrite(SLAVESELECT, HIGH);
-	  digitalWrite(WIFILED, LOW);
+#ifdef SPIWIFI_SS
+      SLAVESELECT = SPIWIFI_SS;
+#endif
+
+#ifdef SPIWIFI_ACK
+      SLAVEREADY = SPIWIFI_ACK;
+#endif
+
+#ifdef SPIWIFI_RESET
+      SLAVERESET = (uint8_t)SPIWIFI_RESET;
+#endif
+
+      if (SLAVERESET > PINS_COUNT) {
+        inverted_reset = true;
+        SLAVERESET = ~SLAVERESET;
+      }
+
+      SPIWIFI.begin();
+      pinMode(SLAVESELECT, OUTPUT);
+      pinMode(SLAVEREADY, INPUT);
+      pinMode(SLAVERESET, OUTPUT);
+      pinMode(NINA_GPIO0, OUTPUT);
+
+      digitalWrite(NINA_GPIO0, HIGH);
+      digitalWrite(SLAVESELECT, HIGH);
+      digitalWrite(SLAVERESET, inverted_reset ? HIGH : LOW);
+      delay(10);
+      digitalWrite(SLAVERESET, inverted_reset ? LOW : HIGH);
+      delay(750);
+
+      digitalWrite(NINA_GPIO0, LOW);
+      pinMode(NINA_GPIO0, INPUT);
 
 #ifdef _DEBUG_
 	  INIT_TRIGGER()
 #endif
+
+      initialized = true;
 }
 
 void SpiDrv::end() {
-    SPI.end();
+    digitalWrite(SLAVERESET, inverted_reset ? HIGH : LOW);
+
+    pinMode(SLAVESELECT, INPUT);
+    pinMode(SLAVERESET, INPUT);
+
+    SPIWIFI.end();
+
+    initialized = false;
 }
 
 void SpiDrv::spiSlaveSelect()
 {
+    SPIWIFI.beginTransaction(SPISettings(8000000, MSBFIRST, SPI_MODE0));
     digitalWrite(SLAVESELECT,LOW);
+
+    // wait for up to 5 ms for the NINA to indicate it is not ready for transfer
+    // the timeout is only needed for the case when the shield or module is not present
+    for (unsigned long start = millis(); (digitalRead(SLAVEREADY) != HIGH) && (millis() - start) < 5;);
 }
 
 
 void SpiDrv::spiSlaveDeselect()
 {
     digitalWrite(SLAVESELECT,HIGH);
+    SPIWIFI.endTransaction();
 }
 
 
 char SpiDrv::spiTransfer(volatile char data)
 {
-    char result = SPI.transfer(data);
+    char result = SPIWIFI.transfer(data);
     DELAY_TRANSFER();
 
     return result;                    // return the received byte
@@ -157,7 +200,7 @@ int SpiDrv::waitResponseCmd(uint8_t cmd, uint8_t numParam, uint8_t* param, uint8
     {
         CHECK_DATA(cmd | REPLY_FLAG, _data){};
 
-        CHECK_DATA(numParam, _data);
+        CHECK_DATA(numParam, _data)
         {
             readParamLen8(param_len);
             for (ii=0; ii<(*param_len); ++ii)
@@ -474,10 +517,6 @@ void SpiDrv::sendCmd(uint8_t cmd, uint8_t numParam)
     // Send Spi START CMD
     spiTransfer(START_CMD);
 
-    //waitForSlaveSign();
-    //wait the interrupt trigger on slave
-    delayMicroseconds(SPI_START_CMD_DELAY);
-
     // Send Spi C + cmd
     spiTransfer(cmd & ~(REPLY_FLAG));
 
@@ -491,6 +530,11 @@ void SpiDrv::sendCmd(uint8_t cmd, uint8_t numParam)
     if (numParam == 0)
         spiTransfer(END_CMD);
 
+}
+
+int SpiDrv::available()
+{
+    return (digitalRead(NINA_GPIO0) != LOW);
 }
 
 SpiDrv spiDrv;

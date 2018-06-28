@@ -1,5 +1,6 @@
 /*
   WiFi.h - Library for Arduino Wifi shield.
+  Copyright (C) 2018 Arduino AG (http://www.arduino.cc/)
   Copyright (c) 2011-2014 Arduino LLC.  All right reserved.
 
   This library is free software; you can redistribute it and/or
@@ -29,6 +30,7 @@ extern "C" {
 
 #include "IPAddress.h"
 #include "WiFiClient.h"
+#include "WiFiSSLClient.h"
 #include "WiFiServer.h"
 
 class WiFiClass
@@ -37,27 +39,19 @@ private:
 
     static void init();
 public:
-    static int16_t 	_state[MAX_SOCK_NUM];
-    static uint16_t _server_port[MAX_SOCK_NUM];
-
     WiFiClass();
-
-    /*
-     * Get the first socket available
-     */
-    static uint8_t getSocket();
 
     /*
      * Get firmware version
      */
-    static char* firmwareVersion();
+    static const char* firmwareVersion();
 
 
     /* Start Wifi connection for OPEN networks
      *
      * param ssid: Pointer to the SSID string.
      */
-    int begin(char* ssid);
+    int begin(const char* ssid);
 
     /* Start Wifi connection with WEP encryption.
      * Configure a key into the device. The key type (WEP-40, WEP-104)
@@ -67,7 +61,7 @@ public:
      * param key_idx: The key index to set. Valid values are 0-3.
      * param key: Key input buffer.
      */
-    int begin(char* ssid, uint8_t key_idx, const char* key);
+    int begin(const char* ssid, uint8_t key_idx, const char* key);
 
     /* Start Wifi connection with passphrase
      * the most secure supported mode will be automatically selected
@@ -76,7 +70,12 @@ public:
      * param passphrase: Passphrase. Valid characters in a passphrase
      *        must be between ASCII 32-126 (decimal).
      */
-    int begin(char* ssid, const char *passphrase);
+    int begin(const char* ssid, const char *passphrase);
+
+    uint8_t beginAP(const char *ssid);
+    uint8_t beginAP(const char *ssid, uint8_t channel);
+    uint8_t beginAP(const char *ssid, const char* passphrase);
+    uint8_t beginAP(const char *ssid, const char* passphrase, uint8_t channel);
 
     /* Change Ip configuration settings disabling the dhcp client
         *
@@ -122,12 +121,22 @@ public:
      */
     void setDNS(IPAddress dns_server1, IPAddress dns_server2);
 
+
+    /* Set the hostname used for DHCP requests
+     *
+     * param name: hostname to set
+     *
+     */
+    void setHostname(const char* name);
+
     /*
      * Disconnect from the network
      *
      * return: one value of wl_status_t enum
      */
     int disconnect(void);
+
+    void end(void);
 
     /*
      * Get the interface MAC address.
@@ -162,7 +171,7 @@ public:
      *
      * return: ssid string
      */
-    char* SSID();
+    const char* SSID();
 
     /*
       * Return the current BSSID associated with the network.
@@ -201,7 +210,7 @@ public:
 	 *
      * return: ssid string of the specified item on the networks scanned list
      */
-    char*	SSID(uint8_t networkItem);
+    const char*	SSID(uint8_t networkItem);
 
     /*
      * Return the encryption type of the networks discovered during the scanNetworks
@@ -211,6 +220,9 @@ public:
      * return: encryption type (enum wl_enc_type) of the specified item on the networks scanned list
      */
     uint8_t	encryptionType(uint8_t networkItem);
+
+    uint8_t* BSSID(uint8_t networkItem, uint8_t* bssid);
+    uint8_t channel(uint8_t networkItem);
 
     /*
      * Return the RSSI of the networks discovered during the scanNetworks
@@ -237,8 +249,14 @@ public:
      */
     int hostByName(const char* aHostname, IPAddress& aResult);
 
-    friend class WiFiClient;
-    friend class WiFiServer;
+    unsigned long getTime();
+
+    void lowPowerMode();
+    void noLowPowerMode();
+
+    int ping(const char* hostname, uint8_t ttl = 128);
+    int ping(const String &hostname, uint8_t ttl = 128);
+    int ping(IPAddress host, uint8_t ttl = 128);
 };
 
 extern WiFiClass WiFi;

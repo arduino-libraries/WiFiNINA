@@ -1,5 +1,6 @@
 /*
   WiFiUdp.cpp - Library for Arduino Wifi shield.
+  Copyright (C) 2018 Arduino AG (http://www.arduino.cc/)
   Copyright (c) 2011-2014 Arduino LLC.  All right reserved.
 
   This library is free software; you can redistribute it and/or
@@ -37,17 +38,28 @@ WiFiUDP::WiFiUDP() : _sock(NO_SOCKET_AVAIL) {}
 /* Start WiFiUDP socket, listening at local port PORT */
 uint8_t WiFiUDP::begin(uint16_t port) {
 
-    uint8_t sock = WiFiClass::getSocket();
+    uint8_t sock = ServerDrv::getSocket();
     if (sock != NO_SOCKET_AVAIL)
     {
         ServerDrv::startServer(port, sock, UDP_MODE);
-        WiFiClass::_server_port[sock] = port;
         _sock = sock;
         _port = port;
         return 1;
     }
     return 0;
+}
 
+uint8_t WiFiUDP::beginMulticast(IPAddress ip, uint16_t port) {
+
+    uint8_t sock = ServerDrv::getSocket();
+    if (sock != NO_SOCKET_AVAIL)
+    {
+        ServerDrv::startServer(ip, port, sock, UDP_MULTICAST_MODE);
+        _sock = sock;
+        _port = port;
+        return 1;
+    }
+    return 0;
 }
 
 /* return number of bytes available in the current packet,
@@ -86,11 +98,10 @@ int WiFiUDP::beginPacket(const char *host, uint16_t port)
 int WiFiUDP::beginPacket(IPAddress ip, uint16_t port)
 {
   if (_sock == NO_SOCKET_AVAIL)
-	  _sock = WiFiClass::getSocket();
+	  _sock = ServerDrv::getSocket();
   if (_sock != NO_SOCKET_AVAIL)
   {
 	  ServerDrv::startClient(uint32_t(ip), port, _sock, UDP_MODE);
-	  WiFiClass::_state[_sock] = _sock;
 	  return 1;
   }
   return 0;
@@ -133,10 +144,9 @@ int WiFiUDP::read(unsigned char* buffer, size_t len)
 {
   if (available())
   {
-	  uint16_t size = 0;
+	  uint16_t size = len;
 	  if (!ServerDrv::getDataBuf(_sock, buffer, &size))
 		  return -1;
-	  // TODO check if the buffer is too smal respect to buffer size
 	  return size;
   }else{
 	  return -1;

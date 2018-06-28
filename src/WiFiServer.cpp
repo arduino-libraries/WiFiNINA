@@ -1,5 +1,6 @@
 /*
   WiFiServer.cpp - Library for Arduino Wifi shield.
+  Copyright (C) 2018 Arduino AG (http://www.arduino.cc/)
   Copyright (c) 2011-2014 Arduino LLC.  All right reserved.
 
   This library is free software; you can redistribute it and/or
@@ -28,57 +29,48 @@ extern "C" {
 #include "WiFiClient.h"
 #include "WiFiServer.h"
 
-WiFiServer::WiFiServer(uint16_t port)
+WiFiServer::WiFiServer(uint16_t port) :
+  _sock(NO_SOCKET_AVAIL)
 {
     _port = port;
 }
 
 void WiFiServer::begin()
 {
-    uint8_t _sock = WiFiClass::getSocket();
+    _sock = ServerDrv::getSocket();
     if (_sock != NO_SOCKET_AVAIL)
     {
         ServerDrv::startServer(_port, _sock);
-        WiFiClass::_server_port[_sock] = _port;
-        WiFiClass::_state[_sock] = _sock;
     }
 }
 
 WiFiClient WiFiServer::available(byte* status)
 {
-	static int cycle_server_down = 0;
-	const int TH_SERVER_DOWN = 50;
+    int sock = NO_SOCKET_AVAIL;
 
-    for (int sock = 0; sock < MAX_SOCK_NUM; sock++)
-    {
-        if (WiFiClass::_server_port[sock] == _port)
-        {
-        	WiFiClient client(sock);
-            uint8_t _status = client.status();
-            uint8_t _ser_status = this->status();
+    if (_sock != NO_SOCKET_AVAIL) {
+        sock = ServerDrv::availServer(_sock);
+    }
 
-            if (status != NULL)
-            	*status = _status;
+    if (sock != NO_SOCKET_AVAIL) {
+        WiFiClient client(sock);
 
-            //server not in listen state, restart it
-            if ((_ser_status == 0)&&(cycle_server_down++ > TH_SERVER_DOWN))
-            {
-            	ServerDrv::startServer(_port, sock);
-            	cycle_server_down = 0;
-            }
-
-            if (_status == ESTABLISHED)
-            {                
-                return client;  //TODO 
-            }
+        if (status != NULL) {
+            *status = client.status();
         }
+
+        return client;
     }
 
     return WiFiClient(255);
 }
 
 uint8_t WiFiServer::status() {
-    return ServerDrv::getServerState(0);
+    if (_sock == NO_SOCKET_AVAIL) {
+        return CLOSED;
+    } else {
+        return ServerDrv::getServerState(_sock);
+    }
 }
 
 
@@ -89,20 +81,24 @@ size_t WiFiServer::write(uint8_t b)
 
 size_t WiFiServer::write(const uint8_t *buffer, size_t size)
 {
-	size_t n = 0;
-
-    for (int sock = 0; sock < MAX_SOCK_NUM; sock++)
+    if (size==0)
     {
-        if (WiFiClass::_server_port[sock] != 0)
-        {
-        	WiFiClient client(sock);
-
-            if (WiFiClass::_server_port[sock] == _port &&
-                client.status() == ESTABLISHED)
-            {                
-                n+=client.write(buffer, size);
-            }
-        }
+        setWriteError();
+        return 0;
     }
-    return n;
+
+    size_t written = ServerDrv::sendData(_sock, buffer, size);
+    if (!written)
+    {
+        setWriteError();
+        return 0;
+    }
+
+    if (!ServerDrv::checkDataSent(_sock))
+    {
+        setWriteError();
+        return 0;
+    }
+
+    return written;
 }

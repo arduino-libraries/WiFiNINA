@@ -1,5 +1,6 @@
 /*
   WiFiClient.cpp - Library for Arduino Wifi shield.
+  Copyright (C) 2018 Arduino AG (http://www.arduino.cc/)
   Copyright (c) 2011-2014 Arduino LLC.  All right reserved.
 
   This library is free software; you can redistribute it and/or
@@ -33,6 +34,8 @@ public:
   uint8_t status();
   virtual int connect(IPAddress ip, uint16_t port);
   virtual int connect(const char *host, uint16_t port);
+  virtual int connectSSL(IPAddress ip, uint16_t port);
+  virtual int connectSSL(const char *host, uint16_t port);
   virtual size_t write(uint8_t);
   virtual size_t write(const uint8_t *buf, size_t size);
   virtual int available();
@@ -44,7 +47,11 @@ public:
   virtual uint8_t connected();
   virtual operator bool();
 
+  virtual IPAddress remoteIP();
+  virtual uint16_t remotePort();
+
   friend class WiFiServer;
+  friend class WiFiDrv;
 
   using Print::write;
 
@@ -52,8 +59,6 @@ private:
   static uint16_t _srcport;
   uint8_t _sock;   //not used
   uint16_t  _socket;
-
-  uint8_t getFirstSocket();
 };
 
 #endif

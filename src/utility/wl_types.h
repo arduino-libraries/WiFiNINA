@@ -1,5 +1,6 @@
 /*
   wl_types.h - Library for Arduino Wifi shield.
+  Copyright (C) 2018 Arduino AG (http://www.arduino.cc/)
   Copyright (c) 2011-2014 Arduino.  All right reserved.
 
   This library is free software; you can redistribute it and/or
@@ -45,5 +46,12 @@ enum wl_auth_mode {
         AUTH_MODE_WPA_PSK,
         AUTH_MODE_WPA2_PSK
 };
+
+typedef enum {
+  WL_PING_DEST_UNREACHABLE = -1,
+  WL_PING_TIMEOUT = -2,
+  WL_PING_UNKNOWN_HOST = -3,
+  WL_PING_ERROR = -4
+} wl_ping_result_t;
 
 #endif //_WL_TYPES_H_

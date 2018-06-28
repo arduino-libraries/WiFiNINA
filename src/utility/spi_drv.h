@@ -1,5 +1,6 @@
 /*
   spi_drv.h - Library for Arduino Wifi shield.
+  Copyright (C) 2018 Arduino AG (http://www.arduino.cc/)
   Copyright (c) 2011-2014 Arduino.  All right reserved.
 
   This library is free software; you can redistribute it and/or
@@ -31,14 +32,11 @@
 #define DUMMY_DATA  0xFF
 
 #define WAIT_FOR_SLAVE_SELECT()	      \
-	if (!initialized) {           \
+	if (!SpiDrv::initialized) {           \
 		SpiDrv::begin();      \
-		initialized = true;   \
 	}                             \
 	SpiDrv::waitForSlaveReady();  \
 	SpiDrv::spiSlaveSelect();
-
-static bool initialized = false;
 
 class SpiDrv
 {
@@ -47,6 +45,7 @@ private:
 	static void waitForSlaveSign();
 	static void getParam(uint8_t* param);
 public:
+    static bool initialized;
 
     static void begin();
 
@@ -99,6 +98,8 @@ public:
     static void sendParam(uint16_t param, uint8_t lastParam = NO_LAST_PARAM);
     
     static void sendCmd(uint8_t cmd, uint8_t numParam);
+
+    static int available();
 };                                                                 
 
 extern SpiDrv spiDrv;

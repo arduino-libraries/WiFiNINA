@@ -1,5 +1,6 @@
 /*
   WiFiClient.cpp - Library for Arduino Wifi shield.
+  Copyright (C) 2018 Arduino AG (http://www.arduino.cc/)
   Copyright (c) 2011-2014 Arduino LLC.  All right reserved.
 
   This library is free software; you can redistribute it and/or
@@ -28,11 +29,12 @@ extern "C" {
 #include "WiFiClient.h"
 #include "WiFiServer.h"
 #include "utility/server_drv.h"
+#include "utility/wifi_drv.h"
 
 
 uint16_t WiFiClient::_srcport = 1024;
 
-WiFiClient::WiFiClient() : _sock(MAX_SOCK_NUM) {
+WiFiClient::WiFiClient() : _sock(NO_SOCKET_AVAIL) {
 }
 
 WiFiClient::WiFiClient(uint8_t sock) : _sock(sock) {
@@ -48,11 +50,10 @@ int WiFiClient::connect(const char* host, uint16_t port) {
 }
 
 int WiFiClient::connect(IPAddress ip, uint16_t port) {
-    _sock = getFirstSocket();
+    _sock = ServerDrv::getSocket();
     if (_sock != NO_SOCKET_AVAIL)
     {
     	ServerDrv::startClient(uint32_t(ip), port, _sock);
-    	WiFiClass::_state[_sock] = _sock;
 
     	unsigned long start = millis();
 
@@ -67,6 +68,54 @@ int WiFiClient::connect(IPAddress ip, uint16_t port) {
     }else{
     	Serial.println("No Socket available");
     	return 0;
+    }
+    return 1;
+}
+
+int WiFiClient::connectSSL(IPAddress ip, uint16_t port)
+{
+    _sock = ServerDrv::getSocket();
+    if (_sock != NO_SOCKET_AVAIL)
+    {
+      ServerDrv::startClient(uint32_t(ip), port, _sock, TLS_MODE);
+
+      unsigned long start = millis();
+
+      // wait 4 second for the connection to close
+      while (!connected() && millis() - start < 10000)
+        delay(1);
+
+      if (!connected())
+        {
+        return 0;
+      }
+    }else{
+      Serial.println("No Socket available");
+      return 0;
+    }
+    return 1;
+}
+
+int WiFiClient::connectSSL(const char *host, uint16_t port)
+{
+    _sock = ServerDrv::getSocket();
+    if (_sock != NO_SOCKET_AVAIL)
+    {
+      ServerDrv::startClient(host, strlen(host), uint32_t(0), port, _sock, TLS_MODE);
+
+      unsigned long start = millis();
+
+      // wait 4 second for the connection to close
+      while (!connected() && millis() - start < 10000)
+        delay(1);
+
+      if (!connected())
+        {
+        return 0;
+      }
+    }else{
+      Serial.println("No Socket available");
+      return 0;
     }
     return 1;
 }
@@ -87,8 +136,8 @@ size_t WiFiClient::write(const uint8_t *buf, size_t size) {
       return 0;
   }
 
-
-  if (!ServerDrv::sendData(_sock, buf, size))
+  size_t written = ServerDrv::sendData(_sock, buf, size);
+  if (!written)
   {
 	  setWriteError();
       return 0;
@@ -99,7 +148,7 @@ size_t WiFiClient::write(const uint8_t *buf, size_t size) {
       return 0;
   }
 
-  return size;
+  return written;
 }
 
 int WiFiClient::available() {
@@ -127,7 +176,7 @@ int WiFiClient::read(uint8_t* buf, size_t size) {
   uint16_t _size = size;
   if (!ServerDrv::getDataBuf(_sock, buf, &_size))
       return -1;
-  return 0;
+  return _size;
 }
 
 int WiFiClient::peek() {
@@ -149,7 +198,6 @@ void WiFiClient::stop() {
     return;
 
   ServerDrv::stopClient(_sock);
-  WiFiClass::_state[_sock] = NA_STATE;
 
   int count = 0;
   // wait maximum 5 secs for the connection to close
@@ -185,15 +233,22 @@ WiFiClient::operator bool() {
   return _sock != 255;
 }
 
-// Private Methods
-uint8_t WiFiClient::getFirstSocket()
+IPAddress  WiFiClient::remoteIP()
 {
-    for (int i = 0; i < MAX_SOCK_NUM; i++) {
-      if (WiFiClass::_state[i] == NA_STATE)
-      {
-          return i;
-      }
-    }
-    return SOCK_NOT_AVAIL;
+  uint8_t _remoteIp[4] = {0};
+  uint8_t _remotePort[2] = {0};
+
+  WiFiDrv::getRemoteData(_sock, _remoteIp, _remotePort);
+  IPAddress ip(_remoteIp);
+  return ip;
 }
 
+uint16_t  WiFiClient::remotePort()
+{
+  uint8_t _remoteIp[4] = {0};
+  uint8_t _remotePort[2] = {0};
+
+  WiFiDrv::getRemoteData(_sock, _remoteIp, _remotePort);
+  uint16_t port = (_remotePort[0]<<8)+_remotePort[1];
+  return port;
+}

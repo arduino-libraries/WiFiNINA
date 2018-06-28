@@ -1,7 +1,7 @@
 /*
 
  This example  prints the Wifi shield's MAC address, and
- scans for available Wifi networks using the Wifi shield.
+ scans for available Wifi networks using the Wifi module.
  Every ten seconds, it scans again. It doesn't actually
  connect to any network, so no encryption scheme is specified.
 
@@ -16,7 +16,7 @@
 
 
 #include <SPI.h>
-#include <WiFi.h>
+#include <WiFi1010.h>
 
 void setup() {
   //Initialize serial and wait for port to open:
@@ -25,15 +25,15 @@ void setup() {
     ; // wait for serial port to connect. Needed for native USB port only
   }
 
-  // check for the presence of the shield:
-  if (WiFi.status() == WL_NO_SHIELD) {
-    Serial.println("WiFi shield not present");
-    // don't continue:
+  // check for the WiFi module:
+  if (WiFi.status() == WL_NO_MODULE) {
+    Serial.println("Communication with WiFi module failed!");
+    // don't continue
     while (true);
   }
 
   String fv = WiFi.firmwareVersion();
-  if (fv != "1.1.0") {
+  if (fv != "1.0.0") {
     Serial.println("Please upgrade the firmware");
   }
 
