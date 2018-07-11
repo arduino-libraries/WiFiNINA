@@ -22,7 +22,7 @@
 
 
 #include <SPI.h>
-#include <WiFi1010.h>
+#include <WiFiNINA.h>
 
 #include "arduino_secrets.h" 
 ///////please enter your sensitive data in the Secret tab/arduino_secrets.h

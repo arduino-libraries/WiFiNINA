@@ -14,7 +14,7 @@
 
 
 #include <SPI.h>
-#include <WiFi1010.h>
+#include <WiFiNINA.h>
 
 void setup() {
   //Initialize serial and wait for port to open:

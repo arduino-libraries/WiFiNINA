@@ -1,5 +1,5 @@
 /*
-  This file is part of the WiFi1010 library.
+  This file is part of the WiFiNINA library.
   Copyright (C) 2018  Arduino AG (http://www.arduino.cc/)
 
   This library is free software; you can redistribute it and/or

@@ -1,6 +1,6 @@
 /*
-  WiFi1010FirmwareUpdater - Firmware Updater for the 
-  Arduino MKR WiFi101, Arduino MKR Vidor 4000, and Arduino UNO WiFi Rev.2.
+  WiFiNINAFirmwareUpdater - Firmware Updater for the 
+  Arduino MKR WiFi 1010, Arduino MKR Vidor 4000, and Arduino UNO WiFi Rev.2.
   
   Copyright (C) 2018  Arduino AG (http://www.arduino.cc/)
 
