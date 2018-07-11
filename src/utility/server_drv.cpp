@@ -1,6 +1,6 @@
 /*
   server_drv.cpp - Library for Arduino Wifi shield.
-  Copyright (C) 2018 Arduino AG (http://www.arduino.cc/)
+  Copyright (c) 2018 Arduino SA. All rights reserved.
   Copyright (c) 2011-2014 Arduino.  All right reserved.
 
   This library is free software; you can redistribute it and/or

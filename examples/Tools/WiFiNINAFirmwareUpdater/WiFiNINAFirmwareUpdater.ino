@@ -2,7 +2,7 @@
   WiFiNINAFirmwareUpdater - Firmware Updater for the 
   Arduino MKR WiFi 1010, Arduino MKR Vidor 4000, and Arduino UNO WiFi Rev.2.
   
-  Copyright (C) 2018  Arduino AG (http://www.arduino.cc/)
+  Copyright (c) 2018 Arduino SA. All rights reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
