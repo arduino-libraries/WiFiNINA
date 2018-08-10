@@ -73,10 +73,14 @@ void SpiDrv::begin()
       SLAVERESET = (uint8_t)SPIWIFI_RESET;
 #endif
 
+#ifdef ARDUINO_SAMD_MKRVIDOR4000
+      inverted_reset = false;
+#else
       if (SLAVERESET > PINS_COUNT) {
         inverted_reset = true;
         SLAVERESET = ~SLAVERESET;
-      }
+      }      
+#endif
 
       SPIWIFI.begin();
       pinMode(SLAVESELECT, OUTPUT);
