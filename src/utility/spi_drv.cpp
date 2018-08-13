@@ -22,6 +22,28 @@
 #include <SPI.h>
 #include "utility/spi_drv.h"
 #include "pins_arduino.h"
+
+#ifdef ARDUINO_SAMD_MKRVIDOR4000
+
+// check if a bitstream is already included
+#if __has_include(<VidorFPGA.h>)
+// yes, so use the existing VidorFPGA include
+#include <VidorFPGA.h>
+#else
+// otherwise, fallback to VidorPeripherals and it's bistream
+#include <VidorPeripherals.h>
+#endif
+
+#define NINA_GPIO0    FPGA_NINA_GPIO0
+#define SPIWIFI_SS    FPGA_SPIWIFI_SS
+#define SPIWIFI_ACK   FPGA_SPIWIFI_ACK
+#define SPIWIFI_RESET FPGA_SPIWIFI_RESET
+
+#define pinMode(pin, mode)       FPGA.pinMode(pin, mode)
+#define digitalRead(pin)         FPGA.digitalRead(pin)
+#define digitalWrite(pin, value) FPGA.digitalWrite(pin, value)
+#endif
+
 //#define _DEBUG_
 extern "C" {
 #include "utility/debug.h"
@@ -43,6 +65,9 @@ bool SpiDrv::initialized = false;
 
 void SpiDrv::begin()
 {
+#ifdef ARDUINO_SAMD_MKRVIDOR4000
+      FPGA.begin();
+#endif
 
 #ifdef SPIWIFI_SS
       SLAVESELECT = SPIWIFI_SS;
@@ -56,10 +81,14 @@ void SpiDrv::begin()
       SLAVERESET = (uint8_t)SPIWIFI_RESET;
 #endif
 
+#ifdef ARDUINO_SAMD_MKRVIDOR4000
+      inverted_reset = false;
+#else
       if (SLAVERESET > PINS_COUNT) {
         inverted_reset = true;
         SLAVERESET = ~SLAVERESET;
-      }
+      }      
+#endif
 
       SPIWIFI.begin();
       pinMode(SLAVESELECT, OUTPUT);
