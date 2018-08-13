@@ -4,6 +4,7 @@ env:
     - IDE_VERSION=1.8.5
   matrix:
     - BOARD="arduino:samd:mkrwifi1010"
+    - BOARD="arduino:samd_beta:mkrvidor4000"
 before_install:
   - wget http://downloads.arduino.cc/arduino-$IDE_VERSION-linux64.tar.xz
   - tar xf arduino-$IDE_VERSION-linux64.tar.xz
@@ -11,6 +12,10 @@ before_install:
   - export PATH=$PATH:$HOME/arduino-ide
   - if [[ "$BOARD" =~ "arduino:samd:" ]]; then
       arduino --install-boards arduino:samd;
+    fi
+  - if [[ "$BOARD" =~ "arduino:samd_beta:" ]]; then
+      arduino --install-boards arduino:samd_beta;
+      arduino --install-library VidorPeripherals;
     fi
   - buildExampleSketch() { arduino --verbose-build --verify --board $BOARD $PWD/examples/$1/$1.ino; }
   - buildExampleToolsSketch() { arduino --verbose-build --verify --board $BOARD $PWD/examples/Tools/$1/$1.ino; }
@@ -33,4 +38,6 @@ script:
   - buildExampleSketch WiFiWebClient
   - buildExampleSketch WiFiWebClientRepeating
   - buildExampleSketch WiFiWebServer
-  - buildExampleToolsSketch WiFiNINAFirmwareUpdater
+  - if [[ "$BOARD" =~ "arduino:samd:" ]]; then
+      buildExampleToolsSketch WiFiNINAFirmwareUpdater;
+    fi
