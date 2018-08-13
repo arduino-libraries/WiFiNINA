@@ -139,6 +139,7 @@ void printEncryptionType(int thisType) {
       Serial.print("Auto");
       break;
     case ENC_TYPE_UNKNOWN:
+    default:
       Serial.print("Unknown");
       break;
   }
