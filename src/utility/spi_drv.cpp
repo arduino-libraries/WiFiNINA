@@ -24,7 +24,15 @@
 #include "pins_arduino.h"
 
 #ifdef ARDUINO_SAMD_MKRVIDOR4000
+
+// check if a bitstream is already included
+#if __has_include(<VidorFPGA.h>)
+// yes, so use the existing VidorFPGA include
 #include <VidorFPGA.h>
+#else
+// otherwise, fallback to VidorPeripherals and it's bistream
+#include <VidorPeripherals.h>
+#endif
 
 #define NINA_GPIO0    FPGA_NINA_GPIO0
 #define SPIWIFI_SS    FPGA_SPIWIFI_SS
