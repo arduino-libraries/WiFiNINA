@@ -24,7 +24,7 @@
 #include "pins_arduino.h"
 
 #ifdef ARDUINO_SAMD_MKRVIDOR4000
-#include <VidorPeripherals.h>
+#include <VidorFPGA.h>
 
 #define NINA_GPIO0    FPGA_NINA_GPIO0
 #define SPIWIFI_SS    FPGA_SPIWIFI_SS
