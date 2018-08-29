@@ -39,5 +39,6 @@ script:
   - buildExampleSketch WiFiWebClientRepeating
   - buildExampleSketch WiFiWebServer
   - if [[ "$BOARD" =~ "arduino:samd:" ]]; then
-      buildExampleToolsSketch WiFiNINAFirmwareUpdater;
+      buildExampleToolsSketch FirmwareUpdater;
+      buildExampleToolsSketch SerialNINAPassthrough;
     fi
