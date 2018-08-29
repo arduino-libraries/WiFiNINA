@@ -29,7 +29,7 @@ int status = WL_IDLE_STATUS;
 WiFiClient client;
 
 // server address:
-char server[] = "www.arduino.cc";
+char server[] = "arduino.cc";
 //IPAddress server(64,131,82,241);
 
 unsigned long lastConnectionTime = 0;            // last time you connected to the server, in milliseconds
@@ -95,8 +95,8 @@ void httpRequest() {
   if (client.connect(server, 80)) {
     Serial.println("connecting...");
     // send the HTTP PUT request:
-    client.println("GET /latest.txt HTTP/1.1");
-    client.println("Host: www.arduino.cc");
+    client.println("GET /asciilogo.txt HTTP/1.1");
+    client.println("Host: arduino.cc");
     client.println("User-Agent: ArduinoWiFi/1.1");
     client.println("Connection: close");
     client.println();
@@ -126,5 +126,3 @@ void printWifiStatus() {
   Serial.print(rssi);
   Serial.println(" dBm");
 }
-
-
