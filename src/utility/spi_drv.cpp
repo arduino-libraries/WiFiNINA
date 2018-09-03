@@ -90,7 +90,6 @@ void SpiDrv::begin()
       }      
 #endif
 
-      SPIWIFI.begin();
       pinMode(SLAVESELECT, OUTPUT);
       pinMode(SLAVEREADY, INPUT);
       pinMode(SLAVERESET, OUTPUT);
@@ -105,6 +104,8 @@ void SpiDrv::begin()
 
       digitalWrite(NINA_GPIO0, LOW);
       pinMode(NINA_GPIO0, INPUT);
+
+      SPIWIFI.begin();
 
 #ifdef _DEBUG_
 	  INIT_TRIGGER()
