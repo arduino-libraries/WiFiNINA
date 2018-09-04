@@ -1,23 +1,31 @@
 /*
-  ESP32BootROM - part of the Firmware Updater for the 
+  ESP32BootROM - part of the Firmware Updater for the
   Arduino MKR WiFi 1010, Arduino MKR Vidor 4000, and Arduino UNO WiFi Rev.2.
-  
+
   Copyright (c) 2018 Arduino SA. All rights reserved.
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
   version 2.1 of the License, or (at your option) any later version.
-  
+
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
+#ifdef ARDUINO_SAMD_MKRVIDOR4000
+#include <VidorPeripherals.h>
+
+#define NINA_GPIO0 FPGA_NINA_GPIO0
+#define NINA_RESETN FPGA_SPIWIFI_RESET
+#endif
+
 
 #include "ESP32BootROM.h"
 
@@ -30,7 +38,25 @@ ESP32BootROMClass::ESP32BootROMClass(HardwareSerial& serial, int gpio0Pin, int r
 }
 
 int ESP32BootROMClass::begin(unsigned long baudrate)
-{ pinMode(_gpio0Pin, OUTPUT);
+{
+#ifdef ARDUINO_SAMD_MKRVIDOR4000
+  FPGA.begin();
+
+  _serial->begin(119400);
+
+  FPGA.pinMode(_gpio0Pin, OUTPUT);
+  FPGA.pinMode(_resetnPin, OUTPUT);
+
+  FPGA.digitalWrite(_gpio0Pin, LOW);
+
+  FPGA.digitalWrite(_resetnPin, LOW);
+  delay(10);
+  FPGA.digitalWrite(_resetnPin, HIGH);
+  delay(100);
+#else
+  _serial->begin(115200);
+
+  pinMode(_gpio0Pin, OUTPUT);
   pinMode(_resetnPin, OUTPUT);
 
   digitalWrite(_gpio0Pin, LOW);
@@ -39,8 +65,7 @@ int ESP32BootROMClass::begin(unsigned long baudrate)
   delay(10);
   digitalWrite(_resetnPin, LOW);
   delay(100);
-
-  _serial->begin(115200);
+#endif
 
   int synced = 0;
 
@@ -52,6 +77,9 @@ int ESP32BootROMClass::begin(unsigned long baudrate)
     return 0;
   }
 
+#ifdef ARDUINO_SAMD_MKRVIDOR4000
+  (void)baudrate;
+#else
   if (baudrate != 115200) {
     if (!changeBaudrate(baudrate)) {
       return 0;
@@ -62,6 +90,7 @@ int ESP32BootROMClass::begin(unsigned long baudrate)
     _serial->end();
     _serial->begin(baudrate);
   }
+#endif
 
   if (!spiAttach()) {
     return 0;
@@ -209,7 +238,11 @@ void ESP32BootROMClass::command(int opcode, const void* data, uint16_t length)
   writeEscapedBytes((uint8_t*)&checksum, sizeof(checksum));
   writeEscapedBytes((uint8_t*)data, length);
   _serial->write(0xc0);
+#ifdef ARDUINO_SAMD_MKRVIDOR4000
+  // _serial->flush(); // doesn't work!
+#else
   _serial->flush();
+#endif
 }
 
 int ESP32BootROMClass::response(int opcode, unsigned int timeout, void* body)
