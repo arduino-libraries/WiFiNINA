@@ -40,7 +40,7 @@
 // Maximum size of a SSID list
 #define WL_NETWORKS_LIST_MAXNUM	10
 // Maxmium number of socket
-#define	MAX_SOCK_NUM		4
+#define	WIFI_MAX_SOCK_NUM	4
 // Socket not available constant
 #define SOCK_NOT_AVAIL  255
 // Default state value for Wifi state field

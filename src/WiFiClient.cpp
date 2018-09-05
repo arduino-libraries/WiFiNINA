@@ -125,7 +125,7 @@ size_t WiFiClient::write(uint8_t b) {
 }
 
 size_t WiFiClient::write(const uint8_t *buf, size_t size) {
-  if (_sock >= MAX_SOCK_NUM)
+  if (_sock >= WIFI_MAX_SOCK_NUM)
   {
 	  setWriteError();
 	  return 0;
