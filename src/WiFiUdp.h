@@ -29,6 +29,7 @@ class WiFiUDP : public UDP {
 private:
   uint8_t _sock;  // socket ID for Wiz5100
   uint16_t _port; // local port to listen on
+  int _parsed;
 
 public:
   WiFiUDP();  // Constructor

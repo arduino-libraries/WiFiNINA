@@ -18,13 +18,16 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#include <string.h>
+
 extern "C" {
   #include "utility/debug.h"
   #include "utility/wifi_spi.h"
 }
-#include <string.h>
+
 #include "utility/server_drv.h"
 #include "utility/wifi_drv.h"
+#include "utility/WiFiSocketBuffer.h"
 
 #include "WiFi.h"
 #include "WiFiUdp.h"
@@ -33,10 +36,14 @@ extern "C" {
 
 
 /* Constructor */
-WiFiUDP::WiFiUDP() : _sock(NO_SOCKET_AVAIL) {}
+WiFiUDP::WiFiUDP() : _sock(NO_SOCKET_AVAIL), _parsed(0) {}
 
 /* Start WiFiUDP socket, listening at local port PORT */
 uint8_t WiFiUDP::begin(uint16_t port) {
+    if (_sock != NO_SOCKET_AVAIL)
+    {
+        stop();
+    }
 
     uint8_t sock = ServerDrv::getSocket();
     if (sock != NO_SOCKET_AVAIL)
@@ -44,12 +51,17 @@ uint8_t WiFiUDP::begin(uint16_t port) {
         ServerDrv::startServer(port, sock, UDP_MODE);
         _sock = sock;
         _port = port;
+        _parsed = 0;
         return 1;
     }
     return 0;
 }
 
 uint8_t WiFiUDP::beginMulticast(IPAddress ip, uint16_t port) {
+    if (_sock != NO_SOCKET_AVAIL)
+    {
+        stop();
+    }
 
     uint8_t sock = ServerDrv::getSocket();
     if (sock != NO_SOCKET_AVAIL)
@@ -57,6 +69,7 @@ uint8_t WiFiUDP::beginMulticast(IPAddress ip, uint16_t port) {
         ServerDrv::startServer(ip, port, sock, UDP_MULTICAST_MODE);
         _sock = sock;
         _port = port;
+        _parsed = 0;
         return 1;
     }
     return 0;
@@ -65,11 +78,7 @@ uint8_t WiFiUDP::beginMulticast(IPAddress ip, uint16_t port) {
 /* return number of bytes available in the current packet,
    will return zero if parsePacket hasn't been called yet */
 int WiFiUDP::available() {
-	 if (_sock != NO_SOCKET_AVAIL)
-	 {
-	      return ServerDrv::availData(_sock);
-	 }
-	 return 0;
+	 return _parsed;
 }
 
 /* Release any resources being used by this WiFiUDP instance */
@@ -80,6 +89,7 @@ void WiFiUDP::stop()
 
 	  ServerDrv::stopClient(_sock);
 
+	  WiFiSocketBuffer.close(_sock);
 	  _sock = NO_SOCKET_AVAIL;
 }
 
@@ -125,42 +135,59 @@ size_t WiFiUDP::write(const uint8_t *buffer, size_t size)
 
 int WiFiUDP::parsePacket()
 {
-	return available();
+	while (_parsed--)
+	{
+	  // discard previously parsed packet data
+	  uint8_t b;
+
+	  WiFiSocketBuffer.read(_sock, &b, sizeof(b));
+	}
+
+	_parsed = ServerDrv::availData(_sock);
+
+	return _parsed;
 }
 
 int WiFiUDP::read()
 {
-  uint8_t b;
-  if (available())
+  if (_parsed < 1)
   {
-	  ServerDrv::getData(_sock, &b);
-  	  return b;
-  }else{
-	  return -1;
+    return -1;
   }
+
+  uint8_t b;
+
+  WiFiSocketBuffer.read(_sock, &b, sizeof(b));
+  _parsed--;
+
+  return b;
 }
 
 int WiFiUDP::read(unsigned char* buffer, size_t len)
 {
-  if (available())
+  if (_parsed < 1)
   {
-	  uint16_t size = len;
-	  if (!ServerDrv::getDataBuf(_sock, buffer, &size))
-		  return -1;
-	  return size;
-  }else{
-	  return -1;
+    return 0;
   }
+
+  int result = WiFiSocketBuffer.read(_sock, buffer, len);
+
+  if (result > 0)
+  {
+    _parsed -= result;
+  }
+
+  return result;
 }
 
 int WiFiUDP::peek()
 {
-  uint8_t b;
-  if (!available())
+  if (_parsed < 1)
+  {
     return -1;
+  }
 
-  ServerDrv::getData(_sock, &b, 1);
-  return b;
+  return WiFiSocketBuffer.peek(_sock);
 }
 
 void WiFiUDP::flush()

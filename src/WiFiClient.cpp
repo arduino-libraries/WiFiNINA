@@ -25,12 +25,13 @@ extern "C" {
   #include "utility/debug.h"
 }
 
-#include "WiFi.h"
-#include "WiFiClient.h"
-#include "WiFiServer.h"
+
 #include "utility/server_drv.h"
 #include "utility/wifi_drv.h"
+#include "utility/WiFiSocketBuffer.h"
 
+#include "WiFi.h"
+#include "WiFiClient.h"
 
 uint16_t WiFiClient::_srcport = 1024;
 
@@ -50,6 +51,11 @@ int WiFiClient::connect(const char* host, uint16_t port) {
 }
 
 int WiFiClient::connect(IPAddress ip, uint16_t port) {
+    if (_sock != NO_SOCKET_AVAIL)
+    {
+      stop();
+    }
+
     _sock = ServerDrv::getSocket();
     if (_sock != NO_SOCKET_AVAIL)
     {
@@ -74,6 +80,11 @@ int WiFiClient::connect(IPAddress ip, uint16_t port) {
 
 int WiFiClient::connectSSL(IPAddress ip, uint16_t port)
 {
+    if (_sock != NO_SOCKET_AVAIL)
+    {
+      stop();
+    }
+
     _sock = ServerDrv::getSocket();
     if (_sock != NO_SOCKET_AVAIL)
     {
@@ -125,7 +136,7 @@ size_t WiFiClient::write(uint8_t b) {
 }
 
 size_t WiFiClient::write(const uint8_t *buf, size_t size) {
-  if (_sock >= WIFI_MAX_SOCK_NUM)
+  if (_sock == NO_SOCKET_AVAIL)
   {
 	  setWriteError();
 	  return 0;
@@ -154,38 +165,32 @@ size_t WiFiClient::write(const uint8_t *buf, size_t size) {
 int WiFiClient::available() {
   if (_sock != 255)
   {
-      return ServerDrv::availData(_sock);
+      return WiFiSocketBuffer.available(_sock);
   }
    
   return 0;
 }
 
 int WiFiClient::read() {
-  uint8_t b;
   if (!available())
+  {
     return -1;
+  }
 
-  ServerDrv::getData(_sock, &b);
+  uint8_t b;
+
+  WiFiSocketBuffer.read(_sock, &b, sizeof(b));
+
   return b;
 }
 
 
 int WiFiClient::read(uint8_t* buf, size_t size) {
-  // sizeof(size_t) is architecture dependent
-  // but we need a 16 bit data type here
-  uint16_t _size = size;
-  if (!ServerDrv::getDataBuf(_sock, buf, &_size))
-      return -1;
-  return _size;
+  return  WiFiSocketBuffer.read(_sock, buf, size);
 }
 
 int WiFiClient::peek() {
-	  uint8_t b;
-	  if (!available())
-	    return -1;
-
-	  ServerDrv::getData(_sock, &b, 1);
-	  return b;
+  return WiFiSocketBuffer.peek(_sock);
 }
 
 void WiFiClient::flush() {
@@ -204,6 +209,7 @@ void WiFiClient::stop() {
   while (status() != CLOSED && ++count < 50)
     delay(100);
 
+  WiFiSocketBuffer.close(_sock);
   _sock = 255;
 }
 
@@ -211,13 +217,22 @@ uint8_t WiFiClient::connected() {
 
   if (_sock == 255) {
     return 0;
+  } else if (available()) {
+    return 1;
   } else {
     uint8_t s = status();
 
-    return !(s == LISTEN || s == CLOSED || s == FIN_WAIT_1 ||
-    		s == FIN_WAIT_2 || s == TIME_WAIT ||
-    		s == SYN_SENT || s== SYN_RCVD ||
-    		(s == CLOSE_WAIT));
+    uint8_t result =  !(s == LISTEN || s == CLOSED || s == FIN_WAIT_1 ||
+                      s == FIN_WAIT_2 || s == TIME_WAIT ||
+                      s == SYN_SENT || s== SYN_RCVD ||
+                      (s == CLOSE_WAIT));
+
+    if (result == 0) {
+      WiFiSocketBuffer.close(_sock);
+      _sock = 255;
+    }
+
+    return result;
   }
 }
 
