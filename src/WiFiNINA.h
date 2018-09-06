@@ -17,4 +17,9 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#ifndef WiFiNINA_h
+#define WiFiNINA_h
+
 #include "WiFi.h"
+
+#endif
