@@ -1,0 +1,10 @@
+WiFiNINA ?.?.? - ????.??.??
+
+WiFiNINA 1.1.0 - 2018.08.13
+
+* Added support for MKR Vidor 4000
+* Added handling of unknown encryption type in the ScanNetworks example
+
+WiFiNINA 1.0.0 - 2018.07.11
+
+* Initial release
