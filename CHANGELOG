@@ -1,5 +1,9 @@
 WiFiNINA ?.?.? - ????.??.??
 
+WiFiNINA 1.1.1 - 2018.09.11
+
+* Improved byte by byte read performance of sockets by adding a socket buffer
+
 WiFiNINA 1.1.0 - 2018.08.13
 
 * Added support for MKR Vidor 4000
