@@ -85,6 +85,8 @@ public:
 
     static void sendParam(uint8_t* param, uint8_t param_len, uint8_t lastParam = NO_LAST_PARAM);
 
+    static void sendParamNoLen(uint8_t* param, size_t param_len, uint8_t lastParam = NO_LAST_PARAM);
+
     static void sendParamLen8(uint8_t param_len);
 
     static void sendParamLen16(uint16_t param_len);

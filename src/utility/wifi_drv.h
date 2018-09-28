@@ -288,7 +288,7 @@ public:
 
     static int8_t downloadFile(const char* url, uint8_t url_len, const char *filename, uint8_t filename_len);
 
-    static int8_t fileOperation(uint8_t operation, const char *filename, uint8_t filename_len, size_t offset, uint8_t* buffer, uint8_t len);
+    static int8_t fileOperation(uint8_t operation, const char *filename, uint8_t filename_len, size_t offset, uint8_t* buffer, size_t len);
 
     static int8_t readFile(const char *filename, uint8_t filename_len, size_t offset, uint8_t* buffer, size_t buffer_len) {
         return fileOperation(READ_FILE, filename, filename_len, offset, buffer, buffer_len);

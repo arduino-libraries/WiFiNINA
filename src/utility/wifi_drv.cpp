@@ -1110,20 +1110,25 @@ int8_t WiFiDrv::downloadFile(const char* url, uint8_t url_len, const char *filen
     return _data;
 }
 
-int8_t WiFiDrv::fileOperation(uint8_t operation, const char *filename, uint8_t filename_len, size_t offset, uint8_t* buffer, uint8_t len)
+int8_t WiFiDrv::fileOperation(uint8_t operation, const char *filename, uint8_t filename_len, size_t offset, uint8_t* buffer, size_t len)
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
-    SpiDrv::sendCmd(operation, PARAM_NUMS_3);
+    uint8_t numParams = PARAM_NUMS_3;
+    if (operation == WRITE_FILE) {
+        numParams = PARAM_NUMS_4;
+    }
+
+    SpiDrv::sendCmd(operation, numParams);
     SpiDrv::sendParam((uint8_t*)&offset, sizeof(offset), NO_LAST_PARAM);
     SpiDrv::sendParam((uint8_t*)&len, sizeof(len), NO_LAST_PARAM);
     SpiDrv::sendParam((uint8_t*)filename, filename_len, (operation == WRITE_FILE) ? NO_LAST_PARAM : LAST_PARAM);
     if (operation == WRITE_FILE) {
-        SpiDrv::sendParam((uint8_t*)buffer, len, LAST_PARAM);
+        SpiDrv::sendParamNoLen((uint8_t*)buffer, len, LAST_PARAM);
     }
 
     // pad to multiple of 4
-    int commandSize = 7 + sizeof(offset) + sizeof(len) + filename_len;
+    int commandSize = 4 + numParams + sizeof(offset) + sizeof(len) + filename_len;
     while (commandSize % 4) {
         SpiDrv::readChar();
         commandSize++;
