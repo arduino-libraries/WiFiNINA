@@ -8,6 +8,7 @@ public:
 	static bool begin();
 
 	static WiFiStorageFile open(const char *filename);
+	static WiFiStorageFile open(String filename);
 
 	static bool exists(const char *filename) {
 		size_t len;
