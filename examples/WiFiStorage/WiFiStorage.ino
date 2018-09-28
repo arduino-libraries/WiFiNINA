@@ -3,7 +3,7 @@
   APIs are modeled on SerialFlash library (not on SD) to speedup operations and avoid buffers.
 */
 
-#include <WiFi1010.h>
+#include <WiFiNINA.h>
 
 void setup() {
 
@@ -17,7 +17,7 @@ void setup() {
     while (true);
   }
 
-  WiFiStorageFile file = WiFiStorage.open("/storage/testfile");
+  WiFiStorageFile file = WiFiStorage.open("/fs/testfile");
 
   if (file) {
     file.erase();
