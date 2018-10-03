@@ -752,17 +752,12 @@ int WiFiDrv::getHostByName(IPAddress& aResult)
 
 int WiFiDrv::getHostByName(const char* aHostname, IPAddress& aResult)
 {
-	uint8_t retry = 10;
 	if (reqHostByName(aHostname))
 	{
-		while(!getHostByName(aResult) && --retry > 0)
-		{
-			delay(1000);
-		}
+		return getHostByName(aResult);
 	}else{
 		return 0;
 	}
-	return (retry>0);
 }
 
 const char*  WiFiDrv::getFwVersion()
