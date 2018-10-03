@@ -719,6 +719,10 @@ uint8_t WiFiDrv::reqHostByName(const char* aHostname)
 
     SpiDrv::spiSlaveDeselect();
 
+    if (result) {
+        result = (_data == 1);
+    }
+
     return result;
 }
 
