@@ -45,7 +45,7 @@ void setup() {
   }
 
   String fv = WiFi.firmwareVersion();
-  if (fv != "1.0.0") {
+  if (fv < "1.0.0") {
     Serial.println("Please upgrade the firmware");
   }
 
