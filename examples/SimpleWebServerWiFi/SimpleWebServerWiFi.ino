@@ -14,7 +14,7 @@
  WEP or WPA, change the Wifi.begin() call accordingly.
 
  Circuit:
- * WiFi shield attached
+ * Board with NINA module (Arduino MKR WiFi 1010, MKR VIDOR 4000 and UNO WiFi Rev.2)
  * LED attached to pin 9
 
  created 25 Nov 2012
@@ -119,7 +119,7 @@ void printWifiStatus() {
   Serial.print("SSID: ");
   Serial.println(WiFi.SSID());
 
-  // print your WiFi shield's IP address:
+  // print your board's IP address:
   IPAddress ip = WiFi.localIP();
   Serial.print("IP Address: ");
   Serial.println(ip);

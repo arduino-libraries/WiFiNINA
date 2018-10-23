@@ -1,10 +1,13 @@
 /*
 
-  This example  prints the WiFi 101 shield or MKR1000 MAC address, and
-  scans for available WiFi networks using the WiFi 101 shield or MKR1000 board.
+  This example  prints the board's MAC address, and
+  scans for available WiFi networks using the NINA module.
   Every ten seconds, it scans again. It doesn't actually
   connect to any network, so no encryption scheme is specified.
   BSSID and WiFi channel are printed
+
+  Circuit:
+  * Board with NINA module (Arduino MKR WiFi 1010, MKR VIDOR 4000 and UNO WiFi Rev.2)
 
   This example is based on ScanNetworks
 
