@@ -10,7 +10,7 @@
 
 
  Circuit:
- * WiFi shield attached
+ * Board with NINA module (Arduino MKR WiFi 1010, MKR VIDOR 4000 and UNO WiFi Rev.2)
 
  created 18 Dec 2009
  by David A. Mellis

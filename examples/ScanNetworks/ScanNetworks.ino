@@ -1,12 +1,12 @@
 /*
 
- This example  prints the Wifi shield's MAC address, and
- scans for available Wifi networks using the Wifi module.
+ This example  prints the board's MAC address, and
+ scans for available Wifi networks using the NINA module.
  Every ten seconds, it scans again. It doesn't actually
  connect to any network, so no encryption scheme is specified.
 
  Circuit:
- * WiFi shield attached
+ * Board with NINA module (Arduino MKR WiFi 1010, MKR VIDOR 4000 and UNO WiFi Rev.2)
 
  created 13 July 2010
  by dlf (Metodo2 srl)

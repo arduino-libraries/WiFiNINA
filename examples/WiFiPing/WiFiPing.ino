@@ -1,12 +1,12 @@
 /*
 
   This example connects to a encrypted WiFi network (WPA/WPA2).
-  Then it prints the  MAC address of the WiFi module,
+  Then it prints the  MAC address of the board,
   the IP address obtained, and other network details.
   Then it continuously pings given host specified by IP Address or name.
 
   Circuit:
-   WiFi shield attached / MKR1000
+  * Board with NINA module (Arduino MKR WiFi 1010, MKR VIDOR 4000 and UNO WiFi Rev.2)
 
   created 13 July 2010
   by dlf (Metodo2 srl)
@@ -82,7 +82,7 @@ void loop() {
 }
 
 void printWiFiData() {
-  // print your WiFi shield's IP address:
+  // print your board's IP address:
   IPAddress ip = WiFi.localIP();
   Serial.print("IP address : ");
   Serial.println(ip);
