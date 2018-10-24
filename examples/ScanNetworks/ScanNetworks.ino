@@ -37,8 +37,11 @@ void setup() {
     Serial.println("Please upgrade the firmware");
   }
 
-  // Print WiFi MAC address:
-  printMacAddress();
+  // print your MAC address:
+  byte mac[6];
+  WiFi.macAddress(mac);
+  Serial.print("MAC: ");
+  printMacAddress(mac);
 }
 
 void loop() {
@@ -46,26 +49,6 @@ void loop() {
   Serial.println("Scanning available networks...");
   listNetworks();
   delay(10000);
-}
-
-void printMacAddress() {
-  // the MAC address of your Wifi shield
-  byte mac[6];
-
-  // print your MAC address:
-  WiFi.macAddress(mac);
-  Serial.print("MAC: ");
-  Serial.print(mac[5], HEX);
-  Serial.print(":");
-  Serial.print(mac[4], HEX);
-  Serial.print(":");
-  Serial.print(mac[3], HEX);
-  Serial.print(":");
-  Serial.print(mac[2], HEX);
-  Serial.print(":");
-  Serial.print(mac[1], HEX);
-  Serial.print(":");
-  Serial.println(mac[0], HEX);
 }
 
 void listNetworks() {
@@ -120,4 +103,15 @@ void printEncryptionType(int thisType) {
 }
 
 
-
+void printMacAddress(byte mac[]) {
+  for (int i = 5; i >= 0; i--) {
+    if (mac[i] < 16) {
+      Serial.print("0");
+    }
+    Serial.print(mac[i], HEX);
+    if (i > 0) {
+      Serial.print(":");
+    }
+  }
+  Serial.println();
+}
