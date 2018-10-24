@@ -88,7 +88,7 @@ void loop() {
 // this method makes a HTTP connection to the server:
 void httpRequest() {
   // close any connection before send a new request.
-  // This will free the socket on the WiFi shield
+  // This will free the socket on the Nina module
   client.stop();
 
   // if there's a successful connection:
@@ -115,7 +115,7 @@ void printWifiStatus() {
   Serial.print("SSID: ");
   Serial.println(WiFi.SSID());
 
-  // print your WiFi shield's IP address:
+  // print your board's IP address:
   IPAddress ip = WiFi.localIP();
   Serial.print("IP Address: ");
   Serial.println(ip);

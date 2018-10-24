@@ -38,8 +38,11 @@ void setup() {
     Serial.println("Please upgrade the firmware");
   }
 
-  // Print WiFi MAC address:
-  printMacAddress();
+  // print your MAC address:
+  byte mac[6];
+  WiFi.macAddress(mac);
+  Serial.print("MAC: ");
+  printMacAddress(mac);
 
   // scan for existing networks:
   Serial.println();
@@ -52,26 +55,6 @@ void loop() {
   // scan for existing networks:
   Serial.println("Scanning available networks...");
   listNetworks();
-}
-
-void printMacAddress() {
-  // the MAC address of your WiFi shield
-  byte mac[6];
-
-  // print your MAC address:
-  WiFi.macAddress(mac);
-  Serial.print("MAC: ");
-  print2Digits(mac[5]);
-  Serial.print(":");
-  print2Digits(mac[4]);
-  Serial.print(":");
-  print2Digits(mac[3]);
-  Serial.print(":");
-  print2Digits(mac[2]);
-  Serial.print(":");
-  print2Digits(mac[1]);
-  Serial.print(":");
-  print2Digits(mac[0]);
 }
 
 void listNetworks() {
@@ -99,7 +82,7 @@ void listNetworks() {
     Serial.print(WiFi.channel(thisNet));
     byte bssid[6];
     Serial.print("\t\tBSSID: ");
-    printBSSID(WiFi.BSSID(thisNet, bssid));
+    printMacAddress(WiFi.BSSID(thisNet, bssid));
     Serial.print("\tEncryption: ");
     printEncryptionType(WiFi.encryptionType(thisNet));
     Serial.print("\t\tSSID: ");
@@ -107,20 +90,6 @@ void listNetworks() {
     Serial.flush();
   }
   Serial.println();
-}
-
-void printBSSID(byte bssid[]) {
-  print2Digits(bssid[5]);
-  Serial.print(":");
-  print2Digits(bssid[4]);
-  Serial.print(":");
-  print2Digits(bssid[3]);
-  Serial.print(":");
-  print2Digits(bssid[2]);
-  Serial.print(":");
-  print2Digits(bssid[1]);
-  Serial.print(":");
-  print2Digits(bssid[0]);
 }
 
 void printEncryptionType(int thisType) {
@@ -155,4 +124,15 @@ void print2Digits(byte thisByte) {
   Serial.print(thisByte, HEX);
 }
 
-
+void printMacAddress(byte mac[]) {
+  for (int i = 5; i >= 0; i--) {
+    if (mac[i] < 16) {
+      Serial.print("0");
+    }
+    Serial.print(mac[i], HEX);
+    if (i > 0) {
+      Serial.print(":");
+    }
+  }
+  Serial.println();
+}

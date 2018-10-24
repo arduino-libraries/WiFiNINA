@@ -97,18 +97,7 @@ void printWiFiData() {
   byte mac[6];
   WiFi.macAddress(mac);
   Serial.print("MAC address: ");
-  Serial.print(mac[5], HEX);
-  Serial.print(":");
-  Serial.print(mac[4], HEX);
-  Serial.print(":");
-  Serial.print(mac[3], HEX);
-  Serial.print(":");
-  Serial.print(mac[2], HEX);
-  Serial.print(":");
-  Serial.print(mac[1], HEX);
-  Serial.print(":");
-  Serial.println(mac[0], HEX);
-  Serial.println();
+  printMacAddress(mac);
 }
 
 void printCurrentNet() {
@@ -120,18 +109,7 @@ void printCurrentNet() {
   byte bssid[6];
   WiFi.BSSID(bssid);
   Serial.print("BSSID: ");
-  Serial.print(bssid[5], HEX);
-  Serial.print(":");
-  Serial.print(bssid[4], HEX);
-  Serial.print(":");
-  Serial.print(bssid[3], HEX);
-  Serial.print(":");
-  Serial.print(bssid[2], HEX);
-  Serial.print(":");
-  Serial.print(bssid[1], HEX);
-  Serial.print(":");
-  Serial.println(bssid[0], HEX);
-
+  printMacAddress(bssid);
   // print the received signal strength:
   long rssi = WiFi.RSSI();
   Serial.print("signal strength (RSSI): ");
@@ -141,5 +119,18 @@ void printCurrentNet() {
   byte encryption = WiFi.encryptionType();
   Serial.print("Encryption Type: ");
   Serial.println(encryption, HEX);
+  Serial.println();
+}
+
+void printMacAddress(byte mac[]) {
+  for (int i = 5; i >= 0; i--) {
+    if (mac[i] < 16) {
+      Serial.print("0");
+    }
+    Serial.print(mac[i], HEX);
+    if (i > 0) {
+      Serial.print(":");
+    }
+  }
   Serial.println();
 }

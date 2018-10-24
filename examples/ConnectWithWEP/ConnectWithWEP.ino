@@ -71,7 +71,7 @@ void loop() {
 }
 
 void printWifiData() {
-  // print your WiFi shield's IP address:
+  // print your board's IP address:
   IPAddress ip = WiFi.localIP();
   Serial.print("IP Address: ");
   Serial.println(ip);
@@ -81,17 +81,7 @@ void printWifiData() {
   byte mac[6];
   WiFi.macAddress(mac);
   Serial.print("MAC address: ");
-  Serial.print(mac[5], HEX);
-  Serial.print(":");
-  Serial.print(mac[4], HEX);
-  Serial.print(":");
-  Serial.print(mac[3], HEX);
-  Serial.print(":");
-  Serial.print(mac[2], HEX);
-  Serial.print(":");
-  Serial.print(mac[1], HEX);
-  Serial.print(":");
-  Serial.println(mac[0], HEX);
+  printMacAddress(mac);
 }
 
 void printCurrentNet() {
@@ -103,17 +93,7 @@ void printCurrentNet() {
   byte bssid[6];
   WiFi.BSSID(bssid);
   Serial.print("BSSID: ");
-  Serial.print(bssid[5], HEX);
-  Serial.print(":");
-  Serial.print(bssid[4], HEX);
-  Serial.print(":");
-  Serial.print(bssid[3], HEX);
-  Serial.print(":");
-  Serial.print(bssid[2], HEX);
-  Serial.print(":");
-  Serial.print(bssid[1], HEX);
-  Serial.print(":");
-  Serial.println(bssid[0], HEX);
+  printMacAddress(bssid);
 
   // print the received signal strength:
   long rssi = WiFi.RSSI();
@@ -127,5 +107,15 @@ void printCurrentNet() {
   Serial.println();
 }
 
-
-
+void printMacAddress(byte mac[]) {
+  for (int i = 5; i >= 0; i--) {
+    if (mac[i] < 16) {
+      Serial.print("0");
+    }
+    Serial.print(mac[i], HEX);
+    if (i > 0) {
+      Serial.print(":");
+    }
+  }
+  Serial.println();
+}

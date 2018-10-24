@@ -7,7 +7,7 @@
   to the Serial monitor. From there, you can open that address in a web browser
   to turn on and off the LED on pin 13.
 
-  If the IP address of your shield is yourAddress:
+  If the IP address of your board is yourAddress:
     http://yourAddress/H turns the LED on
     http://yourAddress/L turns it off
 
