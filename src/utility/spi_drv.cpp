@@ -117,7 +117,6 @@ void SpiDrv::end() {
     digitalWrite(SLAVERESET, inverted_reset ? HIGH : LOW);
 
     pinMode(SLAVESELECT, INPUT);
-    pinMode(SLAVERESET, INPUT);
 
     SPIWIFI.end();
 
