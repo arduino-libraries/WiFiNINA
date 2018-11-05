@@ -71,7 +71,7 @@ int WiFiClient::connect(IPAddress ip, uint16_t port) {
        	{
     		return 0;
     	}
-    }else{
+    } else {
     	Serial.println("No Socket available");
     	return 0;
     }
@@ -100,7 +100,7 @@ int WiFiClient::connectSSL(IPAddress ip, uint16_t port)
         {
         return 0;
       }
-    }else{
+    } else {
       Serial.println("No Socket available");
       return 0;
     }
@@ -109,6 +109,11 @@ int WiFiClient::connectSSL(IPAddress ip, uint16_t port)
 
 int WiFiClient::connectSSL(const char *host, uint16_t port)
 {
+    if (_sock != NO_SOCKET_AVAIL)
+    {
+      stop();
+    }
+
     _sock = ServerDrv::getSocket();
     if (_sock != NO_SOCKET_AVAIL)
     {
@@ -124,7 +129,7 @@ int WiFiClient::connectSSL(const char *host, uint16_t port)
         {
         return 0;
       }
-    }else{
+    } else {
       Serial.println("No Socket available");
       return 0;
     }
