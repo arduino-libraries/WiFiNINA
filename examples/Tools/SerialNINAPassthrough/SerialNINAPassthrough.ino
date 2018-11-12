@@ -31,7 +31,7 @@ int rts = -1;
 int dtr = -1;
 
 void setup() {
-  SerialUSB.begin(baud);
+  Serial.begin(baud);
 
 #ifdef ARDUINO_SAMD_MKRVIDOR4000
   FPGA.begin();
@@ -46,43 +46,58 @@ void setup() {
   pinMode(NINA_GPIO0, OUTPUT);
   pinMode(NINA_RESETN, OUTPUT);
 #endif
+
+#ifdef ARDUINO_AVR_UNO_WIFI_REV2
+  // manually put the NINA in upload mode
+  digitalWrite(NINA_GPIO0, LOW);
+
+  digitalWrite(NINA_RESETN, LOW);
+  delay(100);
+  digitalWrite(NINA_RESETN, HIGH);
+  delay(100);
+  digitalWrite(NINA_RESETN, LOW);
+#endif
 }
 
 void loop() {
-  if (rts != SerialUSB.rts()) {
+#ifndef ARDUINO_AVR_UNO_WIFI_REV2
+  if (rts != Serial.rts()) {
 #ifdef ARDUINO_SAMD_MKRVIDOR4000
-    FPGA.digitalWrite(FPGA_SPIWIFI_RESET, (SerialUSB.rts() == 1) ? LOW : HIGH);
+    FPGA.digitalWrite(FPGA_SPIWIFI_RESET, (Serial.rts() == 1) ? LOW : HIGH);
 #else
-    digitalWrite(NINA_RESETN, SerialUSB.rts());
+    digitalWrite(NINA_RESETN, Serial.rts());
 #endif
-    rts = SerialUSB.rts();
+    rts = Serial.rts();
   }
 
-  if (dtr != SerialUSB.dtr()) {
+  if (dtr != Serial.dtr()) {
 #ifdef ARDUINO_SAMD_MKRVIDOR4000
-    FPGA.digitalWrite(FPGA_NINA_GPIO0, (SerialUSB.dtr() == 1) ? HIGH : LOW);
+    FPGA.digitalWrite(FPGA_NINA_GPIO0, (Serial.dtr() == 1) ? HIGH : LOW);
 #else
-    digitalWrite(NINA_GPIO0, (SerialUSB.dtr() == 0) ? HIGH : LOW);
+    digitalWrite(NINA_GPIO0, (Serial.dtr() == 0) ? HIGH : LOW);
 #endif
-    dtr = SerialUSB.dtr();
+    dtr = Serial.dtr();
   }
+#endif
 
-  if (SerialUSB.available()) {
-    SerialNina.write(SerialUSB.read());
+  if (Serial.available()) {
+    SerialNina.write(Serial.read());
   }
 
   if (SerialNina.available()) {
-    SerialUSB.write(SerialNina.read());
+    Serial.write(SerialNina.read());
   }
 
+#ifndef ARDUINO_AVR_UNO_WIFI_REV2
   // check if the USB virtual serial wants a new baud rate
-  if (SerialUSB.baud() != baud) {
+  if (Serial.baud() != baud) {
     rts = -1;
     dtr = -1;
 
-    baud = SerialUSB.baud();
+    baud = Serial.baud();
 #ifndef ARDUINO_SAMD_MKRVIDOR4000
     SerialNina.begin(baud);
 #endif
   }
+#endif
 }
