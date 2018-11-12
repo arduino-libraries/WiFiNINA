@@ -40,7 +40,7 @@ static const int MAX_PAYLOAD_SIZE = 1024;
 #define CMD_HELLO             0x99
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(1000000);
 
   if (!ESP32BootROM.begin(921600)) {
     Serial.println("Unable to communicate with ESP32 boot ROM!");
