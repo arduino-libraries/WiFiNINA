@@ -40,7 +40,7 @@ class ESP32BootROMClass {
     int spiAttach();
 
     void command(int opcode, const void* data, uint16_t length);
-    int response(int opcode, unsigned int timeout, void* body = NULL);
+    int response(int opcode, unsigned long timeout, void* body = NULL);
 
     void writeEscapedBytes(const uint8_t* data, uint16_t length);
 

@@ -53,6 +53,20 @@ int ESP32BootROMClass::begin(unsigned long baudrate)
   delay(10);
   FPGA.digitalWrite(_resetnPin, HIGH);
   delay(100);
+
+#elif defined(ARDUINO_AVR_UNO_WIFI_REV2)
+  _serial->begin(119400);
+
+  pinMode(_gpio0Pin, OUTPUT);
+  pinMode(_resetnPin, OUTPUT);
+
+  digitalWrite(_gpio0Pin, LOW);
+
+  digitalWrite(_resetnPin, LOW);
+  delay(100);
+  digitalWrite(_resetnPin, HIGH);
+  delay(100);
+  digitalWrite(_resetnPin, LOW);
 #else
   _serial->begin(115200);
 
@@ -77,7 +91,7 @@ int ESP32BootROMClass::begin(unsigned long baudrate)
     return 0;
   }
 
-#ifdef ARDUINO_SAMD_MKRVIDOR4000
+#if defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(ARDUINO_AVR_UNO_WIFI_REV2)
   (void)baudrate;
 #else
   if (baudrate != 115200) {
@@ -245,14 +259,14 @@ void ESP32BootROMClass::command(int opcode, const void* data, uint16_t length)
 #endif
 }
 
-int ESP32BootROMClass::response(int opcode, unsigned int timeout, void* body)
+int ESP32BootROMClass::response(int opcode, unsigned long timeout, void* body)
 {
   uint8_t data[10 + 256];
   uint16_t index = 0;
 
   uint8_t responseLength = 4;
 
-  for (unsigned long start = millis(); (index < (10 + responseLength)) && (millis() - start) < timeout;) {
+  for (unsigned long start = millis(); (index < (uint16_t)(10 + responseLength)) && (millis() - start) < timeout;) {
     if (_serial->available()) {
       data[index] = _serial->read();
 
@@ -280,7 +294,7 @@ int ESP32BootROMClass::response(int opcode, unsigned int timeout, void* body)
   }
 #endif
 
-  if (index != (10 + responseLength)) {
+  if (index != (uint16_t)(10 + responseLength)) {
     return -1;
   }
 
