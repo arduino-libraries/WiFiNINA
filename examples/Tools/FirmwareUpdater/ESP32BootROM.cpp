@@ -259,14 +259,14 @@ void ESP32BootROMClass::command(int opcode, const void* data, uint16_t length)
 #endif
 }
 
-int ESP32BootROMClass::response(int opcode, unsigned int timeout, void* body)
+int ESP32BootROMClass::response(int opcode, unsigned long timeout, void* body)
 {
   uint8_t data[10 + 256];
   uint16_t index = 0;
 
   uint8_t responseLength = 4;
 
-  for (unsigned long start = millis(); (index < (10 + responseLength)) && (millis() - start) < timeout;) {
+  for (unsigned long start = millis(); (index < (uint16_t)(10 + responseLength)) && (millis() - start) < timeout;) {
     if (_serial->available()) {
       data[index] = _serial->read();
 
@@ -294,7 +294,7 @@ int ESP32BootROMClass::response(int opcode, unsigned int timeout, void* body)
   }
 #endif
 
-  if (index != (10 + responseLength)) {
+  if (index != (uint16_t)(10 + responseLength)) {
     return -1;
   }
 
