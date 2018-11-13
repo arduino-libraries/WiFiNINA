@@ -53,6 +53,20 @@ int ESP32BootROMClass::begin(unsigned long baudrate)
   delay(10);
   FPGA.digitalWrite(_resetnPin, HIGH);
   delay(100);
+
+#elif defined(ARDUINO_AVR_UNO_WIFI_REV2)
+  _serial->begin(119400);
+
+  pinMode(_gpio0Pin, OUTPUT);
+  pinMode(_resetnPin, OUTPUT);
+
+  digitalWrite(_gpio0Pin, LOW);
+
+  digitalWrite(_resetnPin, LOW);
+  delay(100);
+  digitalWrite(_resetnPin, HIGH);
+  delay(100);
+  digitalWrite(_resetnPin, LOW);
 #else
   _serial->begin(115200);
 
@@ -77,7 +91,7 @@ int ESP32BootROMClass::begin(unsigned long baudrate)
     return 0;
   }
 
-#ifdef ARDUINO_SAMD_MKRVIDOR4000
+#if defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(ARDUINO_AVR_UNO_WIFI_REV2)
   (void)baudrate;
 #else
   if (baudrate != 115200) {
