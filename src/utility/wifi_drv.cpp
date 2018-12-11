@@ -1148,4 +1148,16 @@ int8_t WiFiDrv::fileOperation(uint8_t operation, const char *filename, uint8_t f
     return _dataLen;
 }
 
+void WiFiDrv::applyOTA() {
+    WAIT_FOR_SLAVE_SELECT();
+
+    // Send Command
+    SpiDrv::sendCmd(APPLY_OTA_COMMAND, PARAM_NUMS_0);
+
+    SpiDrv::spiSlaveDeselect();
+
+    // don't wait for return; OTA operation should be fire and forget :)
+}
+
+
 WiFiDrv wiFiDrv;
