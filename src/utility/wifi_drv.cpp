@@ -1110,7 +1110,7 @@ int8_t WiFiDrv::downloadFile(const char* url, uint8_t url_len, const char *filen
     return _data;
 }
 
-int8_t WiFiDrv::fileOperation(uint8_t operation, const char *filename, uint8_t filename_len, size_t offset, uint8_t* buffer, size_t len)
+int8_t WiFiDrv::fileOperation(uint8_t operation, const char *filename, uint8_t filename_len, uint32_t offset, uint8_t* buffer, uint32_t len)
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command

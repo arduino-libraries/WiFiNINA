@@ -1,3 +1,25 @@
+/*
+  WiFiStorage.h - Library for Arduino boards based on NINA wifi module.
+  Copyright (c) 2018 Arduino SA. All rights reserved.
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+#ifndef wifistorage_h
+#define wifistorage_h
+
 #include "utility/wifi_drv.h"
 
 class WiFiStorageFile;
@@ -11,21 +33,21 @@ public:
 	static WiFiStorageFile open(String filename);
 
 	static bool exists(const char *filename) {
-		size_t len;
+		uint32_t len;
 		return (WiFiDrv::existsFile(filename, strlen(filename), &len) > 0);
 	}
-	static bool exists(const char *filename, size_t* len) {
+	static bool exists(const char *filename, uint32_t* len) {
 		return (WiFiDrv::existsFile(filename, strlen(filename), len) > 0);
 	}
 	static bool remove(const char *filename) {
 		WiFiDrv::deleteFile(filename, strlen(filename));
 		return true;
 	}
-	static bool read(const char *filename, size_t offset, uint8_t* buffer, size_t buffer_len) {
+	static bool read(const char *filename, uint32_t offset, uint8_t* buffer, uint32_t buffer_len) {
 		WiFiDrv::readFile(filename, strlen(filename), offset, buffer, buffer_len);
 		return true;
 	}
-	static bool write(const char *filename, size_t offset, uint8_t* buffer, size_t buffer_len) {
+	static bool write(const char *filename, uint32_t offset, uint8_t* buffer, uint32_t buffer_len) {
 		WiFiDrv::writeFile(filename, strlen(filename), offset, buffer, buffer_len);
 		return true;
 	}
@@ -37,10 +59,10 @@ public:
     static bool remove(String filename) {
     	return remove(filename.c_str());
 	}
-	static bool read(String filename, size_t offset, uint8_t* buffer, size_t buffer_len) {
+	static bool read(String filename, uint32_t offset, uint8_t* buffer, uint32_t buffer_len) {
 		return read(filename.c_str(), offset, buffer, buffer_len);
 	}
-	static bool write(String filename, size_t offset, uint8_t* buffer, size_t buffer_len) {
+	static bool write(String filename, uint32_t offset, uint8_t* buffer, uint32_t buffer_len) {
 		return write(filename.c_str(), offset, buffer, buffer_len);
 	}
     static bool download(String url, String filename) {
@@ -55,6 +77,7 @@ class WiFiStorageFile
 {
 public:
 	constexpr WiFiStorageFile(const char* _filename) : filename(_filename) { }
+
 	operator bool() {
 		return WiFiStorage.exists(filename, &length);
 	}
@@ -96,7 +119,9 @@ public:
 	}
 protected:
 	friend class WiFiStorageClass;
-	size_t offset = 0;
-	size_t length = 0;
+	uint32_t offset = 0;
+	uint32_t length = 0;
 	const char* filename;
 };
+
+#endif
