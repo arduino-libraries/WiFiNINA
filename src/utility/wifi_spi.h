@@ -103,11 +103,12 @@ enum {
     SET_ANALOG_WRITE	= 0x52,
 
     // regular format commands
-    WRITE_FILE			= 0x53,
-    READ_FILE			= 0x54,
-    DELETE_FILE			= 0x55,
-    EXISTS_FILE			= 0x56,
-    DOWNLOAD_FILE		= 0x57,
+    WRITE_FILE			= 0x60,
+    READ_FILE			= 0x61,
+    DELETE_FILE			= 0x62,
+    EXISTS_FILE			= 0x63,
+    DOWNLOAD_FILE		= 0x64,
+    APPLY_OTA_COMMAND	= 0x65,
 };
 
 
