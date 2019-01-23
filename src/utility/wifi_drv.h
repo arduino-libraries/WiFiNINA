@@ -29,8 +29,8 @@
 
 // Key index length
 #define KEY_IDX_LEN     1
-// 5 secs of delay to have the connection established
-#define WL_DELAY_START_CONNECTION 5000
+// 100 msecs of delay to have the connection established
+#define WL_DELAY_START_CONNECTION 100
 // firmware version string length
 #define WL_FW_VER_LENGTH 6
 
