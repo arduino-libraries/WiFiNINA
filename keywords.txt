@@ -54,6 +54,7 @@ lowPowerMode	KEYWORD2
 noLowPowerMode	KEYWORD2
 ping	KEYWORD2
 beginMulticast	KEYWORD2
+setTimeout	KEYWORD2
 
 
 #######################################
