@@ -261,7 +261,7 @@ public:
     int ping(const String &hostname, uint8_t ttl = 128);
     int ping(IPAddress host, uint8_t ttl = 128);
 
-     void setTimeout(unsigned long timeout);
+    void setTimeout(unsigned long timeout);
 };
 
 extern WiFiClass WiFi;
