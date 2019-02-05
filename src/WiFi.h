@@ -74,6 +74,10 @@ public:
      */
     int begin(const char* ssid, const char *passphrase);
 
+    int connect(const char* ssid);
+    int connect(const char* ssid, uint8_t key_idx, const char* key);
+    int connect(const char* ssid, const char *passphrase);
+
     uint8_t beginAP(const char *ssid);
     uint8_t beginAP(const char *ssid, uint8_t channel);
     uint8_t beginAP(const char *ssid, const char* passphrase);
