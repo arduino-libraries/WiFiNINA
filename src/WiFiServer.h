@@ -32,6 +32,7 @@ class WiFiClient;
 class WiFiServer : public Server {
 private:
   uint8_t _sock;
+  uint8_t _lastSock;
   uint16_t _port;
   void*     pcb;
 public:
