@@ -5,7 +5,7 @@ env:
   matrix:
     - BOARD="arduino:samd:mkrwifi1010"
     - BOARD="arduino:samd_beta:mkrvidor4000"
-    - BOARD="arduino:megaavr:uno2018"
+    - BOARD="arduino:megaavr:uno2018:mode=on"
 before_install:
   - wget http://downloads.arduino.cc/arduino-$IDE_VERSION-linux64.tar.xz
   - tar xf arduino-$IDE_VERSION-linux64.tar.xz
