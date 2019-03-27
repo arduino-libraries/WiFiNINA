@@ -1,5 +1,11 @@
 WiFiNINA ?.?.? - ????.??.??
 
+WiFiNINA 1.4.0 - 2019.03.27
+
+* Improved connection time, by increasing poll time of checking connection status to 100ms on begin
+* Added WiFiClass::setTimeout(...) API to set timeout of begin
+* Fixed issue of WiFiServer:available() only reporting the first byte in the WiFiChatServer example
+
 WiFiNINA 1.3.0 - 2018.11.13
 
 * Added Tools/CheckFirmwareVersion example to check NINA firmware version
