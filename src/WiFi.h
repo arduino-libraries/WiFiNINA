@@ -244,6 +244,13 @@ public:
     uint8_t status();
 
     /*
+     * Return The deauthentication reason code.
+     *
+     * return: the deauthentication reason code
+     */
+    uint8_t reasonCode();
+
+    /*
      * Resolve the given hostname to an IP address.
      * param aHostname: Name to be resolved
      * param aResult: IPAddress structure to store the returned IP address

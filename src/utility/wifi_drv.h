@@ -144,6 +144,8 @@ public:
      */
     static int8_t disconnect();
 
+    static uint8_t getReasonCode();
+
     /*
      * Disconnect from the network
      *
