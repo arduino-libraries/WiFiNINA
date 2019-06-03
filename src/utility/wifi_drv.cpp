@@ -328,6 +328,28 @@ int8_t WiFiDrv::disconnect()
     return result;
 }
 
+uint8_t WiFiDrv::getReasonCode()
+{
+    WAIT_FOR_SLAVE_SELECT();
+
+    // Send Command
+    SpiDrv::sendCmd(GET_REASON_CODE_CMD, PARAM_NUMS_0);
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 1;
+    uint8_t _dataLen = 0;
+    SpiDrv::waitResponseCmd(GET_REASON_CODE_CMD, PARAM_NUMS_1, &_data, &_dataLen);
+
+    SpiDrv::spiSlaveDeselect();
+
+    return _data;
+}
+
 uint8_t WiFiDrv::getConnectionStatus()
 {
 	WAIT_FOR_SLAVE_SELECT();

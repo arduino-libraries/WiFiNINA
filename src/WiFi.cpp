@@ -30,7 +30,7 @@ extern "C" {
   #include "utility/debug.h"
 }
 
-WiFiClass::WiFiClass()
+WiFiClass::WiFiClass() : _timeout(50000)
 {
 }
 
@@ -64,16 +64,17 @@ const char* WiFiClass::firmwareVersion()
 int WiFiClass::begin(const char* ssid)
 {
 	uint8_t status = WL_IDLE_STATUS;
-	uint8_t attempts = WL_MAX_ATTEMPT_CONNECTION;
 
    if (WiFiDrv::wifiSetNetwork(ssid, strlen(ssid)) != WL_FAILURE)
    {
-	   do
+	   for (unsigned long start = millis(); (millis() - start) < _timeout;)
 	   {
 		   delay(WL_DELAY_START_CONNECTION);
 		   status = WiFiDrv::getConnectionStatus();
+		   if ((status != WL_IDLE_STATUS) && (status != WL_NO_SSID_AVAIL) && (status != WL_SCAN_COMPLETED)) {
+		     break;
+		   }
 	   }
-	   while (((status == WL_IDLE_STATUS)||(status == WL_NO_SSID_AVAIL)||(status == WL_SCAN_COMPLETED))&&(--attempts>0));
    }else
    {
 	   status = WL_CONNECT_FAILED;
@@ -84,16 +85,18 @@ int WiFiClass::begin(const char* ssid)
 int WiFiClass::begin(const char* ssid, uint8_t key_idx, const char *key)
 {
 	uint8_t status = WL_IDLE_STATUS;
-	uint8_t attempts = WL_MAX_ATTEMPT_CONNECTION;
 
 	// set encryption key
    if (WiFiDrv::wifiSetKey(ssid, strlen(ssid), key_idx, key, strlen(key)) != WL_FAILURE)
    {
-	   do
+	   for (unsigned long start = millis(); (millis() - start) < _timeout;)
 	   {
 		   delay(WL_DELAY_START_CONNECTION);
 		   status = WiFiDrv::getConnectionStatus();
-	   }while ((( status == WL_IDLE_STATUS)||(status == WL_NO_SSID_AVAIL)||(status == WL_SCAN_COMPLETED))&&(--attempts>0));
+		   if ((status != WL_IDLE_STATUS) && (status != WL_NO_SSID_AVAIL) && (status != WL_SCAN_COMPLETED)) {
+		     break;
+		   }
+	   }
    }else{
 	   status = WL_CONNECT_FAILED;
    }
@@ -103,17 +106,18 @@ int WiFiClass::begin(const char* ssid, uint8_t key_idx, const char *key)
 int WiFiClass::begin(const char* ssid, const char *passphrase)
 {
 	uint8_t status = WL_IDLE_STATUS;
-	uint8_t attempts = WL_MAX_ATTEMPT_CONNECTION;
 
     // set passphrase
     if (WiFiDrv::wifiSetPassphrase(ssid, strlen(ssid), passphrase, strlen(passphrase))!= WL_FAILURE)
     {
- 	   do
+	   for (unsigned long start = millis(); (millis() - start) < _timeout;)
  	   {
  		   delay(WL_DELAY_START_CONNECTION);
  		   status = WiFiDrv::getConnectionStatus();
+		   if ((status != WL_IDLE_STATUS) && (status != WL_NO_SSID_AVAIL) && (status != WL_SCAN_COMPLETED)) {
+		     break;
+		   }
  	   }
-	   while ((( status == WL_IDLE_STATUS)||(status == WL_NO_SSID_AVAIL)||(status == WL_SCAN_COMPLETED))&&(--attempts>0));
     }else{
     	status = WL_CONNECT_FAILED;
     }
@@ -128,16 +132,17 @@ uint8_t WiFiClass::beginAP(const char *ssid)
 uint8_t WiFiClass::beginAP(const char *ssid, uint8_t channel)
 {
 	uint8_t status = WL_IDLE_STATUS;
-	uint8_t attempts = WL_MAX_ATTEMPT_CONNECTION;
 
    if (WiFiDrv::wifiSetApNetwork(ssid, strlen(ssid), channel) != WL_FAILURE)
    {
-	   do
+	   for (unsigned long start = millis(); (millis() - start) < _timeout;)
 	   {
 		   delay(WL_DELAY_START_CONNECTION);
 		   status = WiFiDrv::getConnectionStatus();
+		   if ((status != WL_IDLE_STATUS) && (status != WL_NO_SSID_AVAIL) && (status != WL_SCAN_COMPLETED)) {
+		     break;
+		   }
 	   }
-	   while ((( status == WL_IDLE_STATUS)||(status == WL_SCAN_COMPLETED))&&(--attempts>0));
    }else
    {
 	   status = WL_AP_FAILED;
@@ -153,17 +158,18 @@ uint8_t WiFiClass::beginAP(const char *ssid, const char* passphrase)
 uint8_t WiFiClass::beginAP(const char *ssid, const char* passphrase, uint8_t channel)
 {
 	uint8_t status = WL_IDLE_STATUS;
-	uint8_t attempts = WL_MAX_ATTEMPT_CONNECTION;
 
     // set passphrase
     if (WiFiDrv::wifiSetApPassphrase(ssid, strlen(ssid), passphrase, strlen(passphrase), channel)!= WL_FAILURE)
     {
- 	   do
- 	   {
+	   for (unsigned long start = millis(); (millis() - start) < _timeout;)
+	   {
  		   delay(WL_DELAY_START_CONNECTION);
  		   status = WiFiDrv::getConnectionStatus();
+		   if ((status != WL_IDLE_STATUS) && (status != WL_NO_SSID_AVAIL) && (status != WL_SCAN_COMPLETED)) {
+		     break;
+		   }
  	   }
-	   while ((( status == WL_IDLE_STATUS)||(status == WL_SCAN_COMPLETED))&&(--attempts>0));
     }else{
     	status = WL_AP_FAILED;
     }
@@ -315,6 +321,11 @@ uint8_t WiFiClass::status()
     return WiFiDrv::getConnectionStatus();
 }
 
+uint8_t WiFiClass::reasonCode()
+{
+	return WiFiDrv::getReasonCode();
+}
+
 int WiFiClass::hostByName(const char* aHostname, IPAddress& aResult)
 {
 	return WiFiDrv::getHostByName(aHostname, aResult);
@@ -356,4 +367,8 @@ int WiFiClass::ping(IPAddress host, uint8_t ttl)
 	return WiFiDrv::ping(host, ttl);
 }
 
+void WiFiClass::setTimeout(unsigned long timeout)
+{
+	_timeout = timeout;
+}
 WiFiClass WiFi;

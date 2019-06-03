@@ -21,6 +21,7 @@ WiFiUDP	KEYWORD1
 
 firmwareVersion	KEYWORD2
 status	KEYWORD2
+reasonCode	KEYWORD2
 connect	KEYWORD2
 write	KEYWORD2
 available	KEYWORD2
@@ -54,6 +55,7 @@ lowPowerMode	KEYWORD2
 noLowPowerMode	KEYWORD2
 ping	KEYWORD2
 beginMulticast	KEYWORD2
+setTimeout	KEYWORD2
 
 
 #######################################
