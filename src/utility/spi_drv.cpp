@@ -67,11 +67,9 @@ void SpiDrv::begin()
 #ifdef SPIWIFI_SS
       WIFININA_SLAVESELECT = SPIWIFI_SS;
 #endif
-      
 #ifdef SPIWIFI_ACK
       WIFININA_SLAVEREADY = SPIWIFI_ACK;
 #endif
-      
 #ifdef SPIWIFI_RESET
       WIFININA_SLAVERESET = (uint8_t)SPIWIFI_RESET;
 #endif
@@ -101,8 +99,8 @@ void SpiDrv::begin()
       pinMode(WIFININA_SLAVERESET, OUTPUT);
 
       if (WIFININA_SLAVEGPIO0 >= 0) {
-	pinMode(WIFININA_SLAVEGPIO0, OUTPUT);
-	digitalWrite(WIFININA_SLAVEGPIO0, HIGH);
+          pinMode(WIFININA_SLAVEGPIO0, OUTPUT);
+          digitalWrite(WIFININA_SLAVEGPIO0, HIGH);
       }
 
       digitalWrite(WIFININA_SLAVESELECT, HIGH);
@@ -112,8 +110,8 @@ void SpiDrv::begin()
       delay(750);
 
       if (WIFININA_SLAVEGPIO0 >= 0) {
-	digitalWrite(WIFININA_SLAVEGPIO0, LOW);
-	pinMode(WIFININA_SLAVEGPIO0, INPUT);
+          digitalWrite(WIFININA_SLAVEGPIO0, LOW);
+          pinMode(WIFININA_SLAVEGPIO0, INPUT);
       }
 
 #ifdef _DEBUG_
@@ -572,10 +570,10 @@ void SpiDrv::sendCmd(uint8_t cmd, uint8_t numParam)
 
 int SpiDrv::available()
 {
-  if (WIFININA_SLAVEGPIO0 >= 0) {
-    return (digitalRead(WIFININA_SLAVEGPIO0) != LOW);
-  }
-  return true;
+    if (WIFININA_SLAVEGPIO0 >= 0) {
+        return (digitalRead(WIFININA_SLAVEGPIO0) != LOW);
+    }
+    return true;
 }
 
 SpiDrv spiDrv;
