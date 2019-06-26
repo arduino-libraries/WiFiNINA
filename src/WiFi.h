@@ -21,7 +21,11 @@
 #ifndef WiFi_h
 #define WiFi_h
 
+#if defined(ARDUINO_SAMD_MKRVIDOR4000)
+#define WIFI_FIRMWARE_LATEST_VERSION "1.1.0"
+#else
 #define WIFI_FIRMWARE_LATEST_VERSION "1.2.1"
+#endif
 
 #include <inttypes.h>
 
