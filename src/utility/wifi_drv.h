@@ -286,6 +286,11 @@ public:
     static void digitalWrite(uint8_t pin, uint8_t value);
     static void analogWrite(uint8_t pin, uint8_t value);
 
+    static void wpa2EntSetIdentity(const char* identity);
+    static void wpa2EntSetUsername(const char* username);
+    static void wpa2EntSetPassword(const char* password);
+    static void wpa2EntEnable();
+
     friend class WiFiUDP;
     friend class WiFiClient;
 };

@@ -35,6 +35,39 @@ extern "C" {
 #include "WiFiSSLClient.h"
 #include "WiFiServer.h"
 
+typedef enum _eap_methods {
+ EAP_TLS  = 0,
+ EAP_PEAP = 1,
+ EAP_TTLS = 2,
+} eap_method;
+
+class WPA2Enterprise
+{
+public:
+    WPA2Enterprise(eap_method method, String identity, String username = "", String password = "",
+                    const char* ca_pem = NULL, const char* client_crt = NULL, const char* client_key = NULL) :
+                    method(method), identity(identity), username(username), password(password),
+                    ca_pem(ca_pem), client_crt(client_crt), client_key(client_key)
+    {}
+    WPA2Enterprise(String identity, String username = "", String password = "",
+                    const char* ca_pem = NULL, const char* client_crt = NULL, const char* client_key = NULL) :
+                    method(EAP_TLS), identity(identity), username(username), password(password),
+                    ca_pem(ca_pem), client_crt(client_crt), client_key(client_key)
+    {}
+    WPA2Enterprise(String identity, const char* ca_pem = NULL, const char* client_crt = NULL, const char* client_key = NULL) :
+                    method(EAP_TLS), identity(identity), username(""), password(""),
+                    ca_pem(ca_pem), client_crt(client_crt), client_key(client_key)
+    {}
+
+    eap_method method; // TLS: 0, PEAP: 1, TTLS: 2 // looks like it's handled internally
+    String identity;
+    String username;
+    String password;
+    const char* ca_pem;
+    const char* client_crt;
+    const char* client_key;
+};
+
 class WiFiClass
 {
 private:
@@ -79,6 +112,12 @@ public:
     uint8_t beginAP(const char *ssid, uint8_t channel);
     uint8_t beginAP(const char *ssid, const char* passphrase);
     uint8_t beginAP(const char *ssid, const char* passphrase, uint8_t channel);
+
+    /* Add WPA2 Enterprise information for next connection
+        *
+        * param data:   Static ip configuration
+        */
+    void config(WPA2Enterprise& data);
 
     /* Change Ip configuration settings disabling the dhcp client
         *

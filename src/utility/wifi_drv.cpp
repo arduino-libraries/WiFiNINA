@@ -1078,4 +1078,114 @@ void WiFiDrv::analogWrite(uint8_t pin, uint8_t value)
     SpiDrv::spiSlaveDeselect();
 }
 
+void WiFiDrv::wpa2EntSetIdentity(const char* identity)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(WPA2_ENTERPRISE_SET_IDENTITY, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)identity, strlen(identity), LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 5 + strlen(identity);
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(WPA2_ENTERPRISE_SET_IDENTITY, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+}
+
+void WiFiDrv::wpa2EntSetPassword(const char* password)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(WPA2_ENTERPRISE_SET_PASSWORD, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)password, strlen(password), LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 5 + strlen(password);
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(WPA2_ENTERPRISE_SET_PASSWORD, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+}
+
+void WiFiDrv::wpa2EntSetUsername(const char* username)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(WPA2_ENTERPRISE_SET_USERNAME, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)username, strlen(username), LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 5 + strlen(username);
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(WPA2_ENTERPRISE_SET_USERNAME, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+}
+
+void WiFiDrv::wpa2EntEnable()
+{
+    WAIT_FOR_SLAVE_SELECT();
+
+    // Send Command
+    SpiDrv::sendCmd(WPA2_ENTERPRISE_ENABLE, PARAM_NUMS_0);
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 1;
+    uint8_t _dataLen = 0;
+    SpiDrv::waitResponseCmd(WPA2_ENTERPRISE_ENABLE, PARAM_NUMS_1, &_data, &_dataLen);
+
+    SpiDrv::spiSlaveDeselect();
+}
+
 WiFiDrv wiFiDrv;
