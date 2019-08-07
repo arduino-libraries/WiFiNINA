@@ -156,6 +156,11 @@ uint8_t WiFiClass::beginAP(const char *ssid, const char* passphrase, uint8_t cha
     return status;
 }
 
+uint8_t WiFiClass::beginProvision()
+{
+	return WiFiDrv::beginProvision();
+}
+
 void WiFiClass::config(IPAddress local_ip)
 {
 	WiFiDrv::config(1, (uint32_t)local_ip, 0, 0);

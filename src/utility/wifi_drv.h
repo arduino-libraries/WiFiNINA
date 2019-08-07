@@ -286,6 +286,10 @@ public:
     static void digitalWrite(uint8_t pin, uint8_t value);
     static void analogWrite(uint8_t pin, uint8_t value);
 
+    static uint8_t beginProvision();
+    static uint8_t beginProvision(uint8_t channel);
+    static uint32_t provisioned();
+
     friend class WiFiUDP;
     friend class WiFiClient;
 };
