@@ -1,7 +1,7 @@
 #define SECRET_SSID ""
 #define SECRET_PASS ""
 
-// This certificates are completely bogus, but your own should resemble this format
+// These certificates are completely bogus, but your own should resemble this format
 
 const char * ca_pem = "-----BEGIN CERTIFICATE-----\n"
 "MIID3DCCA0WgAwIBAgIJANe5ZSCKoB8fMA0GCSqGSIb3DQEBCwUAMIGTMQswCQYD\n"

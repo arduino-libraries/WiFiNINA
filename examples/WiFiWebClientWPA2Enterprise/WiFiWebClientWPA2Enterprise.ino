@@ -6,10 +6,7 @@
  using the WiFi module.
 
  This example is written for a network using WPA encryption. For
- WEP or WPA, change the Wifi.begin() call accordingly.
-
- This example is written for a network using WPA encryption. For
- WEP or WPA, change the Wifi.begin() call accordingly.
+ WEP or WPA, change the WiFi.begin() call accordingly.
 
  Circuit:
  * Board with NINA module (Arduino MKR WiFi 1010, MKR VIDOR 4000 and UNO WiFi Rev.2)
@@ -45,7 +42,7 @@ WiFiClient client;
 // Just fill the fields you need
 // eg. if you are given only an identity and a certificate, initialize it as 
 //    WPA2Enterprise data("myidentity", ca_pem);
-// Certificates are stored in secret tab to avoid sharing them.
+// Certificates are stored in the Secret tab to avoid sharing them.
 
 WPA2Enterprise data(EAP_TLS, "myidentity", "username", "password", ca_pem, client_crt, client_key);
 
@@ -56,7 +53,7 @@ void setup() {
     ; // wait for serial port to connect. Needed for native USB port only
   }
 
-  // configure the wifi module to use provided WPA2 Enterprise parameters
+  // configure the WiFi module to use provided WPA2 Enterprise parameters
   WiFi.config(data);
 
   // check for the WiFi module:
@@ -71,7 +68,7 @@ void setup() {
     Serial.println("Please upgrade the firmware");
   }
 
-  // attempt to connect to Wifi network:
+  // attempt to connect to WiFi network:
   while (status != WL_CONNECTED) {
     Serial.print("Attempting to connect to SSID: ");
     Serial.println(ssid);
@@ -81,7 +78,7 @@ void setup() {
     // wait 10 seconds for connection:
     delay(10000);
   }
-  Serial.println("Connected to wifi");
+  Serial.println("Connected to WiFi");
   printWifiStatus();
 
   Serial.println("\nStarting connection to server...");
@@ -128,7 +125,7 @@ void printWifiStatus() {
 
   // print the received signal strength:
   long rssi = WiFi.RSSI();
-  Serial.print("signal strength (RSSI):");
+  Serial.print("signal strength (RSSI): ");
   Serial.print(rssi);
   Serial.println(" dBm");
 }
