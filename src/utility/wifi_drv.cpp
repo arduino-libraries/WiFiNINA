@@ -1168,6 +1168,70 @@ void WiFiDrv::wpa2EntSetUsername(const char* username)
     SpiDrv::spiSlaveDeselect();
 }
 
+void WiFiDrv::wpa2EntSetClientCertificate(const char* client_crt, const char* client_key)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(WPA2_ENTERPRISE_SET_CERT_KEY, PARAM_NUMS_2);
+    SpiDrv::sendParamLen16(strlen(client_crt));
+    SpiDrv::sendParamLen16(strlen(client_key));
+    SpiDrv::sendParamNoLen((uint8_t*)client_crt, strlen(client_crt), NO_LAST_PARAM);
+    SpiDrv::sendParamNoLen((uint8_t*)client_key, strlen(client_key), LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 5 + strlen(client_crt) + strlen(client_key);
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(WPA2_ENTERPRISE_SET_CERT_KEY, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+}
+
+void WiFiDrv::wpa2EntSetCACertificate(const char* ca_pem)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(WPA2_ENTERPRISE_SET_CA_CERT, PARAM_NUMS_1);
+    SpiDrv::sendParamLen16(strlen(ca_pem));
+    SpiDrv::sendParamNoLen((uint8_t*)ca_pem, strlen(ca_pem), LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 5 + strlen(ca_pem);
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(WPA2_ENTERPRISE_SET_CA_CERT, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+}
+
 void WiFiDrv::wpa2EntEnable()
 {
     WAIT_FOR_SLAVE_SELECT();

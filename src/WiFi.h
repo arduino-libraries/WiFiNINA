@@ -41,32 +41,16 @@ typedef enum _eap_methods {
  EAP_TTLS = 2,
 } eap_method;
 
-class WPA2Enterprise
+class WPA2EnterpriseClass
 {
 public:
-    WPA2Enterprise(eap_method method, String identity, String username = "", String password = "",
-                    const char* ca_pem = NULL, const char* client_crt = NULL, const char* client_key = NULL) :
-                    method(method), identity(identity), username(username), password(password),
-                    ca_pem(ca_pem), client_crt(client_crt), client_key(client_key)
-    {}
-    WPA2Enterprise(String identity, String username = "", String password = "",
-                    const char* ca_pem = NULL, const char* client_crt = NULL, const char* client_key = NULL) :
-                    method(EAP_TLS), identity(identity), username(username), password(password),
-                    ca_pem(ca_pem), client_crt(client_crt), client_key(client_key)
-    {}
-    WPA2Enterprise(String identity, const char* ca_pem = NULL, const char* client_crt = NULL, const char* client_key = NULL) :
-                    method(EAP_TLS), identity(identity), username(""), password(""),
-                    ca_pem(ca_pem), client_crt(client_crt), client_key(client_key)
-    {}
-
-    eap_method method; // TLS: 0, PEAP: 1, TTLS: 2 // looks like it's handled internally
-    String identity;
-    String username;
-    String password;
-    const char* ca_pem;
-    const char* client_crt;
-    const char* client_key;
+    void clear();
+    void save();
+    void addCACertificate(const char* ca_pem);
+    void addClientCertificate(const char* client_crt, const char* client_key);
 };
+
+extern WPA2EnterpriseClass WPA2Enterprise;
 
 class WiFiClass
 {
@@ -113,11 +97,13 @@ public:
     uint8_t beginAP(const char *ssid, const char* passphrase);
     uint8_t beginAP(const char *ssid, const char* passphrase, uint8_t channel);
 
-    /* Add WPA2 Enterprise information for next connection
+    /* Start Wifi connection with wpa2 enterprise
         *
-        * param data:   Static ip configuration
+        * helper function for most university WPA2 connections
+        * if a fine-grained configuration is needed (like adding certificates)
+        * use WPA2Enterprise functions and then call begin() normally
         */
-    void config(WPA2Enterprise& data);
+    int beginEnterprise(const char *ssid, const char* username, const char* password);
 
     /* Change Ip configuration settings disabling the dhcp client
         *

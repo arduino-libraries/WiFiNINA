@@ -27,6 +27,18 @@ extern "C" {
   #include "utility/debug.h"
 }
 
+void WPA2EnterpriseClass::addCACertificate(const char* ca_pem) {
+	WiFiDrv::wpa2EntSetCACertificate(ca_pem);
+}
+
+void WPA2EnterpriseClass::addClientCertificate(const char* client_crt, const char* client_key) {
+	// TODO: make sure that client_crt is not bigger tahn 4050bytes
+	WiFiDrv::wpa2EntSetClientCertificate(client_crt, client_key);
+}
+
+// singleton
+WPA2EnterpriseClass WPA2Enterprise;
+
 WiFiClass::WiFiClass() : _timeout(50000)
 {
 }
@@ -156,25 +168,13 @@ uint8_t WiFiClass::beginAP(const char *ssid, const char* passphrase, uint8_t cha
     return status;
 }
 
-void WiFiClass::config(WPA2Enterprise& data)
+int WiFiClass::beginEnterprise(const char *ssid, const char* username, const char* password)
 {
-	WiFiDrv::wpa2EntSetIdentity(data.identity.c_str());
-	WiFiDrv::wpa2EntSetUsername(data.username.c_str());
-	WiFiDrv::wpa2EntSetPassword(data.password.c_str());
-
-	if (data.ca_pem) {
-		WiFiStorage.remove("/fs/ca.pem");
-		WiFiStorage.write("/fs/ca.pem", 0, (uint8_t*)data.ca_pem, strlen(data.ca_pem));
-	}
-	if (data.client_crt) {
-		WiFiStorage.remove("/fs/client.crt");
-		WiFiStorage.write("/fs/client.crt", 0, (uint8_t*)data.client_crt, strlen(data.client_crt));
-	}
-	if (data.client_key) {
-		WiFiStorage.remove("/fs/client.key");
-		WiFiStorage.write("/fs/client.key", 0, (uint8_t*)data.client_key, strlen(data.client_key));
-	}
+	WiFiDrv::wpa2EntSetIdentity(username);
+	WiFiDrv::wpa2EntSetUsername(username);
+	WiFiDrv::wpa2EntSetPassword(password);
 	WiFiDrv::wpa2EntEnable();
+	return begin(ssid);
 }
 
 void WiFiClass::config(IPAddress local_ip)

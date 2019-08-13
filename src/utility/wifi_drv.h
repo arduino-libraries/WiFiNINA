@@ -289,6 +289,8 @@ public:
     static void wpa2EntSetIdentity(const char* identity);
     static void wpa2EntSetUsername(const char* username);
     static void wpa2EntSetPassword(const char* password);
+    static void wpa2EntSetCACertificate(const char* ca_pem);
+    static void wpa2EntSetClientCertificate(const char* client_crt, const char* client_key);
     static void wpa2EntEnable();
 
     friend class WiFiUDP;
