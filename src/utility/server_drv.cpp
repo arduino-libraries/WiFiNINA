@@ -323,6 +323,12 @@ bool ServerDrv::getData(uint8_t sock, uint8_t *data, uint8_t peek)
 
 bool ServerDrv::getDataBuf(uint8_t sock, uint8_t *_data, uint16_t *_dataLen)
 {
+    if (!SpiDrv::available())
+    {
+        *_dataLen = 0;
+        return false;
+    }
+    
 	WAIT_FOR_SLAVE_SELECT();
     // Send Command
     SpiDrv::sendCmd(GET_DATABUF_TCP_CMD, PARAM_NUMS_2);
