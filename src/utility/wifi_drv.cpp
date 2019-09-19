@@ -1078,4 +1078,26 @@ void WiFiDrv::analogWrite(uint8_t pin, uint8_t value)
     SpiDrv::spiSlaveDeselect();
 }
 
+uint8_t WiFiDrv::beginProvision()
+{
+    WAIT_FOR_SLAVE_SELECT();
+
+    // Send Command
+    SpiDrv::sendCmd(BEGIN_PROVISION_CMD, PARAM_NUMS_0);
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 1;
+    uint8_t _dataLen = 0;
+    SpiDrv::waitResponseCmd(BEGIN_PROVISION_CMD, PARAM_NUMS_1, &_data, &_dataLen);
+
+    SpiDrv::spiSlaveDeselect();
+
+    return 1;
+}
+
 WiFiDrv wiFiDrv;

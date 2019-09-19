@@ -80,6 +80,14 @@ public:
     uint8_t beginAP(const char *ssid, const char* passphrase);
     uint8_t beginAP(const char *ssid, const char* passphrase, uint8_t channel);
 
+    /* Start Wifi connection using provisioner
+     * If the previously configured network can't be found,
+     * an Access point will be turned on, serving a configuration landing page
+     */
+
+    uint8_t beginProvision();
+    uint8_t beginProvision(uint8_t channel);
+
     /* Change Ip configuration settings disabling the dhcp client
         *
         * param local_ip: 	Static ip configuration
