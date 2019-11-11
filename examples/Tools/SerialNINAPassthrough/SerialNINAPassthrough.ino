@@ -65,7 +65,7 @@ void loop() {
 #ifdef ARDUINO_SAMD_MKRVIDOR4000
     FPGA.digitalWrite(FPGA_SPIWIFI_RESET, (Serial.rts() == 1) ? LOW : HIGH);
 #else
-#ifdef SAMD_NANO_33_IOT
+#ifdef ARDUINO_SAMD_NANO_33_IOT
     digitalWrite(NINA_RESETN, !Serial.rts());
 #else
     digitalWrite(NINA_RESETN, Serial.rts());
