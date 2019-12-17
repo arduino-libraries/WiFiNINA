@@ -31,6 +31,7 @@ script:
   - buildExampleSketch ConnectNoEncryption
   - buildExampleSketch ConnectWithWEP
   - buildExampleSketch ConnectWithWPA
+  - buildExampleSketch ConnectWithWPA2Enterprise
   - buildExampleSketch ScanNetworks
   - buildExampleSketch ScanNetworksAdvanced
   - buildExampleSketch SimpleWebServerWiFi
