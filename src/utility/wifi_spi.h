@@ -92,6 +92,7 @@ enum {
 	GET_SOCKET_CMD		= 0x3F,
 
     // All command with DATA_FLAG 0x40 send a 16bit Len
+	SET_ENT_CMD			= 0x40,
 
 	SEND_DATA_TCP_CMD		= 0x44,
     GET_DATABUF_TCP_CMD		= 0x45,
@@ -126,6 +127,7 @@ enum numParams{
     PARAM_NUMS_3,
     PARAM_NUMS_4,
     PARAM_NUMS_5,
+    PARAM_NUMS_6,
     MAX_PARAM_NUMS
 };
 

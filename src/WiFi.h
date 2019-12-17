@@ -80,6 +80,10 @@ public:
     uint8_t beginAP(const char *ssid, const char* passphrase);
     uint8_t beginAP(const char *ssid, const char* passphrase, uint8_t channel);
 
+    uint8_t beginEnterprise(const char* ssid, const char* username, const char* password);
+    uint8_t beginEnterprise(const char* ssid, const char* username, const char* password, const char* identity);
+    uint8_t beginEnterprise(const char* ssid, const char* username, const char* password, const char* identity, const char* ca);
+
     /* Change Ip configuration settings disabling the dhcp client
         *
         * param local_ip: 	Static ip configuration
