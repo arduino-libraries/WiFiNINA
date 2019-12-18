@@ -35,10 +35,10 @@ extern "C" {
 
 uint16_t WiFiClient::_srcport = 1024;
 
-WiFiClient::WiFiClient() : _sock(NO_SOCKET_AVAIL) {
+WiFiClient::WiFiClient() : _sock(NO_SOCKET_AVAIL), _connect_timeout(10000) {
 }
 
-WiFiClient::WiFiClient(uint8_t sock) : _sock(sock) {
+WiFiClient::WiFiClient(uint8_t sock) : _sock(sock), _connect_timeout(10000) {
 }
 
 int WiFiClient::connect(const char* host, uint16_t port) {
@@ -63,8 +63,7 @@ int WiFiClient::connect(IPAddress ip, uint16_t port) {
 
     	unsigned long start = millis();
 
-    	// wait 4 second for the connection to close
-    	while (!connected() && millis() - start < 10000)
+      while (!connected() && millis() - start < _connect_timeout)
     		delay(1);
 
     	if (!connected())
@@ -92,8 +91,7 @@ int WiFiClient::connectSSL(IPAddress ip, uint16_t port)
 
       unsigned long start = millis();
 
-      // wait 4 second for the connection to close
-      while (!connected() && millis() - start < 10000)
+      while (!connected() && millis() - start < _connect_timeout)
         delay(1);
 
       if (!connected())
@@ -121,8 +119,7 @@ int WiFiClient::connectSSL(const char *host, uint16_t port)
 
       unsigned long start = millis();
 
-      // wait 4 second for the connection to close
-      while (!connected() && millis() - start < 10000)
+      while (!connected() && millis() - start < _connect_timeout)
         delay(1);
 
       if (!connected())
@@ -271,4 +268,9 @@ uint16_t  WiFiClient::remotePort()
   WiFiDrv::getRemoteData(_sock, _remoteIp, _remotePort);
   uint16_t port = (_remotePort[0]<<8)+_remotePort[1];
   return port;
+}
+
+void WiFiClient::setConnectTimeout(unsigned long timeout)
+{
+  _connect_timeout = timeout;
 }

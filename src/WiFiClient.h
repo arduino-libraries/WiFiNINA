@@ -50,6 +50,8 @@ public:
   virtual IPAddress remoteIP();
   virtual uint16_t remotePort();
 
+  virtual void setConnectTimeout(unsigned long timeout);
+
   friend class WiFiServer;
   friend class WiFiDrv;
 
@@ -59,6 +61,7 @@ private:
   static uint16_t _srcport;
   uint8_t _sock;   //not used
   uint16_t  _socket;
+  unsigned long _connect_timeout;
 };
 
 #endif
