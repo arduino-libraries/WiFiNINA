@@ -27,6 +27,10 @@ unsigned long baud = 119400;
 unsigned long baud = 115200;
 #endif
 
+#define BUFFER_SIZE 512
+static unsigned int buffer_length;
+static char buffer[BUFFER_SIZE];
+
 int rts = -1;
 int dtr = -1;
 
@@ -82,12 +86,16 @@ void loop() {
   }
 #endif
 
-  if (Serial.available()) {
-    SerialNina.write(Serial.read());
+  if (Serial.available() > 0) {
+    buffer_length = min(Serial.available(), BUFFER_SIZE);
+    Serial.readBytes(buffer, buffer_length);
+    SerialNina.write(buffer, buffer_length);
   }
 
-  if (SerialNina.available()) {
-    Serial.write(SerialNina.read());
+  if (SerialNina.available() > 0) {
+    buffer_length = min(SerialNina.available(), BUFFER_SIZE);
+    SerialNina.readBytes(buffer, buffer_length);
+    Serial.write(buffer, buffer_length);
   }
 
 #ifndef ARDUINO_AVR_UNO_WIFI_REV2
