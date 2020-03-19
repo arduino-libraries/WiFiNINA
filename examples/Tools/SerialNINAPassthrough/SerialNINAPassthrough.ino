@@ -21,11 +21,9 @@
 
 #ifdef ARDUINO_SAMD_MKRVIDOR4000
 #include <VidorPeripherals.h>
-
-unsigned long baud = 119400;
-#else
-unsigned long baud = 115200;
 #endif
+
+unsigned long baud = 115200;
 
 int rts = -1;
 int dtr = -1;
