@@ -109,6 +109,7 @@ enum {
     EXISTS_FILE			= 0x63,
     DOWNLOAD_FILE		= 0x64,
     APPLY_OTA_COMMAND	= 0x65,
+	RENAME_FILE			= 0x66,
 };
 
 

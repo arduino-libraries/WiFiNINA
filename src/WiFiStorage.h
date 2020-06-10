@@ -43,6 +43,9 @@ public:
 		WiFiDrv::deleteFile(filename, strlen(filename));
 		return true;
 	}
+	static bool rename(const char * old_file_name, const char * new_file_name) {
+		return (WiFiDrv::renameFile(old_file_name, strlen(old_file_name), new_file_name, strlen(new_file_name)) == 0);
+	}
 	static bool read(const char *filename, uint32_t offset, uint8_t* buffer, uint32_t buffer_len) {
 		WiFiDrv::readFile(filename, strlen(filename), offset, buffer, buffer_len);
 		return true;
@@ -58,6 +61,9 @@ public:
 
     static bool remove(String filename) {
     	return remove(filename.c_str());
+	}
+	static bool rename(String old_file_name, String new_file_name) {
+		return rename(old_file_name.c_str(), new_file_name.c_str());
 	}
 	static bool read(String filename, uint32_t offset, uint8_t* buffer, uint32_t buffer_len) {
 		return read(filename.c_str(), offset, buffer, buffer_len);

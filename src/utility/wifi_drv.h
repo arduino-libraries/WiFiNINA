@@ -287,6 +287,7 @@ public:
     static void analogWrite(uint8_t pin, uint8_t value);
 
     static int8_t downloadFile(const char* url, uint8_t url_len, const char *filename, uint8_t filename_len);
+    static int8_t renameFile(const char * old_file_name, uint8_t const old_file_name_len, const char * new_file_name, uint8_t const new_file_name_len);
 
     static int8_t fileOperation(uint8_t operation, const char *filename, uint8_t filename_len, uint32_t offset, uint8_t* buffer, uint32_t len);
 
