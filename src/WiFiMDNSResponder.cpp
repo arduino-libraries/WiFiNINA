@@ -155,9 +155,14 @@ bool WiFiMDNSResponder::parseRequest()
     memcpy(&requestQtype, &request[minimumExpectedRequestLength - 4], sizeof(requestQtype));
     memcpy(&requestQclass, &request[minimumExpectedRequestLength - 2], sizeof(requestQclass));
 
+#ifdef ARDUINO_ARCH_AVR
+    requestQtype = _ntohs(requestQtype);
+    requestQclass = _ntohs(requestQclass);
+#else
     requestQtype = __ntohs(requestQtype);
     requestQclass = __ntohs(requestQclass);
 
+#endif
     // compare request
     if (memcmp_P(request, expectedRequestHeader, 4) == 0 &&                      // request header start match
         memcmp_P(&request[6], &expectedRequestHeader[6], 6) == 0 &&              // request header end match
@@ -180,8 +185,11 @@ void WiFiMDNSResponder::replyToRequest()
   int nameLength = name.length();
   int domainLength = sizeof(domain);
   uint32_t ipAddress = WiFi.localIP();
+#ifdef ARDUINO_ARCH_AVR
+  uint32_t ttl = _htonl(ttlSeconds);
+#else
   uint32_t ttl = __htonl(ttlSeconds);
-
+#endif
   int responseSize = sizeof(responseHeader) + 1 + nameLength + 1 + domainLength + 1 + sizeof(aRecord) + sizeof(nsecRecord);
   uint8_t response[responseSize];
   uint8_t* r = response;
