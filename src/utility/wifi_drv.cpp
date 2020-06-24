@@ -1110,7 +1110,7 @@ int8_t WiFiDrv::downloadFile(const char* url, uint8_t url_len, const char *filen
     return _data;
 }
 
-int8_t renameFile(const char * old_file_name, uint8_t const old_file_name_len, const char * new_file_name, uint8_t const new_file_name_len)
+int8_t WiFiDrv::renameFile(const char * old_file_name, uint8_t const old_file_name_len, const char * new_file_name, uint8_t const new_file_name_len)
 {
 	WAIT_FOR_SLAVE_SELECT();
     /* Send Command */
@@ -1133,7 +1133,7 @@ int8_t renameFile(const char * old_file_name, uint8_t const old_file_name_len, c
     /* Wait for reply */
     uint8_t data = 0;
     uint8_t dataLen = 0;
-    if (!SpiDrv::waitResponseCmd(DOWNLOAD_FILE, PARAM_NUMS_1, &data, &dataLen))
+    if (!SpiDrv::waitResponseCmd(RENAME_FILE, PARAM_NUMS_1, &data, &dataLen))
     {
         WARN("error waitResponse");
         data = WL_FAILURE;
