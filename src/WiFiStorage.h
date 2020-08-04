@@ -58,6 +58,10 @@ public:
 		WiFiDrv::downloadFile(url, strlen(url), filename, strlen(filename));
 		return true;
 	}
+    static bool downloadOTA(const char * url) {
+        return (WiFiDrv::downloadOTA(url, strlen(url)) == 0);
+    }
+
 
     static bool remove(String filename) {
     	return remove(filename.c_str());
