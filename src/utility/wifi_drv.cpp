@@ -1154,7 +1154,7 @@ int8_t WiFiDrv::downloadOTA(const char* url, uint8_t url_len)
     SpiDrv::sendParam((uint8_t*)url, url_len, LAST_PARAM);
 
     // pad to multiple of 4
-    int commandSize = 6 + url_len;
+    int commandSize = 5 + url_len;
     while (commandSize % 4) {
         SpiDrv::readChar();
         commandSize++;
