@@ -78,6 +78,9 @@ public:
     static bool download(String url, String filename) {
     	return download(url.c_str(), filename.c_str());
     }
+    static bool download(String url) {
+        return downloadOTA(url.c_str());
+    }
 };
 
 extern WiFiStorageClass WiFiStorage;
