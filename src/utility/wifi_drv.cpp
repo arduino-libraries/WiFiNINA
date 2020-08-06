@@ -1146,6 +1146,37 @@ int8_t WiFiDrv::downloadFile(const char* url, uint8_t url_len, const char *filen
     return _data;
 }
 
+int8_t WiFiDrv::downloadOTA(const char* url, uint8_t url_len)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(DOWNLOAD_OTA, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)url, url_len, LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 5 + url_len;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(DOWNLOAD_OTA, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return _data;
+}
+
 int8_t WiFiDrv::renameFile(const char * old_file_name, uint8_t const old_file_name_len, const char * new_file_name, uint8_t const new_file_name_len)
 {
 	WAIT_FOR_SLAVE_SELECT();

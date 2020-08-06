@@ -58,6 +58,14 @@ public:
 		WiFiDrv::downloadFile(url, strlen(url), filename, strlen(filename));
 		return true;
 	}
+    static bool downloadOTA(const char * url, uint8_t * res_ota_download = NULL) {
+		uint8_t const res = WiFiDrv::downloadOTA(url, strlen(url));
+		if (res_ota_download)
+		  *res_ota_download = res;
+		bool const success = (res == 0);
+        return success;
+    }
+
 
     static bool remove(String filename) {
     	return remove(filename.c_str());
@@ -73,6 +81,9 @@ public:
 	}
     static bool download(String url, String filename) {
     	return download(url.c_str(), filename.c_str());
+    }
+    static bool download(String url, uint8_t * res_ota_download = NULL) {
+        return downloadOTA(url.c_str(), res_ota_download);
     }
 };
 
