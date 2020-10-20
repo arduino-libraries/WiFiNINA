@@ -36,6 +36,8 @@ public:
   virtual int connect(const char *host, uint16_t port);
   virtual int connectSSL(IPAddress ip, uint16_t port);
   virtual int connectSSL(const char *host, uint16_t port);
+  virtual int connectBearSSL(IPAddress ip, uint16_t port);
+  virtual int connectBearSSL(const char *host, uint16_t port);
   virtual size_t write(uint8_t);
   virtual size_t write(const uint8_t *buf, size_t size);
   virtual int available();
