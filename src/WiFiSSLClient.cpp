@@ -45,7 +45,7 @@ WiFiBearSSLClient::WiFiBearSSLClient() :
 }
 
 WiFiBearSSLClient::WiFiBearSSLClient(uint8_t sock) :
-	WiFiClient()
+	WiFiClient(sock)
 {
 }
 
