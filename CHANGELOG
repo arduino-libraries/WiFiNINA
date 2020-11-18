@@ -1,5 +1,11 @@
 WiFiNINA ?.?.? - ????.??.??
 
+WiFiNINA 1.8.0 - 2020.11.18
+
+* Limit the maximum length of the download URL for the OTA binary since the receive buffer on the nina firmware can't hold more than 128 bytes (#131)
+* Introduce WiFiBearSSLClient (offloaded to Nina) (#139)
+* Change WIFI_FIRMWARE_LATEST_VERSION to 1.4.2
+
 WiFiNINA 1.7.1 - 2020.08.26
 
 * Change WIFI_FIRMWARE_LATEST_VERSION to 1.4.1
