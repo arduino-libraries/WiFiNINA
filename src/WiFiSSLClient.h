@@ -32,4 +32,14 @@ public:
 	virtual int connect(const char* host, uint16_t port);
 };
 
+class WiFiBearSSLClient : public WiFiClient {
+
+public:
+	WiFiBearSSLClient();
+	WiFiBearSSLClient(uint8_t sock);
+
+	virtual int connect(IPAddress ip, uint16_t port);
+	virtual int connect(const char* host, uint16_t port);
+};
+
 #endif /* WIFISSLCLIENT_H */
