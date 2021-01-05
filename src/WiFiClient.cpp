@@ -207,19 +207,29 @@ size_t WiFiClient::write(const uint8_t *buf, size_t size) {
   if (size==0)
   {
 	  setWriteError();
-      return 0;
+    return 0;
   }
 
-  size_t written = ServerDrv::sendData(_sock, buf, size);
-  if (!written)
-  {
-	  setWriteError();
-      return 0;
+  bool success = false;
+  size_t written = 0;
+  for (int i=0; i<5; i++) {
+    written = ServerDrv::sendData(_sock, buf, size);
+    if (written) {
+      success = true;
+      break;
+    }
   }
-  if (!ServerDrv::checkDataSent(_sock))
-  {
-	  setWriteError();
-      return 0;
+  if (success) {
+    if (!ServerDrv::checkDataSent(_sock))
+    {
+      setWriteError();
+        return 0;
+    }
+  } else {
+    // close socket
+    ServerDrv::stopClient(_sock);
+    setWriteError();
+    return 0;
   }
 
   return written;
