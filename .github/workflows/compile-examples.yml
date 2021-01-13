@@ -24,6 +24,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      SKETCHES_REPORTS_PATH: sketches-reports
+
     strategy:
       fail-fast: false
 
@@ -48,3 +51,11 @@ jobs:
             - name: VidorPeripherals
           sketch-paths: |
             - ./examples/
+          enable-deltas-report: true
+          sketches-report-path: ${{ env.SKETCHES_REPORTS_PATH }}
+
+      - name: Save memory usage change report as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.SKETCHES_REPORTS_PATH }}
+          path: ${{ env.SKETCHES_REPORTS_PATH }}
