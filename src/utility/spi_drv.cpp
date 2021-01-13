@@ -30,7 +30,7 @@
 // yes, so use the existing VidorFPGA include
 #include <VidorFPGA.h>
 #else
-// otherwise, fallback to VidorPeripherals and it's bistream
+// otherwise, fallback to VidorPeripherals and it's bitstream
 #include <VidorPeripherals.h>
 #endif
 

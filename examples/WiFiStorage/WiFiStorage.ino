@@ -1,5 +1,5 @@
 /*
-  This example shows how to interact with NiNa internal memory partition
+  This example shows how to interact with NINA internal memory partition
   APIs are modeled on SerialFlash library (not on SD) to speedup operations and avoid buffers.
 */
 

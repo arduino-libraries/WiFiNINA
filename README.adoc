@@ -1,13 +1,18 @@
-= WiFiNINA Library for Arduino =
+// Define the repository information in these attributes
+:repository-owner: arduino-libraries
+:repository-name: WiFiNINA
 
-image:https://travis-ci.org/arduino-libraries/WiFiNINA.svg?branch=master["Build Status", link="https://travis-ci.org/arduino-libraries/WiFiNINA"]
+= {repository-name} library for Arduino =
+
+image:https://github.com/{repository-owner}/{repository-name}/workflows/Compile%20Examples/badge.svg["Compile Examples Status", link="https://github.com/{repository-owner}/{repository-name}/actions?workflow=Compile+Examples"]
+image:https://github.com/{repository-owner}/{repository-name}/workflows/Spell%20Check/badge.svg["Spell Check Status", link="https://github.com/{repository-owner}/{repository-name}/actions?workflow=Spell+Check"]
 
 Enables network connection (local and Internet) with the Arduino MKR WiFi 1010, Arduino MKR VIDOR 4000 and Arduino UNO WiFi Rev.2.
 
 With this library you can instantiate Servers, Clients and send/receive UDP packets through WiFi. The board can connect either to open or encrypted networks (WEP, WPA). The IP address can be assigned statically or through a DHCP. The library can also manage DNS.
 
 For more information about this library please visit us at
-http://www.arduino.cc/en/Reference/WiFiNINA
+https://www.arduino.cc/en/Reference/{repository-name}
 
 == License ==
 
