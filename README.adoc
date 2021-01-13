@@ -1,4 +1,5 @@
 = WiFiNINA Library for Arduino =
+= {repository-name} library for Arduino =
 
 image:https://travis-ci.org/arduino-libraries/WiFiNINA.svg?branch=master["Build Status", link="https://travis-ci.org/arduino-libraries/WiFiNINA"]
 
