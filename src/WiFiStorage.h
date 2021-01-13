@@ -1,5 +1,5 @@
 /*
-  WiFiStorage.h - Library for Arduino boards based on NINA wifi module.
+  WiFiStorage.h - Library for Arduino boards based on NINA WiFi module.
   Copyright (c) 2018 Arduino SA. All rights reserved.
 
   This library is free software; you can redistribute it and/or
