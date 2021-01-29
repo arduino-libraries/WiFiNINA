@@ -35,10 +35,10 @@ extern "C" {
 
 uint16_t WiFiClient::_srcport = 1024;
 
-WiFiClient::WiFiClient() : _sock(NO_SOCKET_AVAIL) {
+WiFiClient::WiFiClient() : _sock(NO_SOCKET_AVAIL), _retrySend(true) {
 }
 
-WiFiClient::WiFiClient(uint8_t sock) : _sock(sock) {
+WiFiClient::WiFiClient(uint8_t sock) : _sock(sock), _retrySend(true) {
 }
 
 int WiFiClient::connect(const char* host, uint16_t port) {
@@ -207,22 +207,48 @@ size_t WiFiClient::write(const uint8_t *buf, size_t size) {
   if (size==0)
   {
 	  setWriteError();
-      return 0;
+    return 0;
   }
 
   size_t written = ServerDrv::sendData(_sock, buf, size);
-  if (!written)
-  {
-	  setWriteError();
-      return 0;
+  if (!written && _retrySend) {
+    written = retry(buf, size, true);
   }
+  if(!written){
+    // close socket
+    ServerDrv::stopClient(_sock);
+    setWriteError();
+    return 0;
+  }
+
   if (!ServerDrv::checkDataSent(_sock))
   {
-	  setWriteError();
-      return 0;
+    setWriteError();
+    return 0;
   }
 
   return written;
+}
+
+size_t WiFiClient::retry(const uint8_t *buf, size_t size, bool write) {
+  size_t rec_bytes = 0;
+
+  if (write) {
+
+    //RETRY WRITE
+    for (int i=0; i<5; i++) {
+      rec_bytes = ServerDrv::sendData(_sock, buf, size);
+      if (rec_bytes) {
+        break;
+      }
+    }
+    return rec_bytes;
+
+  } else {
+    //RETRY READ
+    // To be implemented, if needed
+  }
+
 }
 
 int WiFiClient::available() {
@@ -254,6 +280,10 @@ int WiFiClient::read(uint8_t* buf, size_t size) {
 
 int WiFiClient::peek() {
   return WiFiSocketBuffer.peek(_sock);
+}
+
+void WiFiClient::setRetry(bool retry) {
+  _retrySend = retry;
 }
 
 void WiFiClient::flush() {
