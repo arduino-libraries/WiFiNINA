@@ -207,9 +207,30 @@ void SpiDrv::waitForSlaveSign()
 	while (!waitSlaveSign());
 }
 
-void SpiDrv::waitForSlaveReady()
+#if defined __has_include
+#  if __has_include (<Adafruit_SleepyDog.h>)
+#    include <Adafruit_SleepyDog.h>
+#    define HAS_WATCHDOG 1
+#  endif
+#else
+#  define HAS_WATCHDOG 0
+#endif
+
+void SpiDrv::waitForSlaveReady(bool const feed_watchdog)
 {
-	while (!waitSlaveReady());
+#if HAS_WATCHDOG
+    unsigned long const start = millis();
+#endif /* HAS_WATCHDOG */
+	while (!waitSlaveReady())
+    {
+#if HAS_WATCHDOG
+        if (feed_watchdog) {
+            if ((millis() - start) < 10000) {
+                Watchdog.reset();
+            }
+        }
+#endif /* HAS_WATCHDOG */
+    }
 }
 
 void SpiDrv::getParam(uint8_t* param)
