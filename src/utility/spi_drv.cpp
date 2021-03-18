@@ -63,6 +63,14 @@ static bool inverted_reset = false;
 
 bool SpiDrv::initialized = false;
 
+__attribute__((weak)) void wifi_nina_feed_watchdog()
+{
+    /* This function can be overwritten by a "strong" implementation
+     * in a higher level application, such as the ArduinoIoTCloud
+     * firmware stack.
+     */
+}
+
 void SpiDrv::begin()
 {
 #ifdef ARDUINO_SAMD_MKRVIDOR4000
@@ -207,29 +215,16 @@ void SpiDrv::waitForSlaveSign()
 	while (!waitSlaveSign());
 }
 
-#if defined __has_include
-#  if __has_include (<Adafruit_SleepyDog.h>)
-#    include <Adafruit_SleepyDog.h>
-#    define HAS_WATCHDOG 1
-#  endif
-#else
-#  define HAS_WATCHDOG 0
-#endif
-
 void SpiDrv::waitForSlaveReady(bool const feed_watchdog)
 {
-#if HAS_WATCHDOG
     unsigned long const start = millis();
-#endif /* HAS_WATCHDOG */
 	while (!waitSlaveReady())
     {
-#if HAS_WATCHDOG
         if (feed_watchdog) {
             if ((millis() - start) < 10000) {
-                Watchdog.reset();
+                wifi_nina_feed_watchdog();
             }
         }
-#endif /* HAS_WATCHDOG */
     }
 }
 
