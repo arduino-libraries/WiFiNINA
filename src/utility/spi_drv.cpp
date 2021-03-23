@@ -61,6 +61,10 @@ static bool inverted_reset = false;
 #define SPIWIFI SPI
 #endif
 
+#ifndef NINA_GPIOIRQ
+#define NINA_GPIOIRQ    NINA_GPIO0
+#endif
+
 bool SpiDrv::initialized = false;
 
 __attribute__((weak)) void wifi_nina_feed_watchdog()
@@ -98,7 +102,6 @@ void SpiDrv::begin()
       }      
 #endif
 
-      SPIWIFI.begin();
       pinMode(SLAVESELECT, OUTPUT);
       pinMode(SLAVEREADY, INPUT);
       pinMode(SLAVERESET, OUTPUT);
@@ -112,7 +115,9 @@ void SpiDrv::begin()
       delay(750);
 
       digitalWrite(NINA_GPIO0, LOW);
-      pinMode(NINA_GPIO0, INPUT);
+      pinMode(NINA_GPIOIRQ, INPUT);
+
+      SPIWIFI.begin();
 
 #ifdef _DEBUG_
 	  INIT_TRIGGER()
@@ -594,7 +599,7 @@ void SpiDrv::sendCmd(uint8_t cmd, uint8_t numParam)
 
 int SpiDrv::available()
 {
-    return (digitalRead(NINA_GPIO0) != LOW);
+    return (digitalRead(NINA_GPIOIRQ) != LOW);
 }
 
 SpiDrv spiDrv;
