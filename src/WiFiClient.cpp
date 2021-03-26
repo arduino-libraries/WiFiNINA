@@ -245,8 +245,9 @@ size_t WiFiClient::retry(const uint8_t *buf, size_t size, bool write) {
     return rec_bytes;
 
   } else {
-    //RETRY READ
-    // To be implemented, if needed
+	  return rec_bytes;
+      //RETRY READ
+      // To be implemented, if needed
   }
 
 }
