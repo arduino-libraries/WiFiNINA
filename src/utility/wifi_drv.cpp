@@ -1060,6 +1060,11 @@ void WiFiDrv::pinMode(uint8_t pin, uint8_t mode)
     SpiDrv::spiSlaveDeselect();
 }
 
+PinStatus WiFiDrv::digitalRead(uint8_t pin)
+{
+#warning "This needs to be implemented!!!"
+}
+
 void WiFiDrv::digitalWrite(uint8_t pin, uint8_t value)
 {
     WAIT_FOR_SLAVE_SELECT();
@@ -1085,6 +1090,11 @@ void WiFiDrv::digitalWrite(uint8_t pin, uint8_t value)
         _data = WL_FAILURE;
     }
     SpiDrv::spiSlaveDeselect();
+}
+
+int WiFiDrv::analogRead(uint8_t pin)
+{
+#warning "This needs to be implemented!!!"
 }
 
 void WiFiDrv::analogWrite(uint8_t pin, uint8_t value)
