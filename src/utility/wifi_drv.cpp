@@ -1062,7 +1062,34 @@ void WiFiDrv::pinMode(uint8_t pin, uint8_t mode)
 
 PinStatus WiFiDrv::digitalRead(uint8_t pin)
 {
-#warning "This needs to be implemented!!!"
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(GET_DIGITAL_READ, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)&pin, 1, LAST_PARAM);
+
+    // pad to multiple of 4
+    SpiDrv::readChar();
+    SpiDrv::readChar();
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(GET_DIGITAL_READ, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+
+    if (_data == 1)
+        return HIGH;
+    else
+        return LOW;
 }
 
 void WiFiDrv::digitalWrite(uint8_t pin, uint8_t value)
