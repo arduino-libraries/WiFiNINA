@@ -1119,9 +1119,32 @@ void WiFiDrv::digitalWrite(uint8_t pin, uint8_t value)
     SpiDrv::spiSlaveDeselect();
 }
 
-int WiFiDrv::analogRead(uint8_t pin)
+uint16_t WiFiDrv::analogRead(uint8_t pin)
 {
-#warning "This needs to be implemented!!!"
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(GET_ANALOG_READ, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)&pin, 1, LAST_PARAM);
+
+    // pad to multiple of 4
+    SpiDrv::readChar();
+    SpiDrv::readChar();
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint16_t adc_raw = 0;
+    uint8_t adc_raw_len = 0;
+    if (!SpiDrv::waitResponseCmd(GET_ANALOG_READ, PARAM_NUMS_1, (uint8_t*)&adc_raw, &adc_raw_len))
+    {
+        WARN("error waitResponse");
+    }
+    SpiDrv::spiSlaveDeselect();
+
+    return adc_raw;
 }
 
 void WiFiDrv::analogWrite(uint8_t pin, uint8_t value)
