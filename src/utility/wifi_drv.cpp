@@ -1119,12 +1119,12 @@ void WiFiDrv::digitalWrite(uint8_t pin, uint8_t value)
     SpiDrv::spiSlaveDeselect();
 }
 
-uint16_t WiFiDrv::analogRead(uint8_t pin)
+uint16_t WiFiDrv::analogRead(uint8_t adc_channel)
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
     SpiDrv::sendCmd(GET_ANALOG_READ, PARAM_NUMS_1);
-    SpiDrv::sendParam((uint8_t*)&pin, 1, LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&adc_channel, 1, LAST_PARAM);
 
     // pad to multiple of 4
     SpiDrv::readChar();

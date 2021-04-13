@@ -30,43 +30,42 @@
  * FUNCTION DEFINITION
  ******************************************************************************/
 
+uint8_t toAnalogPin(NinaPin pin)
+{
+  if      (pin == A4) return 6; /* ADC1 - CH6 */
+  else if (pin == A5) return 3; /* ADC1 - CH3 */
+  else if (pin == A6) return 0; /* ADC1 - CH0 */
+  else if (pin == A7) return 7; /* ADC1 - CH7 */
+  else                return 0xFF;
+}
+
 void pinMode(NinaPin pin, PinMode mode)
 {
-  WiFiDrv::wifiDriverInit();
-  Serial.print(__FUNCTION__);
-  Serial.print(": pin = ");
-  Serial.print(pin);
-  Serial.print(", mode = ");
-  Serial.println(mode);
   WiFiDrv::pinMode(static_cast<uint8_t>(pin), static_cast<uint8_t>(mode));
 }
 
 PinStatus digitalRead(NinaPin pin)
 {
-  WiFiDrv::wifiDriverInit();
   return WiFiDrv::digitalRead(static_cast<uint8_t>(pin));
 }
 
 void digitalWrite(NinaPin pin, PinStatus value)
 {
-  WiFiDrv::wifiDriverInit();
-  Serial.print(__FUNCTION__);
-  Serial.print(": pin = ");
-  Serial.print(pin);
-  Serial.print(", value = ");
-  Serial.println(value);
   WiFiDrv::digitalWrite(static_cast<uint8_t>(pin), static_cast<uint8_t>(value));
 }
 
 int analogRead(NinaPin pin)
 {
-  WiFiDrv::wifiDriverInit();
-  return WiFiDrv::analogRead(static_cast<uint8_t>(pin));
+  uint8_t const adc_channel = toAnalogPin(pin);
+
+  if (adc_channel == 0xFF)
+    return 0;
+  else
+    return WiFiDrv::analogRead(adc_channel);
 }
 
 void analogWrite(NinaPin pin, int value)
 {
-  WiFiDrv::wifiDriverInit();
   WiFiDrv::analogWrite(static_cast<uint8_t>(pin), static_cast<uint8_t>(value));
 }
 

@@ -292,7 +292,7 @@ public:
     static void pinMode(uint8_t pin, uint8_t mode);
     static PinStatus digitalRead(uint8_t pin);
     static void digitalWrite(uint8_t pin, uint8_t value);
-    static uint16_t analogRead(uint8_t pin);
+    static uint16_t analogRead(uint8_t adc_channel);
     static void analogWrite(uint8_t pin, uint8_t value);
 
     static int8_t downloadFile(const char* url, uint8_t url_len, const char *filename, uint8_t filename_len);
