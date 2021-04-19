@@ -36,6 +36,7 @@ jobs:
         board:
           - fqbn: arduino:samd:mkrwifi1010
           - fqbn: arduino:samd:mkrvidor4000
+          - fqbn: arduino:samd:nano_33_iot
           - fqbn: arduino:megaavr:uno2018:mode=on
 
     steps:
