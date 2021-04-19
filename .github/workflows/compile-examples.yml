@@ -38,6 +38,7 @@ jobs:
           - fqbn: arduino:samd:mkrvidor4000
           - fqbn: arduino:samd:nano_33_iot
           - fqbn: arduino:megaavr:uno2018:mode=on
+          - fqbn: arduino:mbed_nano:nanorp2040connect
 
     steps:
       - name: Checkout
