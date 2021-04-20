@@ -35,6 +35,7 @@ jobs:
           - fqbn: arduino:samd:mkrwifi1010
           - fqbn: arduino:samd:mkrvidor4000
           - fqbn: arduino:megaavr:uno2018:mode=on
+          - fqbn: arduino:mbed_nano:nanorp2040connect
 
     steps:
       - name: Checkout
