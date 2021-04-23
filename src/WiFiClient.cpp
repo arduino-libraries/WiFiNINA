@@ -64,7 +64,7 @@ int WiFiClient::connect(IPAddress ip, uint16_t port) {
     	unsigned long start = millis();
 
     	// wait 4 second for the connection to close
-    	while (!connected() && millis() - start < 10000)
+    	while (!connected() && millis() - start < 2000)
     		delay(1);
 
     	if (!connected())
