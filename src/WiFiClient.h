@@ -46,6 +46,8 @@ public:
   virtual int read(uint8_t *buf, size_t size);
   virtual int peek();
   virtual void setRetry(bool retry);
+  virtual void setConnectTime(uint16_t connectTime);
+  virtual void setSSLConnectTime(uint16_t SSLConnectTime);
   virtual void flush();
   virtual void stop();
   virtual uint8_t connected();
@@ -64,6 +66,8 @@ private:
   uint8_t _sock;   //not used
   uint16_t  _socket;
   bool _retrySend;
+  uint16_t _connectTime;
+  uint16_t _SSLConnectTime;
 };
 
 #endif
