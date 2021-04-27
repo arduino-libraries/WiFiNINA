@@ -257,7 +257,7 @@ int WiFiClient::available() {
   {
       return WiFiSocketBuffer.available(_sock);
   }
-   
+
   return 0;
 }
 
@@ -293,6 +293,11 @@ void WiFiClient::setConnectTime(uint16_t connectTime){
 
 void WiFiClient::setSSLConnectTime(uint16_t SSLConnectTime){
   _SSLConnectTime = SSLConnectTime;
+}
+
+void WiFiClient::setInsecure(bool insecure){
+  WiFiDrv::setInsecure(_sock, insecure);
+
 }
 
 void WiFiClient::flush() {

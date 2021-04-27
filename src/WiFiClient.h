@@ -20,7 +20,7 @@
 
 #ifndef wificlient_h
 #define wificlient_h
-#include "Arduino.h"	
+#include "Arduino.h"
 #include "Print.h"
 #include "Client.h"
 #include "IPAddress.h"
@@ -48,6 +48,7 @@ public:
   virtual void setRetry(bool retry);
   virtual void setConnectTime(uint16_t connectTime);
   virtual void setSSLConnectTime(uint16_t SSLConnectTime);
+  virtual void setInsecure(bool insecure);
   virtual void flush();
   virtual void stop();
   virtual uint8_t connected();
