@@ -1183,11 +1183,9 @@ void WiFiDrv::setInsecure(uint8_t sock, uint8_t insecure)
   // Send Command
   SpiDrv::sendCmd(SET_INSECURE, PARAM_NUMS_2);
   SpiDrv::sendParam(&sock, sizeof(sock));
-  SpiDrv::sendParam(insecure, LAST_PARAM);
+  SpiDrv::sendParam((uint8_t*)&insecure, 1, LAST_PARAM);
 
   // pad to multiple of 4
-  SpiDrv::readChar();
-  SpiDrv::readChar();
   SpiDrv::readChar();
   
   SpiDrv::spiSlaveDeselect();
