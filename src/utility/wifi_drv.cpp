@@ -1177,7 +1177,7 @@ int8_t WiFiDrv::downloadOTA(const char* url, uint8_t url_len)
     return _data;
 }
 
-void WiFiDrv::setInsecure(uint8_t sock, uint8_t insecure)
+int8_t WiFiDrv::setInsecure(uint8_t sock, uint8_t insecure)
 {
   WAIT_FOR_SLAVE_SELECT();
   // Send Command
@@ -1202,6 +1202,7 @@ void WiFiDrv::setInsecure(uint8_t sock, uint8_t insecure)
       _data = WL_FAILURE;
   }
   SpiDrv::spiSlaveDeselect();
+  return _data;
 }
 
 int8_t WiFiDrv::renameFile(const char * old_file_name, uint8_t const old_file_name_len, const char * new_file_name, uint8_t const new_file_name_len)

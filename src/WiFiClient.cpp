@@ -295,8 +295,9 @@ void WiFiClient::setSSLConnectTime(uint16_t SSLConnectTime){
   _SSLConnectTime = SSLConnectTime;
 }
 
-void WiFiClient::setInsecure(bool insecure){
-  WiFiDrv::setInsecure(_sock, insecure);
+uint8_t WiFiClient::setInsecure(bool insecure){
+  uint8_t nextSock = ServerDrv::getSocket();
+  return WiFiDrv::setInsecure(nextSock, insecure);
 
 }
 
