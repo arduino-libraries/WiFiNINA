@@ -295,6 +295,12 @@ void WiFiClient::setSSLConnectTime(uint16_t SSLConnectTimeout){
   _SSLConnectTimeout = SSLConnectTimeout;
 }
 
+uint8_t WiFiClient::setInsecure(bool insecure){
+  uint8_t nextSock = ServerDrv::getSocket();
+  return WiFiDrv::setInsecure(nextSock, insecure);
+
+}
+
 void WiFiClient::flush() {
   // TODO: a real check to ensure transmission has been completed
 }

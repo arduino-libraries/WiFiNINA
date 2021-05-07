@@ -48,6 +48,7 @@ public:
   virtual void setRetry(bool retry);
   virtual void setConnectTime(uint16_t connectTime);
   virtual void setSSLConnectTime(uint16_t SSLConnectTime);
+  virtual uint8_t setInsecure(bool insecure);
   virtual void flush();
   virtual void stop();
   virtual uint8_t connected();

@@ -57,8 +57,11 @@ noLowPowerMode	KEYWORD2
 ping	KEYWORD2
 beginMulticast	KEYWORD2
 setTimeout	KEYWORD2
-setConnectTimeout	KEYWORD2
-setSSLConnectTimeout	KEYWORD2
+
+setConnectTime	KEYWORD2
+setSSLConnectTime	KEYWORD2
+setInsecure	KEYWORD2
+
 
 
 #######################################
