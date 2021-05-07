@@ -67,8 +67,8 @@ private:
   uint8_t _sock;   //not used
   uint16_t  _socket;
   bool _retrySend;
-  uint16_t _connectTime = 10000;
-  uint16_t _SSLConnectTime = 10000;
+  uint16_t _connectTimeout = 10000;
+  uint16_t _SSLConnectTimeout = 10000;
 };
 
 #endif

@@ -64,7 +64,7 @@ int WiFiClient::connect(IPAddress ip, uint16_t port) {
     	unsigned long start = millis();
 
     	// wait 4 second for the connection to close
-    	while (!connected() && millis() - start < _connectTime)
+    	while (!connected() && millis() - start < _connectTimeout)
     		delay(1);
 
     	if (!connected())
@@ -93,7 +93,7 @@ int WiFiClient::connectSSL(IPAddress ip, uint16_t port)
       unsigned long start = millis();
 
       // wait 4 second for the connection to close
-      while (!connected() && millis() - start < _SSLConnectTime)
+      while (!connected() && millis() - start < _SSLConnectTimeout)
         delay(1);
 
       if (!connected())
@@ -122,7 +122,7 @@ int WiFiClient::connectSSL(const char *host, uint16_t port)
       unsigned long start = millis();
 
       // wait 4 second for the connection to close
-      while (!connected() && millis() - start < _SSLConnectTime)
+      while (!connected() && millis() - start < _SSLConnectTimeout)
         delay(1);
 
       if (!connected())
@@ -151,7 +151,7 @@ int WiFiClient::connectBearSSL(IPAddress ip, uint16_t port)
       unsigned long start = millis();
 
       // wait 4 second for the connection to close
-      while (!connected() && millis() - start < _SSLConnectTime)
+      while (!connected() && millis() - start < _SSLConnectTimeout)
         delay(1);
 
       if (!connected())
@@ -180,7 +180,7 @@ int WiFiClient::connectBearSSL(const char *host, uint16_t port)
       unsigned long start = millis();
 
       // wait 4 second for the connection to close
-      while (!connected() && millis() - start < _SSLConnectTime)
+      while (!connected() && millis() - start < _SSLConnectTimeout)
         delay(1);
 
       if (!connected())
@@ -287,12 +287,12 @@ void WiFiClient::setRetry(bool retry) {
   _retrySend = retry;
 }
 
-void WiFiClient::setConnectTime(uint16_t connectTime){
-  _connectTime = connectTime;
+void WiFiClient::setConnectTime(uint16_t connectTimeout){
+  _connectTimeout = connectTimeout;
 }
 
-void WiFiClient::setSSLConnectTime(uint16_t SSLConnectTime){
-  _SSLConnectTime = SSLConnectTime;
+void WiFiClient::setSSLConnectTime(uint16_t SSLConnectTimeout){
+  _SSLConnectTimeout = SSLConnectTimeout;
 }
 
 uint8_t WiFiClient::setInsecure(bool insecure){

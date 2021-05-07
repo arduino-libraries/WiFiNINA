@@ -57,12 +57,13 @@ noLowPowerMode	KEYWORD2
 ping	KEYWORD2
 beginMulticast	KEYWORD2
 setTimeout	KEYWORD2
+
 setConnectTime	KEYWORD2
 setSSLConnectTime	KEYWORD2
 setInsecure	KEYWORD2
 
 
+
 #######################################
 # Constants (LITERAL1)
 #######################################
-
