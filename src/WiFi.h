@@ -21,7 +21,7 @@
 #ifndef WiFi_h
 #define WiFi_h
 
-#define WIFI_FIRMWARE_LATEST_VERSION "1.4.4"
+#define WIFI_FIRMWARE_LATEST_VERSION "1.4.5"
 
 #include <inttypes.h>
 
