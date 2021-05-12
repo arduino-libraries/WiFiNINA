@@ -51,7 +51,10 @@ PinStatus digitalRead(NinaPin pin)
 
 void digitalWrite(NinaPin pin, PinStatus value)
 {
-  WiFiDrv::digitalWrite(static_cast<uint8_t>(pin), static_cast<uint8_t>(value));
+  if (value == LOW)
+    WiFiDrv::digitalWrite(static_cast<uint8_t>(pin), 1);
+  else
+    WiFiDrv::digitalWrite(static_cast<uint8_t>(pin), 0);
 }
 
 int analogRead(NinaPin pin)
