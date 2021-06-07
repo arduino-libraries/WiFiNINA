@@ -36,12 +36,15 @@ extern "C" {
 #include "WiFiServer.h"
 #include "WiFiStorage.h"
 
+typedef void(*FeedHostProcessorWatchdogFuncPointer)();
+
 class WiFiClass
 {
 private:
 
     static void init();
     unsigned long _timeout;
+    FeedHostProcessorWatchdogFuncPointer _feed_watchdog_func;
 public:
     WiFiClass();
 
@@ -274,6 +277,9 @@ public:
     int ping(IPAddress host, uint8_t ttl = 128);
 
     void setTimeout(unsigned long timeout);
+
+    void setFeedWatchdogFunc(FeedHostProcessorWatchdogFuncPointer func);
+    void feedWatchdog();
 };
 
 extern WiFiClass WiFi;
