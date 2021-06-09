@@ -290,7 +290,13 @@ public:
     static void debug(uint8_t on);
     static float getTemperature();
     static void pinMode(uint8_t pin, uint8_t mode);
+    
+#if defined(ARDUINO_ARCH_MBED)
     static PinStatus digitalRead(uint8_t pin);
+#else    
+    static int digitalRead(uint8_t pin);
+#endif    
+    
     static void digitalWrite(uint8_t pin, uint8_t value);
     static uint16_t analogRead(uint8_t adc_channel);
     static void analogWrite(uint8_t pin, uint8_t value);
