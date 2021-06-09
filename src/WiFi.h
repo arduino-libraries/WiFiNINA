@@ -22,6 +22,7 @@
 #define WiFi_h
 
 #define WIFI_FIRMWARE_LATEST_VERSION "1.4.6"
+#define WIFI_HAS_FEED_WATCHDOG_FUNC
 
 #include <inttypes.h>
 
