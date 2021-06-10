@@ -386,7 +386,7 @@ void WiFiClass::setTimeout(unsigned long timeout)
 	_timeout = timeout;
 }
 
-void WiFiClass::setFeedWatchdogFunc(FeedHostProcessorWatchdogFuncPointer func)
+void WiFiClass::setFeedWatchdogFunc(voidPrtFuncPtr func)
 {
   _feed_watchdog_func = func;
 }

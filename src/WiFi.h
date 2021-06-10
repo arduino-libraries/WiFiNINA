@@ -37,7 +37,7 @@ extern "C" {
 #include "WiFiServer.h"
 #include "WiFiStorage.h"
 
-typedef void(*FeedHostProcessorWatchdogFuncPointer)();
+typedef void(*voidPrtFuncPtr)();
 
 class WiFiClass
 {
@@ -45,7 +45,7 @@ private:
 
     static void init();
     unsigned long _timeout;
-    FeedHostProcessorWatchdogFuncPointer _feed_watchdog_func;
+    voidPrtFuncPtr _feed_watchdog_func;
 public:
     WiFiClass();
 
@@ -279,7 +279,7 @@ public:
 
     void setTimeout(unsigned long timeout);
 
-    void setFeedWatchdogFunc(FeedHostProcessorWatchdogFuncPointer func);
+    void setFeedWatchdogFunc(voidPrtFuncPtr func);
     void feedWatchdog();
 };
 
