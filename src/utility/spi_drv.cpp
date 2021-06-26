@@ -22,6 +22,7 @@
 #include <SPI.h>
 #include "utility/spi_drv.h"
 #include "pins_arduino.h"
+#include "WiFi.h"
 
 #ifdef ARDUINO_SAMD_MKRVIDOR4000
 
@@ -67,13 +68,7 @@ static bool inverted_reset = false;
 
 bool SpiDrv::initialized = false;
 
-__attribute__((weak)) void wifi_nina_feed_watchdog()
-{
-    /* This function can be overwritten by a "strong" implementation
-     * in a higher level application, such as the ArduinoIoTCloud
-     * firmware stack.
-     */
-}
+extern WiFiClass WiFi;
 
 void SpiDrv::begin()
 {
@@ -227,7 +222,7 @@ void SpiDrv::waitForSlaveReady(bool const feed_watchdog)
     {
         if (feed_watchdog) {
             if ((millis() - start) < 10000) {
-                wifi_nina_feed_watchdog();
+                WiFi.feedWatchdog();
             }
         }
     }
