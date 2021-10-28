@@ -27,7 +27,7 @@ extern "C" {
   #include "utility/debug.h"
 }
 
-WiFiClass::WiFiClass() : _timeout(50000)
+WiFiClass::WiFiClass() : _timeout(50000), _feed_watchdog_func(0)
 {
 }
 
@@ -49,6 +49,7 @@ int WiFiClass::begin(const char* ssid)
    {
 	   for (unsigned long start = millis(); (millis() - start) < _timeout;)
 	   {
+		   feedWatchdog();
 		   delay(WL_DELAY_START_CONNECTION);
 		   status = WiFiDrv::getConnectionStatus();
 		   if ((status != WL_IDLE_STATUS) && (status != WL_NO_SSID_AVAIL) && (status != WL_SCAN_COMPLETED)) {
@@ -71,6 +72,7 @@ int WiFiClass::begin(const char* ssid, uint8_t key_idx, const char *key)
    {
 	   for (unsigned long start = millis(); (millis() - start) < _timeout;)
 	   {
+		   feedWatchdog();
 		   delay(WL_DELAY_START_CONNECTION);
 		   status = WiFiDrv::getConnectionStatus();
 		   if ((status != WL_IDLE_STATUS) && (status != WL_NO_SSID_AVAIL) && (status != WL_SCAN_COMPLETED)) {
@@ -92,6 +94,7 @@ int WiFiClass::begin(const char* ssid, const char *passphrase)
     {
 	   for (unsigned long start = millis(); (millis() - start) < _timeout;)
  	   {
+		   feedWatchdog();
  		   delay(WL_DELAY_START_CONNECTION);
  		   status = WiFiDrv::getConnectionStatus();
 		   if ((status != WL_IDLE_STATUS) && (status != WL_NO_SSID_AVAIL) && (status != WL_SCAN_COMPLETED)) {
@@ -382,4 +385,16 @@ void WiFiClass::setTimeout(unsigned long timeout)
 {
 	_timeout = timeout;
 }
+
+void WiFiClass::setFeedWatchdogFunc(FeedHostProcessorWatchdogFuncPointer func)
+{
+  _feed_watchdog_func = func;
+}
+
+void WiFiClass::feedWatchdog()
+{
+  if (_feed_watchdog_func)
+	_feed_watchdog_func();
+}
+
 WiFiClass WiFi;
