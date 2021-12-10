@@ -224,6 +224,7 @@ void SpiDrv::waitForSlaveReady()
             WiFi.feedWatchdog();
             trigger_time = millis() + 10000;
         }
+        delay(10);
     }
 }
 
