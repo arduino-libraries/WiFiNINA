@@ -130,7 +130,7 @@ void ServerDrv::startClient(const char* host, uint8_t host_len, uint32_t ipAddre
 
     SpiDrv::spiSlaveDeselect();
     //Wait the reply elaboration
-    SpiDrv::waitForSlaveReady(/* feed_watchdog = */ (protMode == TLS_BEARSSL_MODE));
+    SpiDrv::waitForSlaveReady();
     SpiDrv::spiSlaveSelect();
 
     // Wait for reply
