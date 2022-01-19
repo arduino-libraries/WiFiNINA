@@ -22,6 +22,7 @@
 #include <SPI.h>
 #include "utility/spi_drv.h"
 #include "pins_arduino.h"
+#include "WiFi.h"
 
 #ifdef ARDUINO_SAMD_MKRVIDOR4000
 
@@ -30,7 +31,7 @@
 // yes, so use the existing VidorFPGA include
 #include <VidorFPGA.h>
 #else
-// otherwise, fallback to VidorPeripherals and it's bistream
+// otherwise, fallback to VidorPeripherals and it's bitstream
 #include <VidorPeripherals.h>
 #endif
 
@@ -56,7 +57,17 @@ int8_t WIFININA_SLAVESELECT = 10, WIFININA_SLAVEREADY = 7,
 
 #define DELAY_TRANSFER()
 
+#ifndef SPIWIFI
+#define SPIWIFI SPI
+#endif
+
+#ifndef NINA_GPIOIRQ
+#define NINA_GPIOIRQ    NINA_GPIO0
+#endif
+
 bool SpiDrv::initialized = false;
+
+extern WiFiClass WiFi;
 
 void SpiDrv::begin()
 {
@@ -93,10 +104,10 @@ void SpiDrv::begin()
 #endif
 #endif
 
-      WIFININA_SPIWIFI->begin();
-      pinMode(WIFININA_SLAVESELECT, OUTPUT);
-      pinMode(WIFININA_SLAVEREADY, INPUT);
-      pinMode(WIFININA_SLAVERESET, OUTPUT);
+      pinMode(SLAVESELECT, OUTPUT);
+      pinMode(SLAVEREADY, INPUT);
+      pinMode(SLAVERESET, OUTPUT);
+      pinMode(NINA_GPIO0, OUTPUT);
 
       if (WIFININA_SLAVEGPIO0 >= 0) {
           pinMode(WIFININA_SLAVEGPIO0, OUTPUT);
@@ -109,10 +120,10 @@ void SpiDrv::begin()
       digitalWrite(WIFININA_SLAVERESET, inverted_reset ? LOW : HIGH);
       delay(750);
 
-      if (WIFININA_SLAVEGPIO0 >= 0) {
-          digitalWrite(WIFININA_SLAVEGPIO0, LOW);
-          pinMode(WIFININA_SLAVEGPIO0, INPUT);
-      }
+      digitalWrite(NINA_GPIO0, LOW);
+      pinMode(NINA_GPIOIRQ, INPUT);
+
+      SPIWIFI.begin();
 
 #ifdef _DEBUG_
 	  INIT_TRIGGER()
@@ -215,9 +226,17 @@ void SpiDrv::waitForSlaveSign()
 	while (!waitSlaveSign());
 }
 
-void SpiDrv::waitForSlaveReady()
+void SpiDrv::waitForSlaveReady(bool const feed_watchdog)
 {
-	while (!waitSlaveReady());
+    unsigned long const start = millis();
+	while (!waitSlaveReady())
+    {
+        if (feed_watchdog) {
+            if ((millis() - start) < 10000) {
+                WiFi.feedWatchdog();
+            }
+        }
+    }
 }
 
 void SpiDrv::getParam(uint8_t* param)
@@ -457,6 +476,22 @@ int SpiDrv::waitResponse(uint8_t cmd, uint8_t* numParamRead, uint8_t** params, u
     return 1;
 }
 
+void SpiDrv::sendParamNoLen(uint8_t* param, size_t param_len, uint8_t lastParam)
+{
+    size_t i = 0;
+    // Send Spi paramLen
+    sendParamLen8(0);
+
+    // Send Spi param data
+    for (i=0; i<param_len; ++i)
+    {
+        spiTransfer(param[i]);
+    }
+
+    // if lastParam==1 Send Spi END CMD
+    if (lastParam == 1)
+        spiTransfer(END_CMD);
+}
 
 void SpiDrv::sendParam(uint8_t* param, uint8_t param_len, uint8_t lastParam)
 {
@@ -570,10 +605,7 @@ void SpiDrv::sendCmd(uint8_t cmd, uint8_t numParam)
 
 int SpiDrv::available()
 {
-    if (WIFININA_SLAVEGPIO0 >= 0) {
-        return (digitalRead(WIFININA_SLAVEGPIO0) != LOW);
-    }
-    return true;
+    return (digitalRead(NINA_GPIOIRQ) != LOW);
 }
 
 SpiDrv spiDrv;

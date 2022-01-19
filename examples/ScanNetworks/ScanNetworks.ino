@@ -1,7 +1,6 @@
 /*
-
  This example  prints the board's MAC address, and
- scans for available Wifi networks using the NINA module.
+ scans for available WiFi networks using the NINA module.
  Every ten seconds, it scans again. It doesn't actually
  connect to any network, so no encryption scheme is specified.
 
@@ -33,7 +32,7 @@ void setup() {
   }
 
   String fv = WiFi.firmwareVersion();
-  if (fv < "1.0.0") {
+  if (fv < WIFI_FIRMWARE_LATEST_VERSION) {
     Serial.println("Please upgrade the firmware");
   }
 
@@ -56,7 +55,7 @@ void listNetworks() {
   Serial.println("** Scan Networks **");
   int numSsid = WiFi.scanNetworks();
   if (numSsid == -1) {
-    Serial.println("Couldn't get a wifi connection");
+    Serial.println("Couldn't get a WiFi connection");
     while (true);
   }
 

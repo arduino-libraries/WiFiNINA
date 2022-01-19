@@ -3,7 +3,7 @@
 
  A simple web server that lets you blink an LED via the web.
  This sketch will print the IP address of your WiFi module (once connected)
- to the Serial monitor. From there, you can open that address in a web browser
+ to the Serial Monitor. From there, you can open that address in a web browser
  to turn on and off the LED on pin 9.
 
  If the IP address of your board is yourAddress:
@@ -11,7 +11,7 @@
  http://yourAddress/L turns it off
 
  This example is written for a network using WPA encryption. For
- WEP or WPA, change the Wifi.begin() call accordingly.
+ WEP or WPA, change the WiFi.begin() call accordingly.
 
  Circuit:
  * Board with NINA module (Arduino MKR WiFi 1010, MKR VIDOR 4000 and UNO WiFi Rev.2)
@@ -27,7 +27,7 @@
 ///////please enter your sensitive data in the Secret tab/arduino_secrets.h
 char ssid[] = SECRET_SSID;        // your network SSID (name)
 char pass[] = SECRET_PASS;    // your network password (use for WPA, or use as key for WEP)
-int keyIndex = 0;                 // your network key Index number (needed only for WEP)
+int keyIndex = 0;                 // your network key index number (needed only for WEP)
 
 int status = WL_IDLE_STATUS;
 WiFiServer server(80);
@@ -44,11 +44,11 @@ void setup() {
   }
 
   String fv = WiFi.firmwareVersion();
-  if (fv < "1.0.0") {
+  if (fv < WIFI_FIRMWARE_LATEST_VERSION) {
     Serial.println("Please upgrade the firmware");
   }
 
-  // attempt to connect to Wifi network:
+  // attempt to connect to WiFi network:
   while (status != WL_CONNECTED) {
     Serial.print("Attempting to connect to Network named: ");
     Serial.println(ssid);                   // print the network name (SSID);
@@ -101,16 +101,16 @@ void loop() {
 
         // Check to see if the client request was "GET /H" or "GET /L":
         if (currentLine.endsWith("GET /H")) {
-          digitalWrite(9, HIGH);               // GET /H turns the LED on
+          digitalWrite(LED_BUILTIN, HIGH);               // GET /H turns the LED on
         }
         if (currentLine.endsWith("GET /L")) {
-          digitalWrite(9, LOW);                // GET /L turns the LED off
+          digitalWrite(LED_BUILTIN, LOW);                // GET /L turns the LED off
         }
       }
     }
     // close the connection:
     client.stop();
-    Serial.println("client disonnected");
+    Serial.println("client disconnected");
   }
 }
 

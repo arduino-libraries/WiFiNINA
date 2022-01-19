@@ -92,6 +92,7 @@ enum {
 	GET_SOCKET_CMD		= 0x3F,
 
     // All command with DATA_FLAG 0x40 send a 16bit Len
+	SET_ENT_CMD			= 0x40,
 
 	SEND_DATA_TCP_CMD		= 0x44,
     GET_DATABUF_TCP_CMD		= 0x45,
@@ -101,6 +102,18 @@ enum {
     SET_PIN_MODE		= 0x50,
     SET_DIGITAL_WRITE	= 0x51,
     SET_ANALOG_WRITE	= 0x52,
+    GET_DIGITAL_READ    = 0x53,
+	GET_ANALOG_READ     = 0x54,
+
+    // regular format commands
+    WRITE_FILE			= 0x60,
+    READ_FILE			= 0x61,
+    DELETE_FILE			= 0x62,
+    EXISTS_FILE			= 0x63,
+    DOWNLOAD_FILE		= 0x64,
+    APPLY_OTA_COMMAND	= 0x65,
+	RENAME_FILE			= 0x66,
+	DOWNLOAD_OTA		= 0x67,
 };
 
 
@@ -126,6 +139,7 @@ enum numParams{
     PARAM_NUMS_3,
     PARAM_NUMS_4,
     PARAM_NUMS_5,
+    PARAM_NUMS_6,
     MAX_PARAM_NUMS
 };
 

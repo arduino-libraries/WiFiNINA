@@ -1,19 +1,18 @@
 /*
- This example connects to an unencrypted WiFi network.
- Then it prints the MAC address of the board,
- the IP address obtained, and other network details.
+  This example connects to a WPA2 Enterprise WiFi network.
+  Then it prints the MAC address of the WiFi module,
+  the IP address obtained, and other network details.
 
- created 13 July 2010
- by dlf (Metodo2 srl)
- modified 31 May 2012
- by Tom Igoe
- */
+  Based on ConnectWithWPA.ino by dlf (Metodo2 srl) and Tom Igoe
+*/
 #include <SPI.h>
 #include <WiFiNINA.h>
 
-#include "arduino_secrets.h" 
+#include "arduino_secrets.h"
 ///////please enter your sensitive data in the Secret tab/arduino_secrets.h
-char ssid[] = SECRET_SSID;        // your network SSID (name)
+char ssid[] = SECRET_SSID;  // your WPA2 enterprise network SSID (name)
+char user[] = SECRET_USER;  // your WPA2 enterprise username
+char pass[] = SECRET_PASS;  // your WPA2 enterprise password
 int status = WL_IDLE_STATUS;     // the WiFi radio's status
 
 void setup() {
@@ -22,6 +21,7 @@ void setup() {
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
+
   // check for the WiFi module:
   if (WiFi.status() == WL_NO_MODULE) {
     Serial.println("Communication with WiFi module failed!");
@@ -36,9 +36,12 @@ void setup() {
 
   // attempt to connect to WiFi network:
   while (status != WL_CONNECTED) {
-    Serial.print("Attempting to connect to open SSID: ");
+    Serial.print("Attempting to connect to WPA SSID: ");
     Serial.println(ssid);
-    status = WiFi.begin(ssid);
+    // Connect to WPA2 enterprise network:
+    // - You can optionally provide additional identity and CA cert (string) parameters if your network requires them:
+    //      WiFi.beginEnterprise(ssid, user, pass, identity, caCert)
+    status = WiFi.beginEnterprise(ssid, user, pass);
 
     // wait 10 seconds for connection:
     delay(10000);
@@ -48,6 +51,7 @@ void setup() {
   Serial.print("You're connected to the network");
   printCurrentNet();
   printWifiData();
+
 }
 
 void loop() {
@@ -61,23 +65,12 @@ void printWifiData() {
   IPAddress ip = WiFi.localIP();
   Serial.print("IP Address: ");
   Serial.println(ip);
-  Serial.println(ip);
 
   // print your MAC address:
   byte mac[6];
   WiFi.macAddress(mac);
   Serial.print("MAC address: ");
   printMacAddress(mac);
-
-  // print your subnet mask:
-  IPAddress subnet = WiFi.subnetMask();
-  Serial.print("NetMask: ");
-  Serial.println(subnet);
-
-  // print your gateway address:
-  IPAddress gateway = WiFi.gatewayIP();
-  Serial.print("Gateway: ");
-  Serial.println(gateway);
 }
 
 void printCurrentNet() {
@@ -100,6 +93,7 @@ void printCurrentNet() {
   byte encryption = WiFi.encryptionType();
   Serial.print("Encryption Type:");
   Serial.println(encryption, HEX);
+  Serial.println();
 }
 
 void printMacAddress(byte mac[]) {

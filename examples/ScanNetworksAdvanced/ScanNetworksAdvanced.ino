@@ -1,5 +1,4 @@
 /*
-
   This example  prints the board's MAC address, and
   scans for available WiFi networks using the NINA module.
   Every ten seconds, it scans again. It doesn't actually
@@ -34,7 +33,7 @@ void setup() {
   }
 
   String fv = WiFi.firmwareVersion();
-  if (fv < "1.0.0") {
+  if (fv < WIFI_FIRMWARE_LATEST_VERSION) {
     Serial.println("Please upgrade the firmware");
   }
 
