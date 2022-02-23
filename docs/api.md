@@ -2072,7 +2072,7 @@ char pass[] = "secretPassword";    // your network password (use for WPA, or use
 int keyIndex = 0;            // your network key Index number (needed only for WEP)
 
 int status = WL_IDLE_STATUS;
-char server[] = "www.arduino.cc";    // name address for Arduino (using DNS)
+char server[] = "arduino.tips";    // name address for Arduino (using DNS)
 
 // Initialize the Wifi client library
 // with the IP address and port of the server
@@ -2104,7 +2104,7 @@ void setup() {
     Serial.println("Connected to server");
     // Make a HTTP request:
     client.println("GET /asciilogo.txt HTTP/1.1");
-    client.println("Host: www.arduino.cc");
+    client.println("Host: arduino.tips");
     client.println("Connection: close");
     client.println();
     Serial.println("Request sent");
