@@ -62,7 +62,7 @@ none
 #### Returns
 nothing
 
-### `beginAP()`
+### `WiFi.beginAP()`
 
 #### Description
 Initializes the WiFiNINA library in Access Point (AP) mode. Other WiFi devices will be able to discover and connect to the created Access Point.
@@ -252,7 +252,7 @@ void printWiFiStatus() {
 }
 ```
 
-### `beginEnterprise()`
+### `WiFi.beginEnterprise()`
 
 #### Description
 Initializes the WiFiNINA library's network settings for a common WPA2 Enterprise network with username and password authentication (PEAP/MSCHAPv2).
@@ -548,7 +548,7 @@ void loop () {
  
 ```
 
-### `setHostname()`
+### `WiFi.setHostname()`
 
 #### Description
 Sets the hostname of the module, the hostname is sent in WiFi.begin(...) when an IP address is requested from a DHCP server.
@@ -585,7 +585,7 @@ Nothing
 …
 ```
 
-### `setTimeout()`
+### `WiFi.setTimeout()`
 
 #### Description
 Sets the connection timeout value in milliseconds for WiFi.begin(...).
@@ -800,7 +800,7 @@ void setup()
 void loop () {}
 ```
 
-### `channel()`
+### `WiFi.channel()`
 
 #### Description
 Gets the WiFi channel of a network that was scanned.
@@ -1345,7 +1345,7 @@ void setup()
 void loop () {}
 ```
 
-### `firmwareVersion()`
+### `WiFi.firmwareVersion()`
 
 #### Description
 Returns the firmware version running on the module as a string.
@@ -1402,7 +1402,7 @@ WiFi.noLowPowerMode()
 #### Returns
 none
 
-### `reasonCode()`
+### `WiFi.reasonCode()`
 
 #### Description
 Return The deauthentication reason code.
@@ -1443,7 +1443,7 @@ The deauthentication reason code
 …
 ```
 
-### `hostByName()`
+### `WiFi.hostByName()`
 
 #### Description
 Resolve the given hostname to an IP address
@@ -1690,8 +1690,7 @@ Creates a client that can connect to to a specified internet IP address and port
 #### Syntax
 
 ```
-WiFiClient
-
+WiFiClient client;
 ```
 
 #### Parameters
@@ -1753,7 +1752,7 @@ This class allows to create a client that always connects in SSL to the specifie
 #### Syntax
 
 ```
-WiFiNINASSLClient client
+WiFiNINASSLClient client;
 
 ```
 
@@ -1880,7 +1879,7 @@ void printWiFiStatus() {
 }
 ```
 
-### `connected()`
+### `client.connected()`
 
 #### Description
 Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread data.
@@ -1954,7 +1953,7 @@ void loop() {
 }
 ```
 
-### `connect()`
+### `client.connect()`
 
 #### Description
 Connect to the IP address and port specified in the constructor. The return value indicates success or failure. connect() also supports DNS lookups when using a domain name (ex:google.com).
@@ -2018,7 +2017,7 @@ void loop() {
 }
 ```
 
-### `ConnectSSL()`
+### `client.connectSSL()`
 
 #### Description
 Connect to the IP address and port specified in the constructor using the SSL protocol. The method connectSSL is required when the server provides only HTTPS connections. Before using this method, it is required to load the SSL certificate used by the server into the Arduino WiFi module . The boards come already loaded with certificates and it should be ready to use. To change or upload new SSL certificates you should follow the procedures that will be made available. connectSSL() also supports DNS lookups when using a domain name (ex:google.com).
@@ -2135,7 +2134,7 @@ void loop() {
 …
 ```
 
-### `status()`
+### `client.status()`
 
 #### Description
 Return Connection status.
@@ -2203,7 +2202,7 @@ void setup() {
 …
 ```
 
-### `write()`
+### `client.write()`
 
 #### Description
 Write data to all the clients connected to a server.
@@ -2223,7 +2222,7 @@ size: the size of the buffer
 #### Returns
 The number of bytes written. It is not necessary to read this.
 
-### `print()`
+### `client.print()`
 
 #### Description
 Print data to the server that a client is connected to. Prints numbers as a sequence of digits, each an ASCII character (e.g. the number 123 is sent as the three characters '1', '2', '3').
@@ -2243,7 +2242,7 @@ BASE (optional): the base in which to print numbers:, DEC for decimal (base 10),
 #### Returns
 byte : returns the number of bytes written, though reading that number is optional
 
-### `println()`
+### `client.println()`
 
 #### Description
 Print data, followed by a carriage return and newline, to the server a client is connected to. Prints numbers as a sequence of digits, each an ASCII character (e.g. the number 123 is sent as the three characters '1', '2', '3').
@@ -2265,7 +2264,7 @@ BASE (optional): the base in which to print numbers: DEC for decimal (base 10), 
 #### Returns
 byte: return the number of bytes written, though reading that number is optional
 
-### `available()`
+### `client.available()`
 
 #### Description
 Returns the number of bytes available for reading (that is, the amount of data that has been written to the client by the server it is connected to).
@@ -2345,7 +2344,7 @@ void loop() {
 }
 ```
 
-### `peek()`
+### `client.peek()`
 
 #### Description
 Read a byte from the file without advancing to the next one. That is, successive calls to peek() will return the same value, as will the next call to read().
@@ -2355,8 +2354,7 @@ This function inherited from the Stream class. See the Stream class main page fo
 #### Syntax
 
 ```
-Client.peek()
-
+client.peek()
 ```
 
 #### Parameters
@@ -2449,7 +2447,7 @@ void loop() {
 …
 ```
 
-### `read()`
+### `client.read()`
 
 Reads data from the client. If no arguments are given, it will return the next character in the buffer.
 
@@ -2504,7 +2502,7 @@ none
 #### Returns
 none
 
-### `remoteIP()`
+### `client.remoteIP()`
 
 #### Description
 Gets the IP address of the remote connection.
@@ -2522,7 +2520,7 @@ None
 #### Returns
 The IP address of the host the client is connected to
 
-### `remotePort()`
+### `client.remotePort()`
 
 #### Description
 Gets the port number of the remote connection.
@@ -2555,8 +2553,7 @@ Creates a server that listens for incoming connections on the specified port.
 #### Syntax
 
 ```
-Server(port);
-
+WiFiServer server(port);
 ```
 
 #### Parameters
@@ -2605,7 +2602,7 @@ void loop() {
  
 ```
 
-### `begin()`
+### `server.begin()`
 
 #### Description
 Tells the server to begin listening for incoming connections.
@@ -2663,7 +2660,7 @@ void loop() {
  
 ```
 
-### `status()`
+### `server.status()`
 
 #### Description
 Return Connection status.
@@ -2692,7 +2689,7 @@ Serial.println(client.status());
 …
 ```
 
-### `write()`
+### `server.write()`
 
 #### Description
 Write data to all the clients connected to a server.
@@ -2752,7 +2749,7 @@ void loop() {
 }
 ```
 
-### `print()`
+### `server.print()`
 
 #### Description
 Print data to all the clients connected to a server. Prints numbers as a sequence of digits, each an ASCII character (e.g. the number 123 is sent as the three characters '1', '2', '3').
@@ -2773,7 +2770,7 @@ BASE (optional): the base in which to print numbers: BIN for binary (base 2), DE
 byte
 print() will return the number of bytes written, though reading that number is optional
 
-### `println()`
+### `server.println()`
 
 #### Description
 Prints data, followed by a newline, to all the clients connected to a server. Prints numbers as a sequence of digits, each an ASCII character (e.g. the number 123 is sent as the three characters '1', '2', '3').
@@ -2796,7 +2793,7 @@ byte
 println() will return the number of bytes written, though reading that number is optional
 
 
-### `available()`
+### `server.available()`
 
 #### Description
 Gets a client that is connected to the server and has data available for reading. The connection persists when the returned client object goes out of scope; you can close it by calling client.stop().
@@ -2865,7 +2862,7 @@ void loop() {
  
 ```
 
-### `peek()`
+### `server.peek()`
 
 #### Description
 Read a byte from the file without advancing to the next one. That is, successive calls to peek() will return the same value, as will the next call to read().
@@ -2976,7 +2973,7 @@ void loop() {
 
 ## UDP Class
 
-WiFiUDP`
+### `WiFiUDP`
 
 #### Description
 Creates a named instance of the WiFi UDP class that can send and receive UDP messages.
@@ -2985,13 +2982,12 @@ Creates a named instance of the WiFi UDP class that can send and receive UDP mes
 
 ```
 WiFiUDP
-
 ```
 
 #### Parameters
 none
 
-### `begin()`
+### `WiFiUDP.begin()`
 
 #### Description
 Initializes the WiFi UDP library and network settings. Starts WiFiUDP socket, listening at local port PORT .
@@ -3000,7 +2996,6 @@ Initializes the WiFi UDP library and network settings. Starts WiFiUDP socket, li
 
 ```
 WiFiUDP.begin(port)
-
 ```
 
 #### Parameters
@@ -3010,7 +3005,7 @@ port: the local port to listen on (int)
 1: if successful
 0: if there are no sockets available to use
 
-### `beginMulticast()`
+### `WiFiUDP.beginMulticast()`
 
 #### Description
 Initializes the WiFi UDP library and network settings. Starts WiFiUDP socket, listening at local port PORT and on specified multicast IP address.
@@ -3023,12 +3018,12 @@ WiFiUDP.beginMulticast(IPAddressport, port);
 ```
 
 #### Parameters
-IPAddress: sdd
-port: the local port to listen on (int)
+- IPAddress: sdd
+- port: the local port to listen on (int)
 
 #### Returns
-1: if successful
-0: if there are no sockets available to use
+- 1: if successful
+- 0: if there are no sockets available to use
 
 #### Example
 
@@ -3066,7 +3061,7 @@ void setup() {
 …
 ```
 
-### `beginPacket()`
+### `WiFiUDP.beginPacket()`
 
 #### Description
 Starts a connection to write UDP data to the remote connection
@@ -3088,7 +3083,7 @@ port: the port of the remote connection (int)
 0: if there was a problem with the supplied IP address or port
 
 
-### `write()`
+### `WiFiUDP.write()`
 
 #### Description
 Writes UDP data to the remote connection. Must be wrapped between beginPacket() and endPacket(). beginPacket() initializes the packet of data, it is not sent until endPacket() is called.
@@ -3109,7 +3104,7 @@ size: the size of the buffer
 single byte into the packet
 bytes size from buffer into the packet
 
-### `endPacket()`
+### `WiFiUDP.endPacket()`
 
 #### Description
 Called after writing UDP data to the remote connection. It finishes off the packet and send it.
@@ -3128,7 +3123,7 @@ None
 1: if the packet was sent successfully
 0: if there was an error
 
-### `available()`
+### `WiFiUDP.available()`
 
 #### Description
 Get the number of bytes (characters) available for reading from the buffer. This is data that's already arrived.
@@ -3151,7 +3146,7 @@ None
 the number of bytes available in the current packet
 0: if WiFiUDP.parsePacket() hasn't been called yet
 
-### `parsePacket()`
+### `WiFiUDP.parsePacket()`
 
 #### Description
 It starts processing the next available incoming packet, checks for the presence of a UDP packet, and reports the size. parsePacket() must be called before reading the buffer with UDP.read().
@@ -3159,8 +3154,7 @@ It starts processing the next available incoming packet, checks for the presence
 #### Syntax
 
 ```
-UDP.parsePacket()
-
+WiFiUDP..parsePacket()
 ```
 
 #### Parameters
@@ -3170,7 +3164,9 @@ None
 the size of the packet in bytes
 0: if no packets are available
 
-peek()
+### `WiFiUDP.peek()`
+
+#### Description
 Read a byte from the file without advancing to the next one. That is, successive calls to peek() will return the same value, as will the next call to read().
 
 This function inherited from the Stream class. See the Stream class main page for more information.
@@ -3189,7 +3185,7 @@ none
 b: the next byte or character
 -1: if none is available
 
-### `read()`
+### `WiFiUDP.read()`
 
 #### Description
 Reads UDP data from the specified buffer. If no arguments are given, it will return the next character in the buffer.
@@ -3208,20 +3204,21 @@ buffer: buffer to hold incoming packets (char*)
 len: maximum size of the buffer (int)
 
 #### Returns
-b: the characters in the buffer (char)
-size: the size of the buffer
--1: if no buffer is available
+- b: the characters in the buffer (char)
+- size: the size of the buffer
+- -1: if no buffer is available
 
-flush()
+### `WiFiUDP.flush()`
+
+#### Description
 Discard any bytes that have been written to the client but not yet read.
 
-flush() inherits from the Stream utility class.
+`flush()` inherits from the Stream utility class.
 
 #### Syntax
 
 ```
 WiFiUDP.flush()
-
 ```
 
 #### Parameters
@@ -3230,7 +3227,7 @@ none
 #### Returns
 none
 
-### `stop()`
+### `WiFiUDP.stop()`
 
 #### Description
 Disconnect from the server. Release any resource being used during the UDP session.
@@ -3248,12 +3245,12 @@ none
 #### Returns
 none
 
-### `remoteIP()`
+### `WiFiUDP.remoteIP()`
 
 #### Description
 Gets the IP address of the remote connection.
 
-This function must be called after WiFiUDP.parsePacket().
+This function must be called after `WiFiUDP.parsePacket()`.
 
 #### Syntax
 
@@ -3268,7 +3265,7 @@ None
 4 bytes : the IP address of the host who sent the current incoming packet
 
 
-### `remotePort()`
+### `WiFiUDP.remotePort()`
 
 #### Description
 Gets the port of the remote UDP connection.
@@ -3279,7 +3276,6 @@ This function must be called after UDP.parsePacket().
 
 ```
 UDP.remotePort()
-
 ```
 
 #### Parameters
