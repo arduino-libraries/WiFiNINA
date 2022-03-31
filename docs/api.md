@@ -181,7 +181,7 @@ void loop() {
       Serial.println("Device disconnected from AP");
     }
   }
- 
+
   WiFiClient client = server.available();   // listen for incoming clients
 
   if (client) {                             // if you get a client,
@@ -545,7 +545,7 @@ void setup()
 
 void loop () {
 }
- 
+
 ```
 
 ### `WiFi.setHostname()`
@@ -687,7 +687,7 @@ void scanNetworks() {
     Serial.println(WiFi.SSID(thisNet));
   }
 }
- 
+
 ```
 
 ### `WiFi.BSSID()`
@@ -720,9 +720,11 @@ char ssid[] = "yourNetwork";
 //password of your WPA Network
 char pass[] = "secretPassword";
 
+int status = WL_IDLE_STATUS;     // the Wifi radio's status
+
 void setup()
 {
- WiFi.begin(ssid, pass);
+ status = WiFi.begin(ssid, pass);
 
   if ( status != WL_CONNECTED) {
     Serial.println("Couldn't get a wifi connection");
@@ -780,9 +782,11 @@ char ssid[] = "yourNetwork";
 //password of your WPA Network
 char pass[] = "secretPassword";
 
+int status = WL_IDLE_STATUS;     // the Wifi radio's status
+
 void setup()
 {
- WiFi.begin(ssid, pass);
+ status = WiFi.begin(ssid, pass);
 
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println("Couldn't get a wifi connection");
@@ -891,9 +895,11 @@ char ssid[] = "yourNetwork";
 //password of your WPA Network
 char pass[] = "secretPassword";
 
+int status = WL_IDLE_STATUS;     // the Wifi radio's status
+
 void setup()
 {
- WiFi.begin(ssid, pass);
+ status = WiFi.begin(ssid, pass);
 
   if ( status != WL_CONNECTED) {
     Serial.println("Couldn't get a wifi connection");
@@ -1281,7 +1287,7 @@ void loop() {
  Serial.println(WiFi.status());
 }
 
- 
+
 ```
 
 ### `WiFi.macAddress()`
@@ -1525,7 +1531,7 @@ void setup()
  // initialize serial:
  Serial.begin(9600);
 
- WiFi.begin(ssid);
+ status = WiFi.begin(ssid);
 
   if ( status != WL_CONNECTED) {
     Serial.println("Couldn't get a wifi connection");
@@ -1578,7 +1584,7 @@ IPAddress gateway;
 
 void setup()
 {
-  WiFi.begin(ssid, pass);
+  status = WiFi.begin(ssid, pass);
 
   if ( status != WL_CONNECTED) {
     Serial.println("Couldn't get a wifi connection");
@@ -1597,7 +1603,7 @@ void setup()
 
 void loop () {
 }
- 
+
 ```
 
 ### `WiFi.gatewayIP()`
@@ -1637,7 +1643,7 @@ void setup()
 {
   Serial.begin(9600);
 
- WiFi.begin(ssid, pass);
+ status = WiFi.begin(ssid, pass);
 
   if ( status != WL_CONNECTED) {
     Serial.println("Couldn't get a wifi connection");
@@ -2599,7 +2605,7 @@ void setup() {
 void loop() {
 
 }
- 
+
 ```
 
 ### `server.begin()`
@@ -2657,7 +2663,7 @@ void setup() {
 void loop() {
 
 }
- 
+
 ```
 
 ### `server.status()`
@@ -2859,7 +2865,7 @@ void loop() {
     client.stop();
   }
 }
- 
+
 ```
 
 ### `server.peek()`
@@ -3283,4 +3289,3 @@ None
 
 #### Returns
 The port of the host who sent the current incoming packet
-
