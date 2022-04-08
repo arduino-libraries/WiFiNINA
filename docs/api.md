@@ -16,14 +16,16 @@ WiFi.begin(ssid, keyIndex, key);
 ```
 
 #### Parameters
-ssid: the SSID (Service Set Identifier) is the name of the WiFi network you want to connect to.
-keyIndex: WEP encrypted networks can hold up to 4 different keys. This identifies which key you are going to use.
-key: a hexadecimal string used as a security code for WEP encrypted networks.
-pass: WPA encrypted networks use a password in the form of a string for security.
+
+- ssid: the SSID (Service Set Identifier) is the name of the WiFi network you want to connect to.
+- keyIndex: WEP encrypted networks can hold up to 4 different keys. This identifies which key you are going to use.
+- key: a hexadecimal string used as a security code for WEP encrypted networks.
+- pass: WPA encrypted networks use a password in the form of a string for security.
 
 #### Returns
-WL_CONNECTED when connected to a network
-WL_IDLE_STATUS when not connected to a network, but powered on
+
+- WL_CONNECTED when connected to a network
+- WL_IDLE_STATUS when not connected to a network, but powered on
 
 #### Example
 
@@ -57,14 +59,17 @@ WiFi.end();
 ```
 
 #### Parameters
-none
+
+- None
 
 #### Returns
-nothing
+
+- Nothing
 
 ### `WiFi.beginAP()`
 
 #### Description
+
 Initializes the WiFiNINA library in Access Point (AP) mode. Other WiFi devices will be able to discover and connect to the created Access Point.
 
 #### Syntax
@@ -77,12 +82,15 @@ WiFi.beginAP(ssid, passphrase, channel);
 ```
 
 #### Parameters
-ssid: the SSID (Service Set Identifier) of the created Access Point. Must be 8 or more characters.
-passphrase: optional, the WPA password of the created Access Point. Must be 8 or more characters.
-channel: optional, channel of created Access Point (1 - 14). Defaults to channel 1;
+
+- ssid: the SSID (Service Set Identifier) of the created Access Point. Must be 8 or more characters.
+- passphrase: optional, the WPA password of the created Access Point. Must be 8 or more characters.
+- channel: optional, channel of created Access Point (1 - 14). Defaults to channel 1;
+
 #### Returns
-WL_AP_LISTENING when creating access point succeeds
-WL_CONNECT_FAILED when creating access point fails
+
+- WL_AP_LISTENING when creating access point succeeds
+- WL_CONNECT_FAILED when creating access point fails
 
 #### Example
 
@@ -255,6 +263,7 @@ void printWiFiStatus() {
 ### `WiFi.beginEnterprise()`
 
 #### Description
+
 Initializes the WiFiNINA library's network settings for a common WPA2 Enterprise network with username and password authentication (PEAP/MSCHAPv2).
 
 Note: this feature requires NINA firmware version 1.3.0 or later. All string parameter supplied must have a combined length of under 4000 bytes.
@@ -268,14 +277,17 @@ WiFi.beginEnterprise(ssid, username, password, identity, ca);
 ```
 
 #### Parameters
-ssid: the SSID (Service Set Identifier) is the name of the WiFi network you want to connect to.
-username: username part of WPA2 Enterprise (RADIUS) credentials
-password: password part of WPA2 Enterprise (RADIUS) credentials
-identity: WPA2 enterprise identity (optional)
-ca: root certificate (string) to validate against (optional)
+
+- ssid: the SSID (Service Set Identifier) is the name of the WiFi network you want to connect to.
+- username: username part of WPA2 Enterprise (RADIUS) credentials
+- password: password part of WPA2 Enterprise (RADIUS) credentials
+- identity: WPA2 enterprise identity (optional)
+- ca: root certificate (string) to validate against (optional)
+
 #### Returns
-WL_CONNECTED when connected to a network
-WL_IDLE_STATUS when not connected to a network, but powered on
+
+- WL_CONNECTED when connected to a network
+- WL_IDLE_STATUS when not connected to a network, but powered on
 
 #### Example
 
@@ -395,6 +407,7 @@ void printMacAddress(byte mac[]) {
 ### `WiFi.disconnect()`
 
 #### Description
+
 Disconnects the WiFi from the current network.
 
 #### Syntax
@@ -404,14 +417,17 @@ WiFi.disconnect()
 ```
 
 #### Parameters
-none
+
+- None
 
 #### Returns
-nothing
+
+- Nothing
 
 ### `WiFi.config()`
 
 #### Description
+
 WiFi.config() allows you to configure a static IP address as well as change the DNS, gateway, and subnet addresses on the WiFi shield.
 
 Unlike WiFi.begin() which automatically configures the WiFi shield to use DHCP, WiFi.config() allows you to manually set the network address of the shield.
@@ -430,13 +446,15 @@ WiFi.config(ip, dns, gateway, subnet);
 ```
 
 #### Parameters
-ip: the IP address of the device (array of 4 bytes)
-dns: the address for a DNS server.
-gateway: the IP address of the network gateway (array of 4 bytes). - optional: defaults to the device IP address with the last octet set to 1
-subnet: the subnet mask of the network (array of 4 bytes). optional: defaults to 255.255.255.0
+
+- ip: the IP address of the device (array of 4 bytes)
+- dns: the address for a DNS server.
+- gateway: the IP address of the network gateway (array of 4 bytes). - optional: defaults to the device IP address with the last octet set to 1
+- subnet: the subnet mask of the network (array of 4 bytes). optional: defaults to 255.255.255.0
 
 #### Returns
-Nothing
+
+- Nothing
 
 #### Example
 
@@ -486,6 +504,7 @@ void loop () {}
 ### `WiFi.setDNS()`
 
 #### Description
+
 WiFi.setDNS() allows you to configure the DNS (Domain Name System) server.
 
 #### Syntax
@@ -497,11 +516,13 @@ WiFi.setDNS(dns_server1, dns_server2)
 ```
 
 #### Parameters
-dns_server1: the IP address of the primary DNS server
-dns_server2: the IP address of the secondary DNS server
+
+- dns_server1: the IP address of the primary DNS server
+- dns_server2: the IP address of the secondary DNS server
 
 #### Returns
-Nothing
+
+- Nothing
 
 #### Example
 
@@ -561,10 +582,12 @@ WiFi.setHostname(hostname)
 ```
 
 #### Parameters
-hostname - new hostname to use
+
+- hostname - new hostname to use
 
 #### Returns
-Nothing
+
+- Nothing
 
 #### Example
 
@@ -594,14 +617,15 @@ Sets the connection timeout value in milliseconds for WiFi.begin(...).
 
 ```
 WiFi.setTimeout(timeout)
-
 ```
 
 #### Parameters
-timeout - the connection timeout value in milliseconds
+
+- timeout - the connection timeout value in milliseconds
 
 #### Returns
-Nothing
+
+- Nothing
 
 #### Example
 
@@ -636,11 +660,13 @@ WiFi.SSID(wifiAccessPoint)
 ```
 
 #### Parameters
-wifiAccessPoint: specifies from which network to get the information
+
+- wifiAccessPoint: specifies from which network to get the information
 
 #### Returns
-A string containing the SSID the WiFi is currently connected to.
-A string containing name of network requested.
+
+- A string containing the SSID the WiFi is currently connected to.
+- A string containing name of network requested.
 
 #### Example
 
@@ -704,10 +730,12 @@ WiFi.BSSID(wifiAccessPoint, bssid)
 ```
 
 #### Parameters
-bssid - 6 byte array
-wifiAccessPoint - specifies from which network to get the information (optional), only needed after a scan
+
+- bssid - 6 byte array
+- wifiAccessPoint - specifies from which network to get the information (optional), only needed after a scan
 
 #### Returns
+
 A byte array containing the MAC address of the router the WiFi shield is currently connected to or the MAC address of a network that was scanned. The first array index contains the last byte of the MAC address.
 
 #### Example
@@ -764,10 +792,12 @@ WiFi.RSSI(wifiAccessPoint);
 ```
 
 #### Parameters
-wifiAccessPoint: specifies from which network to get the information
+
+- wifiAccessPoint: specifies from which network to get the information
 
 #### Returns
-long : the current RSSI /Received Signal Strength in dBm
+
+- long : the current RSSI /Received Signal Strength in dBm
 
 #### Example
 
@@ -813,10 +843,12 @@ WiFi.channel(wifiAccessPoint)
 ```
 
 #### Parameters
-wifiAccessPoint - specifies from which network to get the information
+
+- wifiAccessPoint - specifies from which network to get the information
 
 #### Returns
-WiFi channel of scanned network
+
+- WiFi channel of scanned network
 
 #### Example
 
@@ -871,15 +903,19 @@ WiFi.encryptionType(wifiAccessPoint);
 ```
 
 #### Parameters
-wifiAccessPoint: specifies which network to get information from
+
+- wifiAccessPoint: specifies which network to get information from
+
 #### Returns
+
 byte : value represents the type of encryption
 
-TKIP (WPA) = 2
-WEP = 5
-CCMP (WPA) = 4
-NONE = 7
-AUTO = 8
+- TKIP (WPA) = 2
+- WEP = 5
+- CCMP (WPA) = 4
+- NONE = 7
+- AUTO = 8
+
 #### Example
 
 ```
@@ -924,10 +960,12 @@ WiFi.scanNetworks()
 ```
 
 #### Parameters
-none
+
+- None
 
 #### Returns
-byte : number of discovered networks
+
+- byte : number of discovered networks
 
 #### Example
 
@@ -1053,7 +1091,8 @@ void printMacAddress(byte mac[]) {
 ### `WiFi.ping()`
 
 #### Description
-Ping a remote device on the network.
+
+- Ping a remote device on the network.
 
 #### Syntax
 
@@ -1065,16 +1104,19 @@ WiFi.ping(host, ttl);
 ```
 
 #### Parameters
-ip: the IP address to ping (array of 4 bytes)
-host: the host to ping (string)
-ttl: Time of live (optional, defaults to 128). Maximum number of routers the request can be forwarded to.
+
+- ip: the IP address to ping (array of 4 bytes)
+- host: the host to ping (string)
+- ttl: Time of live (optional, defaults to 128). Maximum number of routers the request can be forwarded to.
 
 #### Returns
-WL_PING_SUCCESS when the ping was successful
-WL_PING_DEST_UNREACHABLE when the destination (IP or host is unreachable)
-WL_PING_TIMEOUT when the ping times out
-WL_PING_UNKNOWN_HOST when the host cannot be resolved via DNS
-WL_PING_ERROR when an error occurs
+
+- WL_PING_SUCCESS when the ping was successful
+- WL_PING_DEST_UNREACHABLE when the destination (IP or host is unreachable)
+- WL_PING_TIMEOUT when the ping times out
+- WL_PING_UNKNOWN_HOST when the host cannot be resolved via DNS
+- WL_PING_ERROR when an error occurs
+
 #### Example
 
 ```
@@ -1228,20 +1270,23 @@ WiFi.status()
 ```
 
 #### Parameters
-none
+
+- None
 
 #### Returns
-WL_CONNECTED: assigned when connected to a WiFi network;
-WL_AP_CONNECTED : assigned when a device is connected in Access Point mode;
-WL_AP_LISTENING : assigned when the listening for connections in Access Point mode;
-WL_NO_SHIELD: assigned when no WiFi shield is present;
-WL_NO_MODULE: assigned when the communication with an integrated WiFi module fails;
-WL_IDLE_STATUS: it is a temporary status assigned when WiFi.begin() is called and remains active until the number of attempts expires (resulting in WL_CONNECT_FAILED) or a connection is established (resulting in WL_CONNECTED);
-WL_NO_SSID_AVAIL: assigned when no SSID are available;
-WL_SCAN_COMPLETED: assigned when the scan networks is completed;
-WL_CONNECT_FAILED: assigned when the connection fails for all the attempts;
-WL_CONNECTION_LOST: assigned when the connection is lost;
-WL_DISCONNECTED: assigned when disconnected from a network;
+
+- WL_CONNECTED: assigned when connected to a WiFi network;
+- WL_AP_CONNECTED : assigned when a device is connected in Access Point mode;
+- WL_AP_LISTENING : assigned when the listening for connections in Access Point mode;
+- WL_NO_SHIELD: assigned when no WiFi shield is present;
+- WL_NO_MODULE: assigned when the communication with an integrated WiFi module fails;
+- WL_IDLE_STATUS: it is a temporary status assigned when WiFi.begin() is called and remains active until the number of attempts expires (resulting in WL_CONNECT_FAILED) or a connection is established (resulting in WL_CONNECTED);
+- WL_NO_SSID_AVAIL: assigned when no SSID are available;
+- WL_SCAN_COMPLETED: assigned when the scan networks is completed;
+- WL_CONNECT_FAILED: assigned when the connection fails for all the attempts;
+- WL_CONNECTION_LOST: assigned when the connection is lost;
+- WL_DISCONNECTED: assigned when disconnected from a network;
+
 #### Example
 
 ```
@@ -1297,10 +1342,12 @@ WiFi.macAddress(mac)
 ```
 
 #### Parameters
-mac: a 6 byte array to hold the MAC address
+
+- mac: a 6 byte array to hold the MAC address
 
 #### Returns
-byte array : 6 bytes representing the MAC address of your module
+
+- byte array : 6 bytes representing the MAC address of your module
 
 #### Example
 
@@ -1358,10 +1405,12 @@ WiFi.firmwareVersion()
 ```
 
 #### Parameters
-None
+
+- None
 
 #### Returns
-The firmware version running on the module as a string
+
+- The firmware version running on the module as a string
 
 #### Example
 
@@ -1377,6 +1426,7 @@ if (fv < "1.0.0") {
 ### `WiFi.lowPowerMode()`
 
 #### Description
+
 Enable low power mode. This is an automatically managed mode where the WiFi NINA Module reduces its power drain bringing the overall power consumption to 30mA. Any incoming data is received and the device sends out regularly the beacon signal each 100ms to keep the AP connection alive.
 
 #### Syntax
@@ -1386,11 +1436,13 @@ WiFi.lowPowerMode()
 ```
 
 #### Returns
-none
+
+- None
 
 ### `WiFi.noLowPowerMode()`
 
 #### Description
+
 Disables the power saving modes enabled with lowPowerMode(). This is the default status of Power Mode.
 
 #### Syntax
@@ -1400,11 +1452,13 @@ WiFi.noLowPowerMode()
 ```
 
 #### Returns
-none
+
+- None
 
 ### `WiFi.reasonCode()`
 
 #### Description
+
 Return The deauthentication reason code.
 
 #### Syntax
@@ -1415,10 +1469,12 @@ WiFi.reasonCode()
 ```
 
 #### Parameters
-None
+
+- None
 
 #### Returns
-The deauthentication reason code
+
+- The deauthentication reason code
 
 #### Example
 
@@ -1456,11 +1512,13 @@ WiFi.hostByName(hostname, result)
 ```
 
 #### Parameters
-hostname: Name to be resolved
-result: IPAddress structure to store the returned IP address
+
+- hostname: Name to be resolved
+- result: IPAddress structure to store the returned IP address
 
 #### Returns
-1 if hostname was successfully converted to an IP address, else the error code
+
+- 1 if hostname was successfully converted to an IP address, else the error code
 
 #### Example
 
@@ -1493,6 +1551,7 @@ result: IPAddress structure to store the returned IP address
 ### `WiFi.localIP()`
 
 #### Description
+
 Gets the WiFi's IP address
 
 #### Syntax
@@ -1503,10 +1562,10 @@ WiFi.localIP()
 ```
 
 #### Parameters
-none
+- None
 
 #### Returns
-the IP address of the board
+- the IP address of the board
 
 #### Example
 
@@ -1556,10 +1615,12 @@ WiFi.subnet()
 ```
 
 #### Parameters
-none
+
+- None
 
 #### Returns
-the subnet mask of the board
+
+- the subnet mask of the board
 
 #### Example
 
@@ -1613,10 +1674,12 @@ WiFi.gatewayIP()
 ```
 
 #### Parameters
-none
+
+- None
 
 #### Returns
-An array containing the board's gateway IP address
+
+- An array containing the board's gateway IP address
 
 #### Example
 
@@ -1666,25 +1729,28 @@ Get the time in seconds since January 1st, 1970. The time is retrieved from the 
 
 ```
 WiFi.getTime();
-
 ```
 
 #### Parameters
-none
+
+- None
 
 #### Returns
-Returns the time in seconds since January 1st, 1970 on success. 0 on failure.
+
+- Returns the time in seconds since January 1st, 1970 on success. 0 on failure.
 
 ## Client Class
 
 ### `Client()`
 
 #### Description
+
 Client is the base class for all WiFi client based calls. It is not called directly, but invoked whenever you use a function that relies on it.
 
-WiFiClient`
+### `WiFiClient()`
 
 #### Description
+
 Creates a client that can connect to to a specified internet IP address and port as defined in client.connect().
 
 #### Syntax
@@ -1694,10 +1760,12 @@ WiFiClient client;
 ```
 
 #### Parameters
-client : the named client to refer to
+
+- client : the named client to refer to
 
 #### Returns
-none
+
+- None
 
 #### Example
 
@@ -1757,10 +1825,12 @@ WiFiNINASSLClient client;
 ```
 
 #### Parameters
-client : the named client to refer to
 
-Return
-none
+- client : the named client to refer to
+
+#### Return
+
+- None
 
 #### Example
 
@@ -1892,10 +1962,12 @@ client.connected()
 ```
 
 #### Parameters
-none
+
+- None
 
 #### Returns
-Returns true if the client is connected, false if not.
+
+- Returns true if the client is connected, false if not.
 
 #### Example
 
@@ -1967,11 +2039,14 @@ client.connect(URL, port)
 ```
 
 #### Parameters
-ip: the IP address that the client will connect to (array of 4 bytes)
-URL: the domain name the client will connect to (string, ex.:"arduino.cc")
-port: the port that the client will connect to (int)
+
+- ip: the IP address that the client will connect to (array of 4 bytes)
+- URL: the domain name the client will connect to (string, ex.:"arduino.cc")
+- port: the port that the client will connect to (int)
+
 #### Returns
-Returns true if the connection succeeds, false if not.
+
+- Returns true if the connection succeeds, false if not.
 
 #### Example
 
@@ -2020,6 +2095,7 @@ void loop() {
 ### `client.connectSSL()`
 
 #### Description
+
 Connect to the IP address and port specified in the constructor using the SSL protocol. The method connectSSL is required when the server provides only HTTPS connections. Before using this method, it is required to load the SSL certificate used by the server into the Arduino WiFi module . The boards come already loaded with certificates and it should be ready to use. To change or upload new SSL certificates you should follow the procedures that will be made available. connectSSL() also supports DNS lookups when using a domain name (ex:google.com).
 
 #### Syntax
@@ -2031,11 +2107,10 @@ client.connectSSL(URL, port)
 ```
 
 #### Parameters
-ip: the IP address that the client will connect to (array of 4 bytes)
 
-URL: the domain name the client will connect to (string, ex.:"arduino.cc")
-
-port: the port that the client will connect to (int)
+- ip: the IP address that the client will connect to (array of 4 bytes)
+- URL: the domain name the client will connect to (string, ex.:"arduino.cc")
+- port: the port that the client will connect to (int)
 
 #### Returns
 Returns true if the connection succeeds, false if not.
@@ -2147,10 +2222,12 @@ client.status()
 ```
 
 #### Parameters
-None
+
+- None
 
 #### Returns
-The client connection status
+
+- The client connection status
 
 #### Example
 
@@ -2216,15 +2293,19 @@ client.write(buffer, size);
 ```
 
 #### Parameters
-data: the outgoing byte
-buffer: the outgoing message
-size: the size of the buffer
+
+- data: the outgoing byte
+- buffer: the outgoing message
+- size: the size of the buffer
+
 #### Returns
-The number of bytes written. It is not necessary to read this.
+
+- The number of bytes written. It is not necessary to read this.
 
 ### `client.print()`
 
 #### Description
+
 Print data to the server that a client is connected to. Prints numbers as a sequence of digits, each an ASCII character (e.g. the number 123 is sent as the three characters '1', '2', '3').
 
 #### Syntax
@@ -2236,15 +2317,17 @@ client.print(data, BASE)
 ```
 
 #### Parameters
-data: the data to print (char, byte, int, long, or string)
-BASE (optional): the base in which to print numbers:, DEC for decimal (base 10), OCT for octal (base 8), HEX for hexadecimal (base 16).
+- data: the data to print (char, byte, int, long, or string)
+- BASE (optional): the base in which to print numbers:, DEC for decimal (base 10), OCT for octal (base 8), HEX for hexadecimal (base 16).
 
 #### Returns
-byte : returns the number of bytes written, though reading that number is optional
+
+- byte : returns the number of bytes written, though reading that number is optional
 
 ### `client.println()`
 
 #### Description
+
 Print data, followed by a carriage return and newline, to the server a client is connected to. Prints numbers as a sequence of digits, each an ASCII character (e.g. the number 123 is sent as the three characters '1', '2', '3').
 
 #### Syntax
@@ -2257,12 +2340,13 @@ client.print(data, BASE)
 ```
 
 #### Parameters
-data (optional): the data to print (char, byte, int, long, or string)
 
-BASE (optional): the base in which to print numbers: DEC for decimal (base 10), OCT for octal (base 8), HEX for hexadecimal (base 16).
+- data (optional): the data to print (char, byte, int, long, or string)
+- BASE (optional): the base in which to print numbers: DEC for decimal (base 10), OCT for octal (base 8), HEX for hexadecimal (base 16).
 
 #### Returns
-byte: return the number of bytes written, though reading that number is optional
+
+- byte: return the number of bytes written, though reading that number is optional
 
 ### `client.available()`
 
@@ -2279,10 +2363,12 @@ client.available()
 ```
 
 #### Parameters
-none
+
+- None
 
 #### Returns
-The number of bytes available.
+
+- The number of bytes available.
 
 #### Example
 
@@ -2347,6 +2433,7 @@ void loop() {
 ### `client.peek()`
 
 #### Description
+
 Read a byte from the file without advancing to the next one. That is, successive calls to peek() will return the same value, as will the next call to read().
 
 This function inherited from the Stream class. See the Stream class main page for more information.
@@ -2358,11 +2445,13 @@ client.peek()
 ```
 
 #### Parameters
-None
+
+- None
 
 #### Returns
-b: the next byte or character
--1: if none is available
+
+- b: the next byte or character
+- -1: if none is available
 
 #### Example
 
@@ -2449,6 +2538,8 @@ void loop() {
 
 ### `client.read()`
 
+#### Description
+
 Reads data from the client. If no arguments are given, it will return the next character in the buffer.
 
 #### Syntax
@@ -2456,51 +2547,57 @@ Reads data from the client. If no arguments are given, it will return the next c
 ```
 client.read()
 client.read(buffer, size);
-
 ```
 
 #### Parameters
-buffer: buffer to hold incoming packets (char*)
-len: maximum size of the buffer (int)
+
+- buffer: buffer to hold incoming packets (char*)
+- len: maximum size of the buffer (int)
 
 #### Returns
-b: the next character in the buffer (char)
-size: the size of the data
--1: if no data is available
+- b: the next character in the buffer (char)
+- size: the size of the data
+- -1: if no data is available
 
-flush()
-Discard any bytes that have been written to the client but not yet read.
+### `client.flush()`
 
-flush() inherits from the Stream utility class.
+#### Description
+
+Clears the buffer once all outgoing characters have been sent.
+
+flush() inherits from the [Stream](https://www.arduino.cc/reference/en/language/functions/communication/stream/) utility class.
 
 #### Syntax
 
 ```
 client.flush()
-
 ```
 
 #### Parameters
-none
+- None
 
 #### Returns
-none
+- None
 
-stop()
-Disconnect from the server
+### `client.stop()`
+
+#### Description
+
+Disconnect from the server.
 
 #### Syntax
 
 ```
 client.stop()
-
 ```
 
 #### Parameters
-none
+
+- None
 
 #### Returns
-none
+
+- None
 
 ### `client.remoteIP()`
 
@@ -2515,10 +2612,12 @@ client.remoteIP()
 ```
 
 #### Parameters
-None
+
+- None
 
 #### Returns
-The IP address of the host the client is connected to
+
+- The IP address of the host the client is connected to
 
 ### `client.remotePort()`
 
@@ -2533,21 +2632,24 @@ client.remotePort()
 ```
 
 #### Parameters
-None
+
+- None
 
 #### Returns
 The port of the remote host that the client is connected to
 
 ## Server Class
 
-Server`
+### `Server()`
 
 #### Description
+
 Server is the base class for all WiFi server based calls. It is not called directly, but invoked whenever you use a function that relies on it.
 
 ### `WiFiServer()`
 
 #### Description
+
 Creates a server that listens for incoming connections on the specified port.
 
 #### Syntax
@@ -2557,10 +2659,10 @@ WiFiServer server(port);
 ```
 
 #### Parameters
-port: the port to listen on (int)
+- port: the port to listen on (int)
 
 #### Returns
-None
+- None
 
 #### Example
 
@@ -2615,10 +2717,12 @@ server.begin()
 ```
 
 #### Parameters
-None
+
+- None
 
 #### Returns
-None
+
+- None
 
 #### Example
 
@@ -2669,14 +2773,15 @@ Return Connection status.
 
 ```
 server.status()
-
 ```
 
 #### Parameters
-None
+
+- None
 
 #### Returns
-The server connection status
+
+- The server connection status
 
 #### Example
 
@@ -2703,11 +2808,14 @@ server.write(buffer, size);
 ```
 
 #### Parameters
-data: the outgoing byte
-buffer: the outgoing message
-size: the size of the buffer
+
+- data: the outgoing byte
+- buffer: the outgoing message
+- size: the size of the buffer
+
 #### Returns
-The number of bytes written. It is not necessary to read this.
+
+- The number of bytes written. It is not necessary to read this.
 
 #### Example
 
@@ -2752,6 +2860,7 @@ void loop() {
 ### `server.print()`
 
 #### Description
+
 Print data to all the clients connected to a server. Prints numbers as a sequence of digits, each an ASCII character (e.g. the number 123 is sent as the three characters '1', '2', '3').
 
 #### Syntax
@@ -2763,12 +2872,12 @@ server.print(data, BASE)
 ```
 
 #### Parameters
-data: the data to print (char, byte, int, long, or string)
-BASE (optional): the base in which to print numbers: BIN for binary (base 2), DEC for decimal (base 10), OCT for octal (base 8), HEX for hexadecimal (base 16).
+- data: the data to print (char, byte, int, long, or string)
+- BASE (optional): the base in which to print numbers: BIN for binary (base 2), DEC for decimal (base 10), OCT for octal (base 8), HEX for hexadecimal (base 16).
 
 #### Returns
-byte
-print() will return the number of bytes written, though reading that number is optional
+- byte
+- print() will return the number of bytes written, though reading that number is optional
 
 ### `server.println()`
 
@@ -2785,12 +2894,13 @@ server.println(data, BASE)
 ```
 
 #### Parameters
-data (optional): the data to print (char, byte, int, long, or string)
-BASE (optional): the base in which to print numbers: DEC for decimal (base 10), OCT for octal (base 8), HEX for hexadecimal (base 16).
+
+- data (optional): the data to print (char, byte, int, long, or string)
+- BASE (optional): the base in which to print numbers: DEC for decimal (base 10), OCT for octal (base 8), HEX for hexadecimal (base 16).
 
 #### Returns
-byte
-println() will return the number of bytes written, though reading that number is optional
+- byte
+- println() will return the number of bytes written, though reading that number is optional
 
 
 ### `server.available()`
@@ -2804,14 +2914,15 @@ available() inherits from the Stream utility class.
 
 ```
 server.available()
-
 ```
 
 #### Parameters
-None
+
+- None
 
 #### Returns
-a Client object; if no Client has data available for reading, this object will evaluate to false in an if-statement
+
+- a Client object; if no Client has data available for reading, this object will evaluate to false in an if-statement
 
 #### Example
 
@@ -2865,6 +2976,7 @@ void loop() {
 ### `server.peek()`
 
 #### Description
+
 Read a byte from the file without advancing to the next one. That is, successive calls to peek() will return the same value, as will the next call to read().
 
 This function inherited from the Stream class. See the Stream class main page for more information.
@@ -2877,11 +2989,12 @@ server.peek()
 ```
 
 #### Parameters
-None
+
+- None
 
 #### Returns
-b: the next byte or character
--1: if none is available
+- b: the next byte or character
+- -1: if none is available
 #### Example
 
 ```
@@ -2999,29 +3112,33 @@ WiFiUDP.begin(port)
 ```
 
 #### Parameters
-port: the local port to listen on (int)
+
+- port: the local port to listen on (int)
 
 #### Returns
-1: if successful
-0: if there are no sockets available to use
+
+- 1: if successful
+- 0: if there are no sockets available to use
 
 ### `WiFiUDP.beginMulticast()`
 
 #### Description
+
 Initializes the WiFi UDP library and network settings. Starts WiFiUDP socket, listening at local port PORT and on specified multicast IP address.
 
 #### Syntax
 
 ```
 WiFiUDP.beginMulticast(IPAddressport, port);
-
 ```
 
 #### Parameters
+
 - IPAddress: sdd
 - port: the local port to listen on (int)
 
 #### Returns
+
 - 1: if successful
 - 0: if there are no sockets available to use
 
@@ -3075,12 +3192,15 @@ WiFiUDP.beginPacket(hostIp, port);
 ```
 
 #### Parameters
-hostName: the address of the remote host. It accepts a character string or an IPAddress
-hostIp: the IP address of the remote connection (4 bytes)
-port: the port of the remote connection (int)
+
+- hostName: the address of the remote host. It accepts a character string or an IPAddress
+- hostIp: the IP address of the remote connection (4 bytes)
+- port: the port of the remote connection (int)
+
 #### Returns
-1: if successful
-0: if there was a problem with the supplied IP address or port
+
+- 1: if successful
+- 0: if there was a problem with the supplied IP address or port
 
 
 ### `WiFiUDP.write()`
@@ -3097,31 +3217,36 @@ WiFiUDP.write(buffer, size);
 ```
 
 #### Parameters
-byte: the outgoing byte
-buffer: the outgoing message
-size: the size of the buffer
+
+- byte: the outgoing byte
+- buffer: the outgoing message
+- size: the size of the buffer
+
 #### Returns
-single byte into the packet
-bytes size from buffer into the packet
+
+- single byte into the packet
+- bytes size from buffer into the packet
 
 ### `WiFiUDP.endPacket()`
 
 #### Description
+
 Called after writing UDP data to the remote connection. It finishes off the packet and send it.
 
 #### Syntax
 
 ```
 WiFiUDP.endPacket()
-
 ```
 
 #### Parameters
-None
+
+- None
 
 #### Returns
-1: if the packet was sent successfully
-0: if there was an error
+
+- 1: if the packet was sent successfully
+- 0: if there was an error
 
 ### `WiFiUDP.available()`
 
@@ -3140,15 +3265,18 @@ WiFiUDP.available()
 ```
 
 #### Parameters
-None
+
+- None
 
 #### Returns
-the number of bytes available in the current packet
-0: if WiFiUDP.parsePacket() hasn't been called yet
+
+- the number of bytes available in the current packet
+- 0: if WiFiUDP.parsePacket() hasn't been called yet
 
 ### `WiFiUDP.parsePacket()`
 
 #### Description
+
 It starts processing the next available incoming packet, checks for the presence of a UDP packet, and reports the size. parsePacket() must be called before reading the buffer with UDP.read().
 
 #### Syntax
@@ -3158,11 +3286,11 @@ WiFiUDP..parsePacket()
 ```
 
 #### Parameters
-None
+- None
 
 #### Returns
-the size of the packet in bytes
-0: if no packets are available
+- the size of the packet in bytes
+- 0: if no packets are available
 
 ### `WiFiUDP.peek()`
 
@@ -3179,11 +3307,12 @@ WiFiUDP.peek()
 ```
 
 #### Parameters
-none
+
+- None
 
 #### Returns
-b: the next byte or character
--1: if none is available
+- b: the next byte or character
+- -1: if none is available
 
 ### `WiFiUDP.read()`
 
@@ -3200,7 +3329,7 @@ WiFiUDP.read(buffer, len);
 ```
 
 #### Parameters
-buffer: buffer to hold incoming packets (char*)
+- buffer: buffer to hold incoming packets (char*)
 len: maximum size of the buffer (int)
 
 #### Returns
@@ -3225,7 +3354,7 @@ WiFiUDP.flush()
 none
 
 #### Returns
-none
+- None
 
 ### `WiFiUDP.stop()`
 
@@ -3236,14 +3365,13 @@ Disconnect from the server. Release any resource being used during the UDP sessi
 
 ```
 WiFiUDP.stop()
-
 ```
 
 #### Parameters
-none
+- None
 
 #### Returns
-none
+- None
 
 ### `WiFiUDP.remoteIP()`
 
@@ -3259,10 +3387,12 @@ WiFiUDP.remoteIP();
 ```
 
 #### Parameters
-None
+
+- None
 
 #### Returns
-4 bytes : the IP address of the host who sent the current incoming packet
+
+- 4 bytes : the IP address of the host who sent the current incoming packet
 
 
 ### `WiFiUDP.remotePort()`
@@ -3279,8 +3409,10 @@ UDP.remotePort()
 ```
 
 #### Parameters
-None
+
+- None
 
 #### Returns
-The port of the host who sent the current incoming packet
+
+- The port of the host who sent the current incoming packet
 
