@@ -82,12 +82,15 @@ WiFi.beginAP(ssid, passphrase, channel);
 ```
 
 #### Parameters
-ssid: the SSID (Service Set Identifier) of the created Access Point. Must be 8 or more characters.
-passphrase: optional, the WPA password of the created Access Point. Must be 8 or more characters.
-channel: optional, channel of created Access Point (1 - 14). Defaults to channel 1;
+
+- ssid: the SSID (Service Set Identifier) of the created Access Point. Must be 8 or more characters.
+- passphrase: optional, the WPA password of the created Access Point. Must be 8 or more characters.
+- channel: optional, channel of created Access Point (1 - 14). Defaults to channel 1;
+
 #### Returns
-WL_AP_LISTENING when creating access point succeeds
-WL_CONNECT_FAILED when creating access point fails
+
+- WL_AP_LISTENING when creating access point succeeds
+- WL_CONNECT_FAILED when creating access point fails
 
 #### Example
 
@@ -2560,9 +2563,9 @@ client.read(buffer, size);
 
 #### Description
 
-Discard any bytes that have been written to the client but not yet read.
+Clears the buffer once all outgoing characters have been sent.
 
-flush() inherits from the Stream utility class.
+flush() inherits from the [Stream](https://www.arduino.cc/reference/en/language/functions/communication/stream/) utility class.
 
 #### Syntax
 
