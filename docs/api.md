@@ -593,7 +593,7 @@ WiFi.setHostname(hostname)
 
 ```
 …
-  WiFi.setHostname(“MyArduino”);
+  WiFi.setHostname("MyArduino");
 
   // attempt to connect to Wifi network:
   while (status != WL_CONNECTED) {
@@ -2788,7 +2788,7 @@ server.status()
 ```
 …
 
-Serial.print(“connection status: ”);
+Serial.print("connection status: ");
 Serial.println(client.status());
 
 …
