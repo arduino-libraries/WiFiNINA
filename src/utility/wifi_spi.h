@@ -42,7 +42,7 @@
 #define CMD_POS			1		// Position of Command OpCode on SPI stream
 #define PARAM_LEN_POS 	2		// Position of Param len on SPI stream
 
-  
+
 enum {
 	SET_NET_CMD 		= 0x10,
 	SET_PASSPHRASE_CMD	= 0x11,
@@ -114,6 +114,7 @@ enum {
     APPLY_OTA_COMMAND	= 0x65,
 	RENAME_FILE			= 0x66,
 	DOWNLOAD_OTA		= 0x67,
+  SET_INSECURE    = 0X6F
 };
 
 

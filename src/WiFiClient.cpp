@@ -35,10 +35,10 @@ extern "C" {
 
 uint16_t WiFiClient::_srcport = 1024;
 
-WiFiClient::WiFiClient() : _sock(NO_SOCKET_AVAIL), _retrySend(true) {
+WiFiClient::WiFiClient() : _sock(NO_SOCKET_AVAIL), _retrySend(true){
 }
 
-WiFiClient::WiFiClient(uint8_t sock) : _sock(sock), _retrySend(true) {
+WiFiClient::WiFiClient(uint8_t sock) : _sock(sock), _retrySend(true){
 }
 
 int WiFiClient::connect(const char* host, uint16_t port) {
@@ -64,7 +64,7 @@ int WiFiClient::connect(IPAddress ip, uint16_t port) {
     	unsigned long start = millis();
 
     	// wait 4 second for the connection to close
-    	while (!connected() && millis() - start < 10000)
+    	while (!connected() && millis() - start < _connectTimeout)
     		delay(1);
 
     	if (!connected())
@@ -93,7 +93,7 @@ int WiFiClient::connectSSL(IPAddress ip, uint16_t port)
       unsigned long start = millis();
 
       // wait 4 second for the connection to close
-      while (!connected() && millis() - start < 10000)
+      while (!connected() && millis() - start < _SSLConnectTimeout)
         delay(1);
 
       if (!connected())
@@ -122,7 +122,7 @@ int WiFiClient::connectSSL(const char *host, uint16_t port)
       unsigned long start = millis();
 
       // wait 4 second for the connection to close
-      while (!connected() && millis() - start < 10000)
+      while (!connected() && millis() - start < _SSLConnectTimeout)
         delay(1);
 
       if (!connected())
@@ -151,7 +151,7 @@ int WiFiClient::connectBearSSL(IPAddress ip, uint16_t port)
       unsigned long start = millis();
 
       // wait 4 second for the connection to close
-      while (!connected() && millis() - start < 10000)
+      while (!connected() && millis() - start < _SSLConnectTimeout)
         delay(1);
 
       if (!connected())
@@ -180,7 +180,7 @@ int WiFiClient::connectBearSSL(const char *host, uint16_t port)
       unsigned long start = millis();
 
       // wait 4 second for the connection to close
-      while (!connected() && millis() - start < 10000)
+      while (!connected() && millis() - start < _SSLConnectTimeout)
         delay(1);
 
       if (!connected())
@@ -257,7 +257,7 @@ int WiFiClient::available() {
   {
       return WiFiSocketBuffer.available(_sock);
   }
-   
+
   return 0;
 }
 
@@ -285,6 +285,20 @@ int WiFiClient::peek() {
 
 void WiFiClient::setRetry(bool retry) {
   _retrySend = retry;
+}
+
+void WiFiClient::setConnectTime(uint16_t connectTimeout){
+  _connectTimeout = connectTimeout;
+}
+
+void WiFiClient::setSSLConnectTime(uint16_t SSLConnectTimeout){
+  _SSLConnectTimeout = SSLConnectTimeout;
+}
+
+uint8_t WiFiClient::setInsecure(bool insecure){
+  uint8_t nextSock = ServerDrv::getSocket();
+  return WiFiDrv::setInsecure(nextSock, insecure);
+
 }
 
 void WiFiClient::flush() {
