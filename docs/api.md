@@ -199,7 +199,7 @@ void loop() {
       delayMicroseconds(10);                // This is required for the Arduino Nano RP2040 Connect - otherwise it will loop so fast that SPI will never be served.
       if (client.available()) {             // if there's bytes to read from the client,
         char c = client.read();             // read a byte, then
-        Serial.write(c);                    // print it out the serial monitor
+        Serial.write(c);                    // print it out to the serial monitor
         if (c == '\n') {                    // if the byte is a newline character
 
           // if the current line is blank, you got two newline characters in a row.
@@ -482,7 +482,7 @@ void setup()
 
   WiFi.config(ip);
 
-  // attempt to connect to Wifi network:
+  // attempt to connect to WiFi network:
   while ( status != WL_CONNECTED) {
     Serial.print("Attempting to connect to SSID: ");
     Serial.println(ssid);
@@ -533,7 +533,7 @@ This example shows how to set the Google DNS (8.8.8.8). You can set it as an obj
 #include <WiFiNINA.h>
 
 // the IP address for the shield:
-IPAddress dns(8, 8, 8, 8);  //Google dns  
+IPAddress dns(8, 8, 8, 8);  //Google DNS  
 
 char ssid[] = "yourNetwork";    // your network SSID (name)
 char pass[] = "secretPassword"; // your network password (use for WPA, or use as key for WEP)
@@ -548,7 +548,7 @@ void setup()
     ; // wait for serial port to connect. Needed for Leonardo only
   }
 
-  // attempt to connect to Wifi network:
+  // attempt to connect to WiFi network:
   while ( status != WL_CONNECTED) {
     Serial.print("Attempting to connect to SSID: ");
     Serial.println(ssid);
@@ -561,7 +561,7 @@ void setup()
 
   // print your WiFi's IP address:
   WiFi.setDNS(dns);
-  Serial.print("Dns configured.");
+  Serial.print("DNS configured.");
 }
 
 void loop () {
@@ -595,7 +595,7 @@ WiFi.setHostname(hostname)
 …
   WiFi.setHostname("MyArduino");
 
-  // attempt to connect to Wifi network:
+  // attempt to connect to WiFi network:
   while (status != WL_CONNECTED) {
     Serial.print("Attempting to connect to SSID: ");
     Serial.println(ssid);
@@ -631,9 +631,9 @@ WiFi.setTimeout(timeout)
 
 ```
 …
- WiF.setTimeout(120 * 1000);
+ WiFi.setTimeout(120 * 1000);
 
-  // attempt to connect to Wifi network:
+  // attempt to connect to WiFi network:
   while (status != WL_CONNECTED) {
     Serial.print("Attempting to connect to SSID: ");
     Serial.println(ssid);
@@ -676,7 +676,7 @@ WiFi.SSID(wifiAccessPoint)
 
 //SSID of your network
 char ssid[] = "yourNetwork";
-int status = WL_IDLE_STATUS;     // the Wifi radio's status
+int status = WL_IDLE_STATUS;     // the WiFi radio's status
 
 void setup()
 {
@@ -753,7 +753,7 @@ void setup()
  WiFi.begin(ssid, pass);
 
   if ( status != WL_CONNECTED) {
-    Serial.println("Couldn't get a wifi connection");
+    Serial.println("Couldn't get a WiFi connection");
     while(true);
   }
   // if you are connected, print out info about the connection:
@@ -797,7 +797,7 @@ WiFi.RSSI(wifiAccessPoint);
 
 #### Returns
 
-- long : the current RSSI /Received Signal Strength in dBm
+- long : the current RSSI/Received Signal Strength in dBm
 
 #### Example
 
@@ -815,7 +815,7 @@ void setup()
  WiFi.begin(ssid, pass);
 
   if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("Couldn't get a wifi connection");
+    Serial.println("Couldn't get a WiFi connection");
     while(true);
   }
   // if you are connected, print out info about the connection:
@@ -932,7 +932,7 @@ void setup()
  WiFi.begin(ssid, pass);
 
   if ( status != WL_CONNECTED) {
-    Serial.println("Couldn't get a wifi connection");
+    Serial.println("Couldn't get a WiFi connection");
     while(true);
   }
   // if you are connected, print out info about the connection:
@@ -971,13 +971,13 @@ WiFi.scanNetworks()
 
 ```
 /*
- This example  prints the board's MAC address, and
+ This example prints the board's MAC address, and
  scans for available WiFi networks using the NINA module.
  Every ten seconds, it scans again. It doesn't actually
  connect to any network, so no encryption scheme is specified.
 
  Circuit:
- * Board with NINA module (Arduino MKR WiFi 1010, MKR VIDOR 4000 and UNO WiFi Rev.2)
+ * Board with NINA module (Arduino MKR WiFi 1010, MKR VIDOR 4000 and Uno WiFi Rev.2)
 
  created 13 July 2010
  by dlf (Metodo2 srl)
@@ -1127,7 +1127,7 @@ WiFi.ping(host, ttl);
   Then it continuously pings given host specified by IP Address or name.
 
   Circuit:
-  * Board with NINA module (Arduino MKR WiFi 1010, MKR VIDOR 4000 and UNO WiFi Rev.2)
+  * Board with NINA module (Arduino MKR WiFi 1010, MKR VIDOR 4000 and Uno WiFi Rev.2)
 
   created 13 July 2010
   by dlf (Metodo2 srl)
@@ -1297,7 +1297,7 @@ WiFi.status()
 char ssid[] = "yourNetwork";                     // your network SSID (name)
 char key[] = "D0D0DEADF00DABBADEAFBEADED";       // your network key
 int keyIndex = 0;                                // your network key Index number
-int status = WL_IDLE_STATUS;                     // the Wifi radio's status
+int status = WL_IDLE_STATUS;                     // the WiFi radio's status
 
 void setup() {
   //Initialize serial and wait for port to open:
@@ -1306,7 +1306,7 @@ void setup() {
     ; // wait for serial port to connect. Needed for Leonardo only
   }
 
-  // attempt to connect to Wifi network:
+  // attempt to connect to WiFi network:
   while ( status != WL_CONNECTED) {
     Serial.print("Attempting to connect to WEP network, SSID: ");
     Serial.println(ssid);
@@ -1356,9 +1356,9 @@ WiFi.macAddress(mac)
 #include <WiFiNINA.h>
 
 char ssid[] = "yourNetwork";     // the name of your network
-int status = WL_IDLE_STATUS;     // the Wifi radio's status
+int status = WL_IDLE_STATUS;     // the WiFi radio's status
 
-byte mac[6];                     // the MAC address of your Wifi Module
+byte mac[6];                     // the MAC address of your WiFi Module
 
 
 void setup()
@@ -1368,7 +1368,7 @@ void setup()
  status = WiFi.begin(ssid);
 
  if ( status != WL_CONNECTED) {
-    Serial.println("Couldn't get a wifi connection");
+    Serial.println("Couldn't get a WiFi connection");
     while(true);
   }
   // if you are connected, print your MAC address:
@@ -1427,7 +1427,7 @@ if (fv < "1.0.0") {
 
 #### Description
 
-Enable low power mode. This is an automatically managed mode where the WiFi NINA Module reduces its power drain bringing the overall power consumption to 30mA. Any incoming data is received and the device sends out regularly the beacon signal each 100ms to keep the AP connection alive.
+Enable low power mode. This is an automatically managed mode where the WiFi NINA Module reduces its power drain bringing the overall power consumption to 30 mA. Any incoming data is received and the device sends out regularly the beacon signal each 100 ms to keep the AP connection alive.
 
 #### Syntax
 
@@ -1531,14 +1531,14 @@ WiFi.hostByName(hostname, result)
         status = WiFi.begin(ssid, pass);
         delay(10000);
   }
-  Serial.println("Connected to wifi");
+  Serial.println("Connected to WiFi");
   printWifiStatus();
 
   Serial.println("\nStarting connection to server...");
   IPAddress result;
   int err = WiFi.hostByName(server, result) ;
   if(err == 1){
-        Serial.print("Ip address: ");
+        Serial.print("IP address: ");
         Serial.println(result);
   } else {
         Serial.print("Error code: ");
@@ -1575,7 +1575,7 @@ WiFi.localIP()
 
 char ssid[] = "yourNetwork";      //SSID of your network
 
-int status = WL_IDLE_STATUS;     // the Wifi radio's status
+int status = WL_IDLE_STATUS;     // the WiFi radio's status
 
 IPAddress ip;                    // the IP address of your board
 
@@ -1587,7 +1587,7 @@ void setup()
  WiFi.begin(ssid);
 
   if ( status != WL_CONNECTED) {
-    Serial.println("Couldn't get a wifi connection");
+    Serial.println("Couldn't get a WiFi connection");
     while(true);
   }
   // if you are connected, print out info about the connection:
@@ -1626,7 +1626,7 @@ WiFi.subnet()
 
 ```
 #include <WiFiNINA.h>
-int status = WL_IDLE_STATUS;     // the Wifi radio's status
+int status = WL_IDLE_STATUS;     // the WiFi radio's status
 
 //SSID of your network
 char ssid[] = "yourNetwork";
@@ -1642,7 +1642,7 @@ void setup()
   WiFi.begin(ssid, pass);
 
   if ( status != WL_CONNECTED) {
-    Serial.println("Couldn't get a wifi connection");
+    Serial.println("Couldn't get a WiFi connection");
     while(true);
   }
   // if you are connected, print out info about the connection:
@@ -1687,7 +1687,7 @@ WiFi.gatewayIP()
 #include <SPI.h>
 #include <WiFiNINA.h>
 
-int status = WL_IDLE_STATUS;     // the Wifi radio's status
+int status = WL_IDLE_STATUS;     // the WiFi radio's status
 
 //SSID of your network
 char ssid[] = "yourNetwork";
@@ -1703,7 +1703,7 @@ void setup()
  WiFi.begin(ssid, pass);
 
   if ( status != WL_CONNECTED) {
-    Serial.println("Couldn't get a wifi connection");
+    Serial.println("Couldn't get a WiFi connection");
     while(true);
   }
   // if you are connected, print out info about the connection:
@@ -1790,12 +1790,12 @@ void setup() {
 
   status = WiFi.begin(ssid, pass);
   if ( status != WL_CONNECTED) {
-    Serial.println("Couldn't get a wifi connection");
+    Serial.println("Couldn't get a WiFi connection");
     // don't do anything else:
     while(true);
   }
   else {
-    Serial.println("Connected to wifi");
+    Serial.println("Connected to WiFi");
     Serial.println("\nStarting connection...");
     // if you get a connection, report back via serial:
     if (client.connect(server, 80)) {
@@ -1992,12 +1992,12 @@ void setup() {
 
   status = WiFi.begin(ssid, pass);
   if ( status != WL_CONNECTED) {
-    Serial.println("Couldn't get a wifi connection");
+    Serial.println("Couldn't get a WiFi connection");
     // don't do anything else:
     while(true);
   }
   else {
-    Serial.println("Connected to wifi");
+    Serial.println("Connected to WiFi");
     Serial.println("\nStarting connection...");
     // if you get a connection, report back via serial:
     if (client.connect(server, 80)) {
@@ -2028,7 +2028,7 @@ void loop() {
 ### `client.connect()`
 
 #### Description
-Connect to the IP address and port specified in the constructor. The return value indicates success or failure. connect() also supports DNS lookups when using a domain name (ex:google.com).
+Connect to the IP address and port specified in the constructor. The return value indicates success or failure. connect() also supports DNS lookups when using a domain name (e.g., google.com).
 
 #### Syntax
 
@@ -2041,7 +2041,7 @@ client.connect(URL, port)
 #### Parameters
 
 - ip: the IP address that the client will connect to (array of 4 bytes)
-- URL: the domain name the client will connect to (string, ex.:"arduino.cc")
+- URL: the domain name the client will connect to (string e.g., "arduino.cc")
 - port: the port that the client will connect to (int)
 
 #### Returns
@@ -2070,12 +2070,12 @@ void setup() {
 
   status = WiFi.begin(ssid, pass);
   if ( status != WL_CONNECTED) {
-    Serial.println("Couldn't get a wifi connection");
+    Serial.println("Couldn't get a WiFi connection");
     // don't do anything else:
     while(true);
   }
   else {
-    Serial.println("Connected to wifi");
+    Serial.println("Connected to WiFi");
     Serial.println("\nStarting connection...");
     // if you get a connection, report back via serial:
     if (client.connect(servername, 80)) {
@@ -2096,7 +2096,7 @@ void loop() {
 
 #### Description
 
-Connect to the IP address and port specified in the constructor using the SSL protocol. The method connectSSL is required when the server provides only HTTPS connections. Before using this method, it is required to load the SSL certificate used by the server into the Arduino WiFi module . The boards come already loaded with certificates and it should be ready to use. To change or upload new SSL certificates you should follow the procedures that will be made available. connectSSL() also supports DNS lookups when using a domain name (ex:google.com).
+Connect to the IP address and port specified in the constructor using the SSL protocol. The method connectSSL is required when the server provides only HTTPS connections. Before using this method, it is required to load the SSL certificate used by the server into the Arduino WiFi module . The boards come already loaded with certificates and it should be ready to use. To change or upload new SSL certificates you should follow the procedures that will be made available. connectSSL() also supports DNS lookups when using a domain name (e.g., google.com).
 
 #### Syntax
 
@@ -2109,7 +2109,7 @@ client.connectSSL(URL, port)
 #### Parameters
 
 - ip: the IP address that the client will connect to (array of 4 bytes)
-- URL: the domain name the client will connect to (string, ex.:"arduino.cc")
+- URL: the domain name the client will connect to (string e.g., "arduino.cc")
 - port: the port that the client will connect to (int)
 
 #### Returns
@@ -2123,11 +2123,11 @@ Returns true if the connection succeeds, false if not.
 /*
   Web client
 
- This sketch connects to a website through a SSL connection
+ This sketch connects to a website through an SSL connection
  using a WiFi board.
 
  This example is written for a network using WPA encryption. For
- WEP or WPA, change the Wifi.begin() call accordingly.
+ WEP or WPA, change the WiFi.begin() call accordingly.
 
  Circuit:
  * WiFiNINA supported board
@@ -2149,7 +2149,7 @@ int keyIndex = 0;            // your network key Index number (needed only for W
 int status = WL_IDLE_STATUS;
 char server[] = "arduino.tips";    // name address for Arduino (using DNS)
 
-// Initialize the Wifi client library
+// Initialize the WiFi client library
 // with the IP address and port of the server
 // that you want to connect to (port 80 is default for HTTP):
 WiFiClient client;
@@ -2161,7 +2161,7 @@ void setup() {
     ; // wait for serial port to connect. Needed for Leonardo only
   }
 
-  // attempt to connect to Wifi network:
+  // attempt to connect to WiFi network:
   while (status != WL_CONNECTED) {
     Serial.print("Attempting to connect to SSID: ");
     Serial.println(ssid);
@@ -2171,7 +2171,7 @@ void setup() {
     // wait 10 seconds for connection:
     delay(10000);
   }
-  Serial.println("Connected to wifi");
+  Serial.println("Connected to WiFi");
 
   Serial.println("\nStarting connection to server...");
   // if you get a connection, report back via serial:
@@ -2250,14 +2250,14 @@ void setup() {
                 status = WiFi.begin(ssid, pass);
         delay(10000);
   }
-  Serial.println("Connected to wifi");
+  Serial.println("Connected to WiFi");
   printWifiStatus();
 
   Serial.println("\nStarting connection to server...");
   IPAddress result;
   int err = WiFi.hostByName(server, result) ;
   if (err == 1) {
-        Serial.print("Ip address: ");
+        Serial.print("IP address: ");
         Serial.println(result);
   } else {
         Serial.print("Error code: ");
@@ -2392,12 +2392,12 @@ void setup() {
 
   status = WiFi.begin(ssid, pass);
   if ( status != WL_CONNECTED) {
-    Serial.println("Couldn't get a wifi connection");
+    Serial.println("Couldn't get a WiFi connection");
     // don't do anything else:
     while(true);
   }
   else {
-    Serial.println("Connected to wifi");
+    Serial.println("Connected to WiFi");
     Serial.println("\nStarting connection...");
     // if you get a connection, report back via serial:
     if (client.connect(servername, 80)) {
@@ -2489,14 +2489,14 @@ void setup() {
         status = WiFi.begin(ssid, pass);
         delay(10000);
   }
-  Serial.println("Connected to wifi");
+  Serial.println("Connected to WiFi");
   printWifiStatus();
 
   Serial.println("\nStarting connection to server...");
   IPAddress result;
   int err = WiFi.hostByName(server, result) ;
   if (err == 1) {
-        Serial.print("Ip address: ");
+        Serial.print("IP address: ");
         Serial.println(result);
   } else {
         Serial.print("Error code: ");
@@ -2685,12 +2685,12 @@ void setup() {
 
   status = WiFi.begin(ssid, pass);
   if ( status != WL_CONNECTED) {
-    Serial.println("Couldn't get a wifi connection");
+    Serial.println("Couldn't get a WiFi connection");
     while(true);
   }
   else {
     server.begin();
-    Serial.print("Connected to wifi. My address:");
+    Serial.print("Connected to WiFi. My address:");
     IPAddress myAddress = WiFi.localIP();
     Serial.println(myAddress);
 
@@ -2745,12 +2745,12 @@ void setup() {
 
   status = WiFi.begin(ssid, pass);
   if ( status != WL_CONNECTED) {
-    Serial.println("Couldn't get a wifi connection");
+    Serial.println("Couldn't get a WiFi connection");
     while(true);
   }
   else {
     server.begin();
-    Serial.print("Connected to wifi. My address:");
+    Serial.print("Connected to WiFi. My address:");
     IPAddress myAddress = WiFi.localIP();
     Serial.println(myAddress);
 
@@ -2838,7 +2838,7 @@ void setup() {
 
   status = WiFi.begin(ssid, pass);
   if ( status != WL_CONNECTED) {
-    Serial.println("Couldn't get a wifi connection");
+    Serial.println("Couldn't get a WiFi connection");
     while(true);
   }
   else {
@@ -2945,12 +2945,12 @@ void setup() {
 
   status = WiFi.begin(ssid, pass);
   if ( status != WL_CONNECTED) {
-    Serial.println("Couldn't get a wifi connection");
+    Serial.println("Couldn't get a WiFi connection");
     while(true);
   }
   else {
     server.begin();
-    Serial.print("Connected to wifi. My address:");
+    Serial.print("Connected to WiFi. My address:");
     IPAddress myAddress = WiFi.localIP();
     Serial.println(myAddress);
 
@@ -3103,7 +3103,7 @@ none
 ### `WiFiUDP.begin()`
 
 #### Description
-Initializes the WiFi UDP library and network settings. Starts WiFiUDP socket, listening at local port PORT .
+Initializes the WiFi UDP library and network settings. Starts WiFiUDP socket, listening at local port PORT.
 
 #### Syntax
 
@@ -3129,7 +3129,7 @@ Initializes the WiFi UDP library and network settings. Starts WiFiUDP socket, li
 #### Syntax
 
 ```
-WiFiUDP.beginMulticast(IPAddressport, port);
+WiFiUDP.beginMulticast(IPAddress, port);
 ```
 
 #### Parameters
@@ -3167,13 +3167,13 @@ void setup() {
         // wait 10 seconds for connection:
         delay(10000);
   }
-  Serial.println("Connected to wifi");
+  Serial.println("Connected to WiFi");
   printWifiStatus();
 
   Serial.println("\nStarting connection to server...");
 
   udp.beginMulticast(IPAddress(226, 1, 1, 1), 4096);
-  Serial.println("\n connected udp multicast");
+  Serial.println("\n connected UDP multicast");
 
 …
 ```
