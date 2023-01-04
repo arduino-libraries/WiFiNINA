@@ -1,5 +1,5 @@
 /*
-  wifi_spi.h - Library for Arduino Wifi shield.
+  wifi_spi.h - Library for Arduino WiFi shield.
   Copyright (c) 2018 Arduino SA. All rights reserved.
   Copyright (c) 2011-2014 Arduino.  All right reserved.
 
@@ -33,7 +33,7 @@
 
 #define TIMEOUT_CHAR    1000
 
-//#define	MAX_SOCK_NUM		4	/**< Maxmium number of socket  */
+//#define	MAX_SOCK_NUM		4	/**< Maximum number of socket  */
 #define NO_SOCKET_AVAIL     255
 
 #define START_CMD   0xE0
