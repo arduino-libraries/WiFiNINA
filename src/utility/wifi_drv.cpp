@@ -418,6 +418,39 @@ void WiFiDrv::getIpAddress(IPAddress& ip)
 	ip = _gatewayIp;
  }
 
+ void WiFiDrv::getDNS(IPAddress& dnsip0, IPAddress& dnsip1)
+ {
+   uint8_t ip0[WL_IPV4_LENGTH] = {0};
+   uint8_t ip1[WL_IPV4_LENGTH] = {0};
+
+   tParam params[PARAM_NUMS_2] = { {0, (char*)ip0}, {0, (char*)ip1}};
+
+   WAIT_FOR_SLAVE_SELECT();
+
+   // Send Command
+   SpiDrv::sendCmd(GET_DNS_CONFIG_CMD, PARAM_NUMS_1);
+
+   uint8_t _dummy = DUMMY_DATA;
+   SpiDrv::sendParam(&_dummy, sizeof(_dummy), LAST_PARAM);
+
+   // pad to multiple of 4
+   SpiDrv::readChar();
+   SpiDrv::readChar();
+
+   SpiDrv::spiSlaveDeselect();
+   //Wait the reply elaboration
+   SpiDrv::waitForSlaveReady();
+   SpiDrv::spiSlaveSelect();
+
+   // Wait for reply
+   SpiDrv::waitResponseParams(GET_DNS_CONFIG_CMD, PARAM_NUMS_2, params);
+
+   SpiDrv::spiSlaveDeselect();
+
+   dnsip0 = ip0;
+   dnsip1 = ip1;
+ }
+
 const char* WiFiDrv::getCurrentSSID()
 {
 	WAIT_FOR_SLAVE_SELECT();

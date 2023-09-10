@@ -1720,6 +1720,71 @@ void setup()
 void loop () {}
 ```
 
+### `WiFi.dnsIP()`
+
+#### Description
+
+Returns the DNS server IP address for the device.
+
+
+#### Syntax
+
+```
+WiFi.dnsIP()
+WiFi.dnsIP(n)
+
+```
+
+#### Parameters
+optional parameter n for the number of the DNS server to get the second DNS serverv
+
+#### Returns
+- the DNS server IP address for the device (IPAddress).
+
+#### Example
+
+```
+#include <WiFiNINA.h>
+
+#include "arduino_secrets.h"
+char ssid[] = SECRET_SSID;
+char pass[] = SECRET_PASS;
+
+IPAddress emptyIP;
+
+void setup() {
+
+  Serial.begin(115200);
+  while (!Serial) {}
+
+  Serial.print("Attempting to connect to SSID: ");
+  Serial.println(ssid);
+  int status = WiFi.begin(ssid, pass);
+  if ( status != WL_CONNECTED) {
+    Serial.println("Couldn't get a WiFi connection");
+    while(true);
+  }
+
+  Serial.print("DHCP assigned DNS server: ");
+  IPAddress dns1 = WiFi.dnsIP();
+  if (dns1 == emptyIP) {
+    Serial.println("not set");
+  } else {
+    dns1.printTo(Serial);
+    Serial.println();
+    IPAddress dns2 = WiFi.dnsIP(1);
+    if (dns2 != emptyIP) {
+      Serial.print("DNS server2: ");
+      dns2.printTo(Serial);
+      Serial.println();
+    }
+  }
+
+}
+
+void loop() {
+}
+```
 ### `WiFi.getTime()`
 
 #### Description

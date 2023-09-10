@@ -266,6 +266,16 @@ IPAddress WiFiClass::gatewayIP()
 	return ret;
 }
 
+IPAddress WiFiClass::dnsIP(int n)
+{
+  if (n > 1)
+    return IPAddress(0,0,0,0);
+  IPAddress dnsip0;
+  IPAddress dnsip1;
+  WiFiDrv::getDNS(dnsip0, dnsip1);
+  return n ? dnsip1 : dnsip0;
+}
+
 const char* WiFiClass::SSID()
 {
     return WiFiDrv::getCurrentSSID();
