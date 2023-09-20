@@ -2764,6 +2764,63 @@ void loop() {
  
 ```
 
+### `if(server)`
+
+#### Description
+Indicates whether the server is listening for new clients. You can use this to detect whether server.begin() was successful.
+
+
+#### Syntax
+
+```
+if (server)
+if (!server)
+
+```
+
+#### Parameters
+none
+
+#### Returns
+- whether the server is listening for new clients (bool).
+
+#### Example
+
+```
+#include <WiFiNINA.h>
+
+char ssid[] = "Network";          //  your network SSID (name)
+char pass[] = "myPassword";   // your network password
+
+WiFiServer server(23);
+
+void setup() {
+
+  Serial.begin(115200);
+  while (!Serial) {}
+
+  int status = WiFi.begin(ssid, pass);
+  if ( status != WL_CONNECTED) {
+    Serial.println("Couldn't get a WiFi connection");
+    while(true);
+  }
+
+  server.begin();
+  if (!server) {
+    Serial.println("Server failed to start.");
+    while(true);
+  }
+}
+
+void loop() {
+  WiFiClient client = server.available();
+  if (client) {
+    String s = client.readStringUntil('\n');
+    server.println(s);
+  }
+}
+```
+
 ### `server.status()`
 
 #### Description
