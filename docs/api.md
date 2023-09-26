@@ -2713,12 +2713,13 @@ Tells the server to begin listening for incoming connections.
 
 ```
 server.begin()
+server.begin(port)
 
 ```
 
 #### Parameters
 
-- None
+- port (optional): the port to listen on (int)
 
 #### Returns
 
