@@ -41,8 +41,6 @@ public:
 
     static void stopClient(uint8_t sock);
                                                                                   
-    static uint8_t getServerState(uint8_t sock);
-
     static uint8_t getClientState(uint8_t sock);
 
     static bool getData(uint8_t sock, uint8_t *data, uint8_t peek = 0);

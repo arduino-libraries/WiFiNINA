@@ -80,15 +80,6 @@ WiFiClient WiFiServer::available(byte* status)
     return WiFiClient(255);
 }
 
-uint8_t WiFiServer::status() {
-    if (_sock == NO_SOCKET_AVAIL) {
-        return CLOSED;
-    } else {
-        return ServerDrv::getServerState(_sock);
-    }
-}
-
-
 size_t WiFiServer::write(uint8_t b)
 {
     return write(&b, 1);
