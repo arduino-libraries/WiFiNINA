@@ -2973,6 +2973,112 @@ void loop() {
  
 ```
 
+### `server.accept()`
+
+#### Description
+
+The traditional server.available() function would only tell you of a new client after it sent data, which makes some protocols like FTP impossible to properly implement.
+
+The intention is programs will use either available() or accept(), but not both. With available(), the client connection continues to be managed by WiFiServer. You don’t need to keep a client object, since calling available() will give you whatever client has sent data. Simple servers can be written with very little code using available().
+
+With accept(), WiFiServer gives you the client only once, regardless of whether it has sent any data. You must keep track of the connected clients. This requires more code, but you gain more control.
+
+
+#### Syntax
+
+```
+server.accept()
+
+```
+
+#### Parameters
+none
+
+#### Returns
+- a Client object. If no client has data available for reading, this object will evaluate to false in an if-statement. (WiFiClient).
+
+#### Example
+
+```
+#include <SPI.h>
+#include <WiFiNINA.h>
+
+char ssid[] = "Network";          //  your network SSID (name)
+char pass[] = "myPassword";   // your network password
+
+int status = WL_IDLE_STATUS;
+
+// telnet defaults to port 23
+WiFiServer server(23);
+
+WiFiClient clients[8];
+
+void setup() {
+  //Initialize serial and wait for port to open:
+  Serial.begin(9600);
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
+  }
+
+  // attempt to connect to WiFi network:
+  status = WiFi.begin(ssid, pass);
+  if ( status != WL_CONNECTED) {
+    Serial.println("Couldn't get a WiFi connection");
+    while(true);
+  }
+
+  // start the server:
+  server.begin();
+
+  Serial.print("Chat server address:");
+  Serial.println(WiFi.localIP());
+}
+
+void loop() {
+  // check for any new client connecting, and say hello (before any incoming data)
+  WiFiClient newClient = server.accept();
+  if (newClient) {
+    for (byte i=0; i < 8; i++) {
+      if (!clients[i]) {
+        Serial.print("We have a new client #");
+        Serial.println(i);
+        newClient.print("Hello, client number: ");
+        newClient.println(i);
+        // Once we "accept", the client is no longer tracked by WiFiServer
+        // so we must store it into our list of clients
+        clients[i] = newClient;
+        break;
+      }
+    }
+  }
+
+  // check for incoming data from all clients
+  for (byte i=0; i < 8; i++) {
+    if (clients[i] && clients[i].available() > 0) {
+      // read bytes from a client
+      byte buffer[80];
+      int count = clients[i].read(buffer, 80);
+      // write the bytes to all other connected clients
+      for (byte j=0; j < 8; j++) {
+        if (j != i && clients[j].connected()) {
+          clients[j].write(buffer, count);
+        }
+      }
+    }
+  }
+
+  // stop any clients which disconnect
+  for (byte i=0; i < 8; i++) {
+    if (clients[i] && !clients[i].connected()) {
+      Serial.print("disconnect client #");
+      Serial.println(i);
+      clients[i].stop();
+    }
+  }
+
+}
+```
+
 ### `server.peek()`
 
 #### Description

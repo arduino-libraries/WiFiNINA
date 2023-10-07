@@ -57,7 +57,7 @@ public:
 
     static uint16_t availData(uint8_t sock);
 
-    static uint8_t availServer(uint8_t sock);
+    static uint8_t availServer(uint8_t sock, uint8_t accept = false);
 
     static uint8_t checkDataSent(uint8_t sock);
 
