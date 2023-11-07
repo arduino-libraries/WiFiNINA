@@ -1,2 +1,2 @@
-#define MY_SSID "dummy"
-#define MY_PASSWORD "dummy"
+#define SECRET_SSID ""
+#define SECRET_PASS ""
