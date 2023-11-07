@@ -38,12 +38,10 @@ void setup() {
 
   int status = WL_IDLE_STATUS;
   auto tic = millis();
-  // attempt to connect to WiFi network:
-  auto start = millis();
 
   Serial.print(F("Attempting to connect to WPA SSID: "));
   Serial.println(ssid);
-  while ((millis() - start) < 60000U) {
+  while ((millis() - tic) < 60000U) {
     Serial.print(". ");
     // Connect to WPA/WPA2 network:
     status = WiFi.begin(ssid, pass);
