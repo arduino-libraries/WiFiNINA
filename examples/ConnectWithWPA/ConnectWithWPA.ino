@@ -22,43 +22,47 @@ void setup() {
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
-  Serial.println("=== Nano33 IOT - Wifi example\n\n");
+  Serial.println(F("\n=== WIFININA - Wifi example ===\n\n"));
 
   // check for the WiFi module:
   if (WiFi.status() == WL_NO_MODULE) {
-    Serial.println("Communication with WiFi module failed!");
+    Serial.println(F("Communication with WiFi module failed!"));
     // don't continue
     while (true);
   }
 
   String fv = WiFi.firmwareVersion();
   if (fv < WIFI_FIRMWARE_LATEST_VERSION) {
-    Serial.println("Please upgrade the firmware");
+    Serial.println(F("Please upgrade the firmware"));
   }
 
   int status = WL_IDLE_STATUS;
-  int counter{0};
   auto tic = millis();
   // attempt to connect to WiFi network:
   auto start = millis();
 
-  Serial.print("Attempting to connect to WPA SSID: ");
+  Serial.print(F("Attempting to connect to WPA SSID: "));
   Serial.println(ssid);
-  while ((millis() - start) < 600000U) {
-    Serial.print("=> Connection Counter: ");
-    Serial.println(++counter);
+  while ((millis() - start) < 60000U) {
+    Serial.print(". ");
     // Connect to WPA/WPA2 network:
     status = WiFi.begin(ssid, pass);
     if (status == WL_CONNECTED) {
       // you're connected now, so print out the data:
-      Serial.print("\nYou're connected to the network");
+      Serial.print(F("\nYou're connected to the network!\n"));
       printCurrentNet();
       printWifiData();
       break;
     }
   }
+  if (status != WL_CONNECTED) {
+    while (true) {
+      Serial.print(F("\n\tError: Connection failed!"));
+      delay(5000);
+    }
+  }
   auto toc = millis();
-  Serial.print("\t=> Connection Time: ");
+  Serial.print("=> Connection Time: ");
   Serial.print(toc-tic);
   Serial.print(" ms\n\n");
 }
@@ -72,35 +76,35 @@ void loop() {
 void printWifiData() {
   // print your board's IP address:
   IPAddress ip = WiFi.localIP();
-  Serial.print("IP Address: ");
+  Serial.print("\tIP Address: ");
   Serial.println(ip);
 
   // print your MAC address:
   byte mac[6];
   WiFi.macAddress(mac);
-  Serial.print("MAC address: ");
+  Serial.print("\tMAC address: ");
   printMacAddress(mac);
 }
 
 void printCurrentNet() {
   // print the SSID of the network you're attached to:
-  Serial.print("SSID: ");
+  Serial.print("\tSSID:  ");
   Serial.println(WiFi.SSID());
 
   // print the MAC address of the router you're attached to:
   byte bssid[6];
   WiFi.BSSID(bssid);
-  Serial.print("BSSID: ");
+  Serial.print("\tBSSID: ");
   printMacAddress(bssid);
 
   // print the received signal strength:
   long rssi = WiFi.RSSI();
-  Serial.print("signal strength (RSSI): ");
+  Serial.print("\tRSSI:  ");
   Serial.println(rssi);
 
   // print the encryption type:
   byte encryption = WiFi.encryptionType();
-  Serial.print("Encryption Type: ");
+  Serial.print("\tEncryption Type: ");
   Serial.println(encryption, HEX);
   Serial.println();
 }
@@ -117,4 +121,3 @@ void printMacAddress(byte mac[]) {
   }
   Serial.println();
 }
-
