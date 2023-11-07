@@ -5,17 +5,16 @@
 
  created 13 July 2010
  by dlf (Metodo2 srl)
- modified 31 May 2012
- by Tom Igoe
+ modified 07 Nov 2023
+ by Frank Häfele
  */
 #include <SPI.h>
 #include <WiFiNINA.h>
+#include "arduino_secrets.h"
 
-#include "arduino_secrets.h" 
-///////please enter your sensitive data in the Secret tab/arduino_secrets.h
-char ssid[] = SECRET_SSID;        // your network SSID (name)
-char pass[] = SECRET_PASS;    // your network password (use for WPA, or use as key for WEP)
-int status = WL_IDLE_STATUS;     // the WiFi radio's status
+// ==> please enter your sensitive data in the Secret tab/arduino_secrets.h
+char ssid[] = MY_SSID;        // your network SSID (name)
+char pass[] = MY_PASSWORD;    // your network password (use for WPA, or use as key for WEP)
 
 void setup() {
   //Initialize serial and wait for port to open:
@@ -23,6 +22,7 @@ void setup() {
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
+  Serial.println("=== Nano33 IOT - Wifi example\n\n");
 
   // check for the WiFi module:
   if (WiFi.status() == WL_NO_MODULE) {
@@ -36,22 +36,31 @@ void setup() {
     Serial.println("Please upgrade the firmware");
   }
 
+  int status = WL_IDLE_STATUS;
+  int counter{0};
+  auto tic = millis();
   // attempt to connect to WiFi network:
-  while (status != WL_CONNECTED) {
-    Serial.print("Attempting to connect to WPA SSID: ");
-    Serial.println(ssid);
+  auto start = millis();
+
+  Serial.print("Attempting to connect to WPA SSID: ");
+  Serial.println(ssid);
+  while ((millis() - start) < 600000U) {
+    Serial.print("=> Connection Counter: ");
+    Serial.println(++counter);
     // Connect to WPA/WPA2 network:
     status = WiFi.begin(ssid, pass);
-
-    // wait 10 seconds for connection:
-    delay(10000);
+    if (status == WL_CONNECTED) {
+      // you're connected now, so print out the data:
+      Serial.print("\nYou're connected to the network");
+      printCurrentNet();
+      printWifiData();
+      break;
+    }
   }
-
-  // you're connected now, so print out the data:
-  Serial.print("You're connected to the network");
-  printCurrentNet();
-  printWifiData();
-
+  auto toc = millis();
+  Serial.print("\t=> Connection Time: ");
+  Serial.print(toc-tic);
+  Serial.print(" ms\n\n");
 }
 
 void loop() {
@@ -64,7 +73,6 @@ void printWifiData() {
   // print your board's IP address:
   IPAddress ip = WiFi.localIP();
   Serial.print("IP Address: ");
-  Serial.println(ip);
   Serial.println(ip);
 
   // print your MAC address:
@@ -87,12 +95,12 @@ void printCurrentNet() {
 
   // print the received signal strength:
   long rssi = WiFi.RSSI();
-  Serial.print("signal strength (RSSI):");
+  Serial.print("signal strength (RSSI): ");
   Serial.println(rssi);
 
   // print the encryption type:
   byte encryption = WiFi.encryptionType();
-  Serial.print("Encryption Type:");
+  Serial.print("Encryption Type: ");
   Serial.println(encryption, HEX);
   Serial.println();
 }
@@ -109,3 +117,4 @@ void printMacAddress(byte mac[]) {
   }
   Serial.println();
 }
+
