@@ -42,19 +42,15 @@ void setup() {
 
   Serial.print(F("Attempting to connect to WPA SSID: "));
   Serial.println(ssid);
-  while ((millis() - tic) < 60000U) {
-    Serial.print(". ");
-    // Connect to WPA/WPA2 network:
-    status = WiFi.begin(ssid, pass);
-    if (status == WL_CONNECTED) {
-      // you're connected now, so print out the data:
-      Serial.print(F("\nYou're connected to the network!\n"));
-      printCurrentNet();
-      printWifiData();
-      break;
-    }
+
+  // Connect to WPA/WPA2 network:
+  if (WiFi.begin(ssid, pass) == WL_CONNECTED) {
+    // you're connected now, so print out the data:
+    Serial.print(F("\nYou're connected to the network!\n"));
+    printCurrentNet();
+    printWifiData();
   }
-  if (status != WL_CONNECTED) {
+  else {
     while (true) {
       Serial.print(F("\n\tError: Connection failed!"));
       delay(5000);
@@ -104,7 +100,26 @@ void printCurrentNet() {
   // print the encryption type:
   byte encryption = WiFi.encryptionType();
   Serial.print("\tEncryption Type: ");
-  Serial.println(encryption, HEX);
+  switch(encryption) {
+    case 2:
+      Serial.println("ENC_TYPE_TKIP");
+      break;
+    case 4:
+      Serial.println("ENC_TYPE_CCMP");
+      break;
+    case 5:
+      Serial.println("ENC_TYPE_WEP");
+      break;
+    case 7:
+      Serial.println("ENC_TYPE_NONE");
+      break;
+    case 8:
+      Serial.println("ENC_TYPE_AUTO");
+      break;
+    case 255:
+      Serial.println("ENC_TYPE_UNKNOWN");
+      break;
+  }
   Serial.println();
 }
 
