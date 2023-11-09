@@ -107,6 +107,20 @@ int WiFiClass::begin(const char* ssid, const char *passphrase)
     return status;
 }
 
+int8_t WiFiClass::waitForConnectResult(unsigned long timeout) {
+   unsigned long _start {millis()};
+   while( (millis() - _start) <= timeout) {
+      WiFi.feedWatchdog();
+      uint8_t _status = WiFiDrv::getConnectionStatus();
+      if((_status != WL_IDLE_STATUS) && (_status != WL_NO_SSID_AVAIL) && (_status != WL_SCAN_COMPLETED)) {
+         return _status;
+      }
+      delay(WL_DELAY_START_CONNECTION);
+   }
+   // -1 indicates timeout
+   return -1;
+}
+
 uint8_t WiFiClass::beginAP(const char *ssid)
 {
 	return beginAP(ssid, 1);

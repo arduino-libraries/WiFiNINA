@@ -80,6 +80,14 @@ public:
      */
     int begin(const char* ssid, const char *passphrase);
 
+    /**
+     * @brief function to check connection status for given time
+     * 
+     * @param timeout timeout value for checking connect status
+     * @return int8_t return connect status (-1 for timeout)
+     */
+    int8_t waitForConnectResult(unsigned long timeout = 60000UL);
+
     uint8_t beginAP(const char *ssid);
     uint8_t beginAP(const char *ssid, uint8_t channel);
     uint8_t beginAP(const char *ssid, const char* passphrase);
