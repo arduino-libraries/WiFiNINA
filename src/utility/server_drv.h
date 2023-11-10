@@ -1,5 +1,5 @@
 /*
-  server_drv.h - Library for Arduino Wifi shield.
+  server_drv.h - Library for Arduino WiFi shield.
   Copyright (c) 2018 Arduino SA. All rights reserved.
   Copyright (c) 2011-2014 Arduino.  All right reserved.
 
@@ -24,7 +24,7 @@
 #include <inttypes.h>
 #include "utility/wifi_spi.h"
 
-typedef enum eProtMode {TCP_MODE, UDP_MODE, TLS_MODE, UDP_MULTICAST_MODE}tProtMode;
+typedef enum eProtMode {TCP_MODE, UDP_MODE, TLS_MODE, UDP_MULTICAST_MODE, TLS_BEARSSL_MODE}tProtMode;
 
 class ServerDrv
 {

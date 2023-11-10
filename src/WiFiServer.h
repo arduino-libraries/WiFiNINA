@@ -1,5 +1,5 @@
 /*
-  WiFiServer.h - Library for Arduino Wifi shield.
+  WiFiServer.h - Library for Arduino WiFi shield.
   Copyright (c) 2018 Arduino SA. All rights reserved.
   Copyright (c) 2011-2014 Arduino LLC.  All right reserved.
 
@@ -32,6 +32,7 @@ class WiFiClient;
 class WiFiServer : public Server {
 private:
   uint8_t _sock;
+  uint8_t _lastSock;
   uint16_t _port;
   void*     pcb;
 public:

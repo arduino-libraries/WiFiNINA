@@ -1,6 +1,6 @@
 /*
   ESP32BootROM - part of the Firmware Updater for the
-  Arduino MKR WiFi 1010, Arduino MKR Vidor 4000, and Arduino UNO WiFi Rev.2.
+  Arduino MKR WiFi 1010, Arduino MKR Vidor 4000, and Arduino Uno WiFi Rev.2.
 
   Copyright (c) 2018 Arduino SA. All rights reserved.
 
@@ -79,6 +79,10 @@ int ESP32BootROMClass::begin(unsigned long baudrate)
   delay(10);
   digitalWrite(_resetnPin, LOW);
   delay(100);
+#if defined(ARDUINO_SAMD_NANO_33_IOT) ||defined(ARDUINO_NANO_RP2040_CONNECT)
+  digitalWrite(_resetnPin, HIGH);
+  delay(100);
+#endif
 #endif
 
   int synced = 0;
@@ -91,7 +95,7 @@ int ESP32BootROMClass::begin(unsigned long baudrate)
     return 0;
   }
 
-#if defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(ARDUINO_AVR_UNO_WIFI_REV2)
+#if defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(ARDUINO_AVR_UNO_WIFI_REV2) || defined(ARDUINO_NANO_RP2040_CONNECT)
   (void)baudrate;
 #else
   if (baudrate != 115200) {

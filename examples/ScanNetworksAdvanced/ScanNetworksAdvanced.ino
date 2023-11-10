@@ -1,5 +1,4 @@
 /*
-
   This example  prints the board's MAC address, and
   scans for available WiFi networks using the NINA module.
   Every ten seconds, it scans again. It doesn't actually
@@ -7,7 +6,7 @@
   BSSID and WiFi channel are printed
 
   Circuit:
-  * Board with NINA module (Arduino MKR WiFi 1010, MKR VIDOR 4000 and UNO WiFi Rev.2)
+  * Board with NINA module (Arduino MKR WiFi 1010, MKR VIDOR 4000 and Uno WiFi Rev.2)
 
   This example is based on ScanNetworks
 
@@ -34,7 +33,7 @@ void setup() {
   }
 
   String fv = WiFi.firmwareVersion();
-  if (fv < "1.0.0") {
+  if (fv < WIFI_FIRMWARE_LATEST_VERSION) {
     Serial.println("Please upgrade the firmware");
   }
 

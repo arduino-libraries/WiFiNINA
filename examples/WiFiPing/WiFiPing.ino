@@ -1,12 +1,11 @@
 /*
-
-  This example connects to a encrypted WiFi network (WPA/WPA2).
-  Then it prints the  MAC address of the board,
+  This example connects to an encrypted WiFi network (WPA/WPA2).
+  Then it prints the MAC address of the board,
   the IP address obtained, and other network details.
   Then it continuously pings given host specified by IP Address or name.
 
   Circuit:
-  * Board with NINA module (Arduino MKR WiFi 1010, MKR VIDOR 4000 and UNO WiFi Rev.2)
+  * Board with NINA module (Arduino MKR WiFi 1010, MKR VIDOR 4000 and Uno WiFi Rev.2)
 
   created 13 July 2010
   by dlf (Metodo2 srl)
@@ -41,7 +40,7 @@ void setup() {
   }
 
   String fv = WiFi.firmwareVersion();
-  if (fv < "1.0.0") {
+  if (fv < WIFI_FIRMWARE_LATEST_VERSION) {
     Serial.println("Please upgrade the firmware");
   }
 

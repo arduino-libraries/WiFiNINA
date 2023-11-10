@@ -1,5 +1,5 @@
 /*
-  WiFiServer.cpp - Library for Arduino Wifi shield.
+  WiFiServer.cpp - Library for Arduino WiFi shield.
   Copyright (c) 2018 Arduino SA. All rights reserved.
   Copyright (c) 2011-2014 Arduino LLC.  All right reserved.
 
@@ -30,7 +30,8 @@ extern "C" {
 #include "WiFiServer.h"
 
 WiFiServer::WiFiServer(uint16_t port) :
-  _sock(NO_SOCKET_AVAIL)
+  _sock(NO_SOCKET_AVAIL),
+  _lastSock(NO_SOCKET_AVAIL)
 {
     _port = port;
 }
@@ -49,7 +50,19 @@ WiFiClient WiFiServer::available(byte* status)
     int sock = NO_SOCKET_AVAIL;
 
     if (_sock != NO_SOCKET_AVAIL) {
-        sock = ServerDrv::availServer(_sock);
+      // check previous received client socket
+      if (_lastSock != NO_SOCKET_AVAIL) {
+          WiFiClient client(_lastSock);
+
+          if (client.connected() && client.available()) {
+              sock = _lastSock;
+          }
+      }
+
+      if (sock == NO_SOCKET_AVAIL) {
+          // check for new client socket
+          sock = ServerDrv::availServer(_sock);
+      }
     }
 
     if (sock != NO_SOCKET_AVAIL) {
@@ -58,6 +71,8 @@ WiFiClient WiFiServer::available(byte* status)
         if (status != NULL) {
             *status = client.status();
         }
+
+        _lastSock = sock;
 
         return client;
     }

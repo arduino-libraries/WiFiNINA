@@ -1,6 +1,6 @@
 /*
   SerialNINAPassthrough - Use esptool to flash the u-blox NINA (ESP32) module
-  Arduino MKR WiFi 1010, Arduino MKR Vidor 4000, and Arduino UNO WiFi Rev.2.
+  Arduino MKR WiFi 1010, Arduino MKR Vidor 4000, and Arduino Uno WiFi Rev.2.
 
   Copyright (c) 2018 Arduino SA. All rights reserved.
 
@@ -64,6 +64,8 @@ void loop() {
   if (rts != Serial.rts()) {
 #ifdef ARDUINO_SAMD_MKRVIDOR4000
     FPGA.digitalWrite(FPGA_SPIWIFI_RESET, (Serial.rts() == 1) ? LOW : HIGH);
+#elif defined(ARDUINO_SAMD_NANO_33_IOT)
+    digitalWrite(NINA_RESETN, Serial.rts() ? LOW : HIGH);
 #else
     digitalWrite(NINA_RESETN, Serial.rts());
 #endif

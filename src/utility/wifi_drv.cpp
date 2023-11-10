@@ -1,5 +1,5 @@
 /*
-  wifi_drv.cpp - Library for Arduino Wifi shield.
+  wifi_drv.cpp - Library for Arduino WiFi shield.
   Copyright (c) 2018 Arduino SA. All rights reserved.
   Copyright (c) 2011-2014 Arduino.  All right reserved.
 
@@ -326,6 +326,28 @@ int8_t WiFiDrv::disconnect()
     SpiDrv::spiSlaveDeselect();
 
     return result;
+}
+
+uint8_t WiFiDrv::getReasonCode()
+{
+    WAIT_FOR_SLAVE_SELECT();
+
+    // Send Command
+    SpiDrv::sendCmd(GET_REASON_CODE_CMD, PARAM_NUMS_0);
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 1;
+    uint8_t _dataLen = 0;
+    SpiDrv::waitResponseCmd(GET_REASON_CODE_CMD, PARAM_NUMS_1, &_data, &_dataLen);
+
+    SpiDrv::spiSlaveDeselect();
+
+    return _data;
 }
 
 uint8_t WiFiDrv::getConnectionStatus()
@@ -899,6 +921,42 @@ int8_t WiFiDrv::wifiSetApPassphrase(const char* ssid, uint8_t ssid_len, const ch
     return _data;
 }
 
+int8_t WiFiDrv::wifiSetEnterprise(uint8_t eapType, const char* ssid, uint8_t ssid_len, const char *username, const uint8_t username_len, const char *password, const uint8_t password_len, const char *identity, const uint8_t identity_len, const char* ca_cert, uint16_t ca_cert_len)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(SET_ENT_CMD, PARAM_NUMS_6);
+    SpiDrv::sendBuffer(&eapType, sizeof(eapType));
+    SpiDrv::sendBuffer((uint8_t*)ssid, ssid_len);
+    SpiDrv::sendBuffer((uint8_t*)username, username_len);
+    SpiDrv::sendBuffer((uint8_t*)password, password_len);
+    SpiDrv::sendBuffer((uint8_t*)identity, identity_len);
+    SpiDrv::sendBuffer((uint8_t*)ca_cert, ca_cert_len, LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 15 + sizeof(eapType) + ssid_len + username_len + password_len + identity_len + ca_cert_len;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(SET_ENT_CMD, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return _data;
+}
+
 int16_t WiFiDrv::ping(uint32_t ipAddress, uint8_t ttl)
 {
     WAIT_FOR_SLAVE_SELECT();
@@ -1002,6 +1060,38 @@ void WiFiDrv::pinMode(uint8_t pin, uint8_t mode)
     SpiDrv::spiSlaveDeselect();
 }
 
+PinStatus WiFiDrv::digitalRead(uint8_t pin)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(GET_DIGITAL_READ, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)&pin, 1, LAST_PARAM);
+
+    // pad to multiple of 4
+    SpiDrv::readChar();
+    SpiDrv::readChar();
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(GET_DIGITAL_READ, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+
+    if (_data == 1)
+        return HIGH;
+    else
+        return LOW;
+}
+
 void WiFiDrv::digitalWrite(uint8_t pin, uint8_t value)
 {
     WAIT_FOR_SLAVE_SELECT();
@@ -1027,6 +1117,34 @@ void WiFiDrv::digitalWrite(uint8_t pin, uint8_t value)
         _data = WL_FAILURE;
     }
     SpiDrv::spiSlaveDeselect();
+}
+
+uint16_t WiFiDrv::analogRead(uint8_t adc_channel)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(GET_ANALOG_READ, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)&adc_channel, 1, LAST_PARAM);
+
+    // pad to multiple of 4
+    SpiDrv::readChar();
+    SpiDrv::readChar();
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint16_t adc_raw = 0;
+    uint8_t adc_raw_len = 0;
+    if (!SpiDrv::waitResponseCmd(GET_ANALOG_READ, PARAM_NUMS_1, (uint8_t*)&adc_raw, &adc_raw_len))
+    {
+        WARN("error waitResponse");
+    }
+    SpiDrv::spiSlaveDeselect();
+
+    return adc_raw;
 }
 
 void WiFiDrv::analogWrite(uint8_t pin, uint8_t value)
@@ -1055,5 +1173,150 @@ void WiFiDrv::analogWrite(uint8_t pin, uint8_t value)
     }
     SpiDrv::spiSlaveDeselect();
 }
+
+int8_t WiFiDrv::downloadFile(const char* url, uint8_t url_len, const char *filename, uint8_t filename_len)
+{
+	WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(DOWNLOAD_FILE, PARAM_NUMS_2);
+    SpiDrv::sendParam((uint8_t*)url, url_len, NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)filename, filename_len, LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 6 + url_len + filename_len;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(DOWNLOAD_FILE, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return _data;
+}
+
+int8_t WiFiDrv::downloadOTA(const char* url, uint8_t url_len)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(DOWNLOAD_OTA, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)url, url_len, LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 5 + url_len;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(DOWNLOAD_OTA, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return _data;
+}
+
+int8_t WiFiDrv::renameFile(const char * old_file_name, uint8_t const old_file_name_len, const char * new_file_name, uint8_t const new_file_name_len)
+{
+	WAIT_FOR_SLAVE_SELECT();
+    /* Send Command */
+    SpiDrv::sendCmd(RENAME_FILE, PARAM_NUMS_2);
+    SpiDrv::sendParam((uint8_t*)old_file_name, old_file_name_len, NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)new_file_name, new_file_name_len, LAST_PARAM);
+
+    /* pad to multiple of 4 */
+    int commandSize = 6 + old_file_name_len + new_file_name_len;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    /* Wait the reply elaboration */
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    /* Wait for reply */
+    uint8_t data = 0;
+    uint8_t dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(RENAME_FILE, PARAM_NUMS_1, &data, &dataLen))
+    {
+        WARN("error waitResponse");
+        data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return data;
+}
+
+int8_t WiFiDrv::fileOperation(uint8_t operation, const char *filename, uint8_t filename_len, uint32_t offset, uint8_t* buffer, uint32_t len)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    uint8_t numParams = PARAM_NUMS_3;
+    if (operation == WRITE_FILE) {
+        numParams = PARAM_NUMS_4;
+    }
+
+    SpiDrv::sendCmd(operation, numParams);
+    SpiDrv::sendParam((uint8_t*)&offset, sizeof(offset), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&len, sizeof(len), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)filename, filename_len, (operation == WRITE_FILE) ? NO_LAST_PARAM : LAST_PARAM);
+    if (operation == WRITE_FILE) {
+        SpiDrv::sendParamNoLen((uint8_t*)buffer, len, LAST_PARAM);
+    }
+
+    // pad to multiple of 4
+    int commandSize = 4 + numParams + sizeof(offset) + sizeof(len) + filename_len;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    SpiDrv::waitResponseCmd(operation, PARAM_NUMS_1, (operation == WRITE_FILE) ? &_data : buffer, &_dataLen);
+
+    SpiDrv::spiSlaveDeselect();
+    return _dataLen;
+}
+
+void WiFiDrv::applyOTA() {
+    WAIT_FOR_SLAVE_SELECT();
+
+    // Send Command
+    SpiDrv::sendCmd(APPLY_OTA_COMMAND, PARAM_NUMS_0);
+
+    SpiDrv::spiSlaveDeselect();
+
+    // don't wait for return; OTA operation should be fire and forget :)
+}
+
 
 WiFiDrv wiFiDrv;

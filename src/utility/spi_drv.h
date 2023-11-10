@@ -1,5 +1,5 @@
 /*
-  spi_drv.h - Library for Arduino Wifi shield.
+  spi_drv.h - Library for Arduino WiFi shield.
   Copyright (c) 2018 Arduino SA. All rights reserved.
   Copyright (c) 2011-2014 Arduino.  All right reserved.
 
@@ -59,7 +59,7 @@ public:
     
     static char spiTransfer(volatile char data);
 
-    static void waitForSlaveReady();
+    static void waitForSlaveReady(bool const feed_watchdog = false);
 
     //static int waitSpiChar(char waitChar, char* readChar);
 
@@ -84,6 +84,8 @@ public:
     static int waitResponse(uint8_t cmd, uint8_t* numParamRead, uint8_t** params, uint8_t maxNumParams);
 
     static void sendParam(uint8_t* param, uint8_t param_len, uint8_t lastParam = NO_LAST_PARAM);
+
+    static void sendParamNoLen(uint8_t* param, size_t param_len, uint8_t lastParam = NO_LAST_PARAM);
 
     static void sendParamLen8(uint8_t param_len);
 
