@@ -132,6 +132,7 @@ int WiFiClass::connect(const char* ssid, const char *passphrase) {
         status = WiFiDrv::getConnectionStatus();
     }
     return status;
+}
 
 int8_t WiFiClass::waitForConnectResult(unsigned long timeout) {
    unsigned long _start {millis()};
