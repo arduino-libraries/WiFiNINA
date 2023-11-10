@@ -134,8 +134,7 @@ int8_t WiFiClass::beginAP(const char *ssid, uint8_t channel) {
    return status;
 }
 
-uint8_t WiFiClass::beginAP(const char *ssid, const char* passphrase)
-{
+int8_t WiFiClass::beginAP(const char *ssid, const char* passphrase) {
 	return beginAP(ssid, passphrase, 1);
 }
 
@@ -144,7 +143,7 @@ int8_t WiFiClass::beginAP(const char *ssid, const char* passphrase, uint8_t chan
    // set passphrase
    if (WiFiDrv::wifiSetApPassphrase(ssid, strlen(ssid), passphrase, strlen(passphrase), channel)!= WL_FAILURE) {
       unsigned long start = millis();
-      for ((millis() - start) < _timeout) {
+      while ((millis() - start) < _timeout) {
          delay(WL_DELAY_START_CONNECTION);
          status = WiFiDrv::getConnectionStatus();
          if ((status != WL_IDLE_STATUS) && (status != WL_NO_SSID_AVAIL) && (status != WL_SCAN_COMPLETED)) {
@@ -160,13 +159,11 @@ int8_t WiFiClass::beginAP(const char *ssid, const char* passphrase, uint8_t chan
    return status;
 }
 
-uint8_t WiFiClass::beginEnterprise(const char* ssid, const char* username, const char* password)
-{
+int8_t WiFiClass::beginEnterprise(const char* ssid, const char* username, const char* password) {
 	return beginEnterprise(ssid, username, password, "");
 }
 
-uint8_t WiFiClass::beginEnterprise(const char* ssid, const char* username, const char* password, const char* identity)
-{
+int8_t WiFiClass::beginEnterprise(const char* ssid, const char* username, const char* password, const char* identity) {
 	return beginEnterprise(ssid, username, password, identity, "");
 }
 

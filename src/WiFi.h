@@ -80,14 +80,14 @@ public:
      */
     int begin(const char* ssid, const char *passphrase);
 
-    uint8_t beginAP(const char *ssid);
-    uint8_t beginAP(const char *ssid, uint8_t channel);
-    uint8_t beginAP(const char *ssid, const char* passphrase);
-    uint8_t beginAP(const char *ssid, const char* passphrase, uint8_t channel);
+    int8_t beginAP(const char *ssid);
+    int8_t beginAP(const char *ssid, uint8_t channel);
+    int8_t beginAP(const char *ssid, const char* passphrase);
+    int8_t beginAP(const char *ssid, const char* passphrase, uint8_t channel);
 
-    uint8_t beginEnterprise(const char* ssid, const char* username, const char* password);
-    uint8_t beginEnterprise(const char* ssid, const char* username, const char* password, const char* identity);
-    uint8_t beginEnterprise(const char* ssid, const char* username, const char* password, const char* identity, const char* ca);
+    int8_t beginEnterprise(const char* ssid, const char* username, const char* password);
+    int8_t beginEnterprise(const char* ssid, const char* username, const char* password, const char* identity);
+    int8_t beginEnterprise(const char* ssid, const char* username, const char* password, const char* identity, const char* ca);
 
     /* Change IP configuration settings disabling the DHCP client
         *
