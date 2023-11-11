@@ -4,7 +4,7 @@
  A simple web server that lets you blink an LED via the web.
  This sketch will print the IP address of your WiFi module (once connected)
  to the Serial Monitor. From there, you can open that address in a web browser
- to turn on and off the LED on pin 9.
+ to turn on and off the Led on pin defined by LED.
 
  If the IP address of your board is yourAddress:
  http://yourAddress/H turns the LED on
