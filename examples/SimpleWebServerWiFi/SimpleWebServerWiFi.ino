@@ -15,26 +15,30 @@
 
  Circuit:
  * Board with NINA module (Arduino MKR WiFi 1010, MKR VIDOR 4000 and Uno WiFi Rev.2)
- * LED attached to pin 9
+ * LED attached to pin LED
 
  created 25 Nov 2012
  by Tom Igoe
+ error correction 11 Nov 2023
+ by Frank Häfele
  */
 #include <SPI.h>
 #include <WiFiNINA.h>
 
 #include "arduino_secrets.h" 
-///////please enter your sensitive data in the Secret tab/arduino_secrets.h
-char ssid[] = SECRET_SSID;        // your network SSID (name)
+#define LED 9 
+
+// ==> please enter your sensitive data in the Secret tab/arduino_secrets.h
+char ssid[] = SECRET_SSID;    // your network SSID (name)
 char pass[] = SECRET_PASS;    // your network password (use for WPA, or use as key for WEP)
-int keyIndex = 0;                 // your network key index number (needed only for WEP)
+int keyIndex = 0;             // your network key index number (needed only for WEP)
 
 int status = WL_IDLE_STATUS;
 WiFiServer server(80);
 
 void setup() {
   Serial.begin(9600);      // initialize serial communication
-  pinMode(9, OUTPUT);      // set the LED pin mode
+  pinMode(LED, OUTPUT);    // set the LED pin mode
 
   // check for the WiFi module:
   if (WiFi.status() == WL_NO_MODULE) {
@@ -85,8 +89,8 @@ void loop() {
             client.println();
 
             // the content of the HTTP response follows the header:
-            client.print("Click <a href=\"/H\">here</a> turn the LED on pin 9 on<br>");
-            client.print("Click <a href=\"/L\">here</a> turn the LED on pin 9 off<br>");
+            client.print("Click <a href=\"/H\">here</a> turn the LED on pin LED on<br>");
+            client.print("Click <a href=\"/L\">here</a> turn the LED on pin LED off<br>");
 
             // The HTTP response ends with another blank line:
             client.println();
@@ -101,10 +105,10 @@ void loop() {
 
         // Check to see if the client request was "GET /H" or "GET /L":
         if (currentLine.endsWith("GET /H")) {
-          digitalWrite(LED_BUILTIN, HIGH);               // GET /H turns the LED on
+          digitalWrite(LED, HIGH);               // GET /H turns the LED on
         }
         if (currentLine.endsWith("GET /L")) {
-          digitalWrite(LED_BUILTIN, LOW);                // GET /L turns the LED off
+          digitalWrite(LED, LOW);                // GET /L turns the LED off
         }
       }
     }
