@@ -38,19 +38,15 @@ void setup() {
 
  // Connect to WPA/WPA2 network:
   auto tic = millis();
+  // using non blocking wifi connect method!
   (void) WiFi.connect(ssid, pass);
-  if ((status = WiFi.waitForConnectResult()) == WL_CONNECTED) {
-    // you're connected now, so print out the data:
-    Serial.print(F("\nYou're connected to the network!\n"));
-    printCurrentNet();
-    printWifiData();
+  while ((status = WiFi.status()) != WL_CONNECTED) {
+   yield();
   }
   else {
-    while (true) {
-      print_wifi_status(status);
-      Serial.print(F("\n\tError: Connection failed!\n"));
-      delay(5000);
-    }
+    Serial.print(F("\nConnection successful!\n"));
+    printCurrentNet();
+    printWifiData();
   }
   auto toc = millis();
   Serial.print("=> Connection Time: ");
