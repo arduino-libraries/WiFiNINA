@@ -59,7 +59,7 @@ public:
      *
      * param ssid: Pointer to the SSID string.
      */
-    int begin(const char* ssid);
+    int16_t begin(const char* ssid);
 
     /* Start WiFi connection with WEP encryption.
      * Configure a key into the device. The key type (WEP-40, WEP-104)
@@ -69,7 +69,7 @@ public:
      * param key_idx: The key index to set. Valid values are 0-3.
      * param key: Key input buffer.
      */
-    int begin(const char* ssid, uint8_t key_idx, const char* key);
+    int16_t begin(const char* ssid, uint8_t key_idx, const char* key);
 
     /* Start WiFi connection with passphrase
      * the most secure supported mode will be automatically selected
@@ -78,16 +78,16 @@ public:
      * param passphrase: Passphrase. Valid characters in a passphrase
      *        must be between ASCII 32-126 (decimal).
      */
-    int begin(const char* ssid, const char *passphrase);
+    int16_t begin(const char* ssid, const char *passphrase);
 
-    int8_t beginAP(const char *ssid);
-    int8_t beginAP(const char *ssid, uint8_t channel);
-    int8_t beginAP(const char *ssid, const char* passphrase);
-    int8_t beginAP(const char *ssid, const char* passphrase, uint8_t channel);
+    int16_t beginAP(const char *ssid);
+    int16_t beginAP(const char *ssid, uint8_t channel);
+    int16_t beginAP(const char *ssid, const char* passphrase);
+    int16_t beginAP(const char *ssid, const char* passphrase, uint8_t channel);
 
-    int8_t beginEnterprise(const char* ssid, const char* username, const char* password);
-    int8_t beginEnterprise(const char* ssid, const char* username, const char* password, const char* identity);
-    int8_t beginEnterprise(const char* ssid, const char* username, const char* password, const char* identity, const char* ca);
+    int16_t beginEnterprise(const char* ssid, const char* username, const char* password);
+    int16_t beginEnterprise(const char* ssid, const char* username, const char* password, const char* identity);
+    int16_t beginEnterprise(const char* ssid, const char* username, const char* password, const char* identity, const char* ca);
 
     /* Change IP configuration settings disabling the DHCP client
         *
