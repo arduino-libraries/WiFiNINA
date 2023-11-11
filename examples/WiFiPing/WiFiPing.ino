@@ -9,14 +9,14 @@
 
   created 13 July 2010
   by dlf (Metodo2 srl)
-  modified 09 June 2016
-  by Petar Georgiev
+  modified 11 Nov 2023
+  by Frank Häfele
 */
 #include <SPI.h>
 #include <WiFiNINA.h>
 
 #include "arduino_secrets.h" 
-///////please enter your sensitive data in the Secret tab/arduino_secrets.h
+// ==> please enter your sensitive data in the Secret tab/arduino_secrets.h
 char ssid[] = SECRET_SSID;        // your network SSID (name)
 char pass[] = SECRET_PASS;    // your network password (use for WPA, or use as key for WEP)
 int status = WL_IDLE_STATUS;     // the WiFi radio's status
@@ -26,6 +26,7 @@ String hostName = "www.google.com";
 int pingResult;
 
 void setup() {
+  WiFi.disconnect();
   // Initialize serial and wait for port to open:
   Serial.begin(9600);
   while (!Serial) {
@@ -44,19 +45,19 @@ void setup() {
     Serial.println("Please upgrade the firmware");
   }
 
+  // Set Timeout to zero => non blocking connect
+  WiFi.setTimeout(0);
+  WiFi.begin(ssid, pass);
   // attempt to connect to WiFi network:
-  while ( status != WL_CONNECTED) {
-    Serial.print("Attempting to connect to WPA SSID: ");
-    Serial.println(ssid);
-    // Connect to WPA/WPA2 network:
-    status = WiFi.begin(ssid, pass);
-
-    // wait 5 seconds for connection:
-    delay(5000);
+  Serial.print("\nWait for connecting to WPA SSID: ");
+  Serial.println(ssid);
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.print(". ");
+    delay(1000);
   }
 
   // you're connected now, so print out the data:
-  Serial.println("You're connected to the network");
+  Serial.println("\nYou're connected to the network");
   printCurrentNet();
   printWiFiData();
 }
