@@ -40,10 +40,11 @@ void setup() {
   auto tic = millis();
   // using non blocking wifi connect method!
   (void) WiFi.connect(ssid, pass);
-  while ((status = WiFi.status()) != WL_CONNECTED) {
+  while ((WiFi.status()) != WL_CONNECTED) {
    yield();
   }
-  else {
+  
+  if ((WiFi.status()) == WL_CONNECTED)  {
     Serial.print(F("\nConnection successful!\n"));
     printCurrentNet();
     printWifiData();
