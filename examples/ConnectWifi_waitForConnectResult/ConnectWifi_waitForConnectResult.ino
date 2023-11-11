@@ -38,7 +38,7 @@ void setup() {
 
  // Connect to WPA/WPA2 network:
   auto tic = millis();
-  (void) WiFi.begin(ssid, pass);
+  (void) WiFi.connect(ssid, pass);
   if ((status = WiFi.waitForConnectResult()) == WL_CONNECTED) {
     // you're connected now, so print out the data:
     Serial.print(F("\nYou're connected to the network!\n"));
