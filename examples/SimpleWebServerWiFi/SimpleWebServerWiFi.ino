@@ -22,11 +22,13 @@
  error correction 11 Nov 2023
  by Frank Häfele
  */
+
 #include <SPI.h>
 #include <WiFiNINA.h>
+#include "arduino_secrets.h"
 
-#include "arduino_secrets.h" 
-#define LED 9 
+// ==> define LED GPIO
+#define LED 9
 
 // ==> please enter your sensitive data in the Secret tab/arduino_secrets.h
 char ssid[] = SECRET_SSID;    // your network SSID (name)
@@ -37,12 +39,17 @@ int status = WL_IDLE_STATUS;
 WiFiServer server(80);
 
 void setup() {
-  Serial.begin(9600);      // initialize serial communication
+  WiFi.disconnect();
+  // initialize serial communication
+  Serial.begin(9600); 
+  while(!Serial) {
+    yield();
+  }
   pinMode(LED, OUTPUT);    // set the LED pin mode
 
   // check for the WiFi module:
   if (WiFi.status() == WL_NO_MODULE) {
-    Serial.println("Communication with WiFi module failed!");
+    Serial.println("\n\nCommunication with WiFi module failed!");
     // don't continue
     while (true);
   }
@@ -52,26 +59,27 @@ void setup() {
     Serial.println("Please upgrade the firmware");
   }
 
+  WiFi.setTimeout(0);
+  WiFi.begin(ssid, pass);
+  Serial.print("\n\nAttempting to connect to Network named: ");
+  Serial.println(ssid);
   // attempt to connect to WiFi network:
-  while (status != WL_CONNECTED) {
-    Serial.print("Attempting to connect to Network named: ");
-    Serial.println(ssid);                   // print the network name (SSID);
-
-    // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
-    status = WiFi.begin(ssid, pass);
-    // wait 10 seconds for connection:
-    delay(10000);
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.print(". ");
+    delay(1000);
   }
-  server.begin();                           // start the web server on port 80
-  printWifiStatus();                        // you're connected now, so print out the status
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.print("\n\nConnection successful!\n");
+    server.begin();     // start the web server on port 80
+    printWifiStatus();  // you're connected now, so print out the status
+  }
 }
-
 
 void loop() {
   WiFiClient client = server.available();   // listen for incoming clients
 
   if (client) {                             // if you get a client,
-    Serial.println("new client");           // print a message out the serial port
+    Serial.println("\n\nnew client");       // print a message out the serial port
     String currentLine = "";                // make a String to hold incoming data from the client
     while (client.connected()) {            // loop while the client's connected
       if (client.available()) {             // if there's bytes to read from the client,
@@ -89,8 +97,10 @@ void loop() {
             client.println();
 
             // the content of the HTTP response follows the header:
-            client.print("Click <a href=\"/H\">here</a> turn the LED on pin LED on<br>");
-            client.print("Click <a href=\"/L\">here</a> turn the LED on pin LED off<br>");
+            String str = "Click <a href=\"/H\">here</a> turn the LED on pin " + String{LED} + " on<br>";
+            client.print(str);
+            str = "Click <a href=\"/L\">here</a> turn the LED on pin " + String{LED} + " off<br>";
+            client.print(str);
 
             // The HTTP response ends with another blank line:
             client.println();
@@ -130,7 +140,7 @@ void printWifiStatus() {
 
   // print the received signal strength:
   long rssi = WiFi.RSSI();
-  Serial.print("signal strength (RSSI):");
+  Serial.print("signal strength (RSSI): ");
   Serial.print(rssi);
   Serial.println(" dBm");
   // print where to go in a browser:
