@@ -37,7 +37,7 @@ void setup() {
 
   Serial.println("Access Point Web Server");
 
-  pinMode(led, OUTPUT);      // set the LED pin mode
+  pinMode(LED, OUTPUT);      // set the LED pin mode
 
   // check for the WiFi module:
   if (WiFi.status() == WL_NO_MODULE) {
