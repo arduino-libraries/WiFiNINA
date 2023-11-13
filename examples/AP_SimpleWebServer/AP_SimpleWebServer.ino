@@ -19,12 +19,12 @@
 #include <SPI.h>
 #include <WiFiNINA.h>
 #include "arduino_secrets.h" 
-///////please enter your sensitive data in the Secret tab/arduino_secrets.h
-char ssid[] = SECRET_SSID;        // your network SSID (name)
+// ==> please enter your sensitive data in the Secret tab/arduino_secrets.h
+char ssid[] = SECRET_SSID;    // your network SSID (name)
 char pass[] = SECRET_PASS;    // your network password (use for WPA, or use as key for WEP)
-int keyIndex = 0;                // your network key index number (needed only for WEP)
+int keyIndex = 0;             // your network key index number (needed only for WEP)
 
-int led =  LED_BUILTIN;
+constexpr int LED =  LED_BUILTIN;
 int status = WL_IDLE_STATUS;
 WiFiServer server(80);
 
@@ -133,10 +133,10 @@ void loop() {
 
         // Check to see if the client request was "GET /H" or "GET /L":
         if (currentLine.endsWith("GET /H")) {
-          digitalWrite(led, HIGH);               // GET /H turns the LED on
+          digitalWrite(LED, HIGH);               // GET /H turns the LED on
         }
         if (currentLine.endsWith("GET /L")) {
-          digitalWrite(led, LOW);                // GET /L turns the LED off
+          digitalWrite(LED, LOW);                // GET /L turns the LED off
         }
       }
     }

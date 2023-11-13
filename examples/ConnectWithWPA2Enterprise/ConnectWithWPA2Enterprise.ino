@@ -9,11 +9,10 @@
 #include <WiFiNINA.h>
 
 #include "arduino_secrets.h"
-///////please enter your sensitive data in the Secret tab/arduino_secrets.h
+// ==> please enter your sensitive data in the Secret tab/arduino_secrets.h
 char ssid[] = SECRET_SSID;  // your WPA2 enterprise network SSID (name)
 char user[] = SECRET_USER;  // your WPA2 enterprise username
 char pass[] = SECRET_PASS;  // your WPA2 enterprise password
-int status = WL_IDLE_STATUS;     // the WiFi radio's status
 
 void setup() {
   //Initialize serial and wait for port to open:
@@ -34,24 +33,22 @@ void setup() {
     Serial.println("Please upgrade the firmware");
   }
 
+  WiFi.setTimeout(0);
+  // use non blocking begin
+  WiFi.beginEnterprise(ssid, user, pass);
   // attempt to connect to WiFi network:
-  while (status != WL_CONNECTED) {
-    Serial.print("Attempting to connect to WPA SSID: ");
-    Serial.println(ssid);
-    // Connect to WPA2 enterprise network:
-    // - You can optionally provide additional identity and CA cert (string) parameters if your network requires them:
-    //      WiFi.beginEnterprise(ssid, user, pass, identity, caCert)
-    status = WiFi.beginEnterprise(ssid, user, pass);
-
-    // wait 10 seconds for connection:
-    delay(10000);
+  Serial.print("Attempting to connect to open SSID: ");
+  Serial.println(ssid);
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.print(". ");
+    delay(500);
   }
-
-  // you're connected now, so print out the data:
-  Serial.print("You're connected to the network");
-  printCurrentNet();
-  printWifiData();
-
+  if (WiFi.status() == WL_CONNECTED) {
+    // you're connected now, so print out the data:
+    Serial.print("You're connected to the network");
+    printCurrentNet();
+    printWifiData();
+  }
 }
 
 void loop() {
@@ -86,12 +83,12 @@ void printCurrentNet() {
 
   // print the received signal strength:
   long rssi = WiFi.RSSI();
-  Serial.print("signal strength (RSSI):");
+  Serial.print("RSSI: ");
   Serial.println(rssi);
 
   // print the encryption type:
   byte encryption = WiFi.encryptionType();
-  Serial.print("Encryption Type:");
+  Serial.print("Encryption Type: ");
   Serial.println(encryption, HEX);
   Serial.println();
 }
