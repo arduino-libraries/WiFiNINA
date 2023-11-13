@@ -28,7 +28,7 @@
 #include "arduino_secrets.h"
 
 // ==> define LED GPIO
-#define LED 9
+constexpr int LED {9};
 
 // ==> please enter your sensitive data in the Secret tab/arduino_secrets.h
 char ssid[] = SECRET_SSID;    // your network SSID (name)
