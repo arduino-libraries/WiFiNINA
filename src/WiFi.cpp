@@ -21,6 +21,9 @@
 #include "utility/wifi_drv.h"
 #include "WiFi.h"
 
+extern SPIClass *WIFININA_SPIWIFI;
+extern int8_t WIFININA_SLAVESELECT, WIFININA_SLAVEREADY, WIFININA_SLAVERESET, WIFININA_SLAVEGPIO0;
+
 extern "C" {
   #include "utility/wl_definitions.h"
   #include "utility/wl_types.h"
@@ -29,6 +32,23 @@ extern "C" {
 
 WiFiClass::WiFiClass() : _timeout(50000), _feed_watchdog_func(0)
 {
+}
+
+void WiFiClass::setPins(int8_t cs, int8_t ready, int8_t reset, int8_t gpio0, SPIClass *spi) {
+  WIFININA_SLAVESELECT = cs;
+  WIFININA_SLAVEREADY = ready; 
+  WIFININA_SLAVERESET = reset;
+  WIFININA_SLAVEGPIO0 = gpio0;
+  WIFININA_SPIWIFI = spi;
+}
+
+void WiFiClass::setLEDs(uint8_t red, uint8_t green, uint8_t blue) {
+  WiFiDrv::pinMode(25, OUTPUT);
+  WiFiDrv::pinMode(26, OUTPUT);
+  WiFiDrv::pinMode(27, OUTPUT);
+  WiFiDrv::analogWrite(25, red);
+  WiFiDrv::analogWrite(26, green);
+  WiFiDrv::analogWrite(27, blue);
 }
 
 void WiFiClass::init()
