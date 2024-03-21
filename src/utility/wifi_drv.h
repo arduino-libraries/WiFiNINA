@@ -182,6 +182,13 @@ public:
     static void getGatewayIP(IPAddress& ip);
 
     /*
+     * Get the DNS servers IP addresses.
+     *
+     * return: copy the DNS servers IP addresses into IPAddress objects
+     */
+    static void getDNS(IPAddress& dnsip0, IPAddress& dnsip1);
+
+    /*
      * Return the current SSID associated with the network
      *
      * return: SSID string

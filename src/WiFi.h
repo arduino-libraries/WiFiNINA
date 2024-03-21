@@ -178,6 +178,14 @@ public:
      */
    IPAddress gatewayIP();
 
+   /*
+    * Get the DNS server IP address.
+    * param n: index of the DNS server
+    * return: DNS server IP address value
+    * requires firmware version > 1.5.0
+    */
+   IPAddress dnsIP(int n = 0);
+
     /*
      * Return the current SSID associated with the network
      *
