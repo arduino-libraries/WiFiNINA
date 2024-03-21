@@ -59,7 +59,7 @@ public:
     
     static char spiTransfer(volatile char data);
 
-    static void waitForSlaveReady(bool const feed_watchdog = false);
+    static void waitForSlaveReady();
 
     //static int waitSpiChar(char waitChar, char* readChar);
 
