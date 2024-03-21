@@ -74,7 +74,7 @@ void loop() {
 
   if (dtr != Serial.dtr()) {
 #ifdef ARDUINO_SAMD_MKRVIDOR4000
-    FPGA.digitalWrite(FPGA_NINA_GPIO0, (Serial.dtr() == 1) ? HIGH : LOW);
+    FPGA.digitalWrite(FPGA_NINA_GPIO0, (Serial.dtr() == 0) ? HIGH : LOW);
 #else
     digitalWrite(NINA_GPIO0, (Serial.dtr() == 0) ? HIGH : LOW);
 #endif
