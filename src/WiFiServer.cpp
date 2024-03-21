@@ -80,6 +80,12 @@ WiFiClient WiFiServer::available(byte* status)
     return WiFiClient(255);
 }
 
+WiFiClient WiFiServer::accept()
+{
+    int sock = ServerDrv::availServer(_sock, true);
+    return WiFiClient(sock);
+}
+
 uint8_t WiFiServer::status() {
     if (_sock == NO_SOCKET_AVAIL) {
         return CLOSED;
