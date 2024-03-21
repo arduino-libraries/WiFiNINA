@@ -110,16 +110,17 @@ void ServerDrv::startClient(uint32_t ipAddress, uint16_t port, uint8_t sock, uin
     SpiDrv::spiSlaveDeselect();
 }
 
-void ServerDrv::startClient(const char* host, uint8_t host_len, uint32_t ipAddress, uint16_t port, uint8_t sock, uint8_t protMode)
+void ServerDrv::startClient(const char* host, uint8_t host_len, uint32_t ipAddress, uint16_t port, uint8_t sock, uint8_t protMode, uint16_t timeout)
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
-    SpiDrv::sendCmd(START_CLIENT_TCP_CMD, PARAM_NUMS_5);
+    SpiDrv::sendCmd(START_CLIENT_TCP_CMD, PARAM_NUMS_6);
     SpiDrv::sendParam((uint8_t*)host, host_len);
     SpiDrv::sendParam((uint8_t*)&ipAddress, sizeof(ipAddress));
     SpiDrv::sendParam(port);
     SpiDrv::sendParam(&sock, 1);
-    SpiDrv::sendParam(&protMode, 1, LAST_PARAM);
+    SpiDrv::sendParam(&protMode, 1);
+    SpiDrv::sendParam(timeout, LAST_PARAM);
 
     // pad to multiple of 4
     int commandSize = 17 + host_len;
