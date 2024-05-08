@@ -31,7 +31,7 @@ extern "C" {
 	#include "utility/wl_types.h"
 }
 
-#include "IPAddress.h"
+#include "api/IPAddress.h"
 #include "WiFiClient.h"
 #include "WiFiSSLClient.h"
 #include "WiFiServer.h"
