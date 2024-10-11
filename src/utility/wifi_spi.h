@@ -42,7 +42,7 @@
 #define CMD_POS			1		// Position of Command OpCode on SPI stream
 #define PARAM_LEN_POS 	2		// Position of Param len on SPI stream
 
-  
+
 enum {
 	SET_NET_CMD 		= 0x10,
 	SET_PASSPHRASE_CMD	= 0x11,
@@ -119,17 +119,17 @@ enum {
 
 
 enum wl_tcp_state {
-  CLOSED      = 0,
-  LISTEN      = 1,
-  SYN_SENT    = 2,
-  SYN_RCVD    = 3,
-  ESTABLISHED = 4,
-  FIN_WAIT_1  = 5,
-  FIN_WAIT_2  = 6,
-  CLOSE_WAIT  = 7,
-  CLOSING     = 8,
-  LAST_ACK    = 9,
-  TIME_WAIT   = 10
+	CLOSED      = 0,
+	LISTEN      = 1,
+	SYN_SENT    = 2,
+	SYN_RCVD    = 3,
+	ESTABLISHED = 4,
+	FIN_WAIT_1  = 5,
+	FIN_WAIT_2  = 6,
+	CLOSE_WAIT  = 7,
+	CLOSING     = 8,
+	LAST_ACK    = 9,
+	TIME_WAIT   = 10
 };
 
 
@@ -200,7 +200,7 @@ typedef struct  __attribute__((__packed__))
 typedef struct  __attribute__((__packed__))
 {
 	uint8_t     paramLen;
-	uint8_t	param;
+	uint8_t		param;
 }tByteParam;
 
 #endif

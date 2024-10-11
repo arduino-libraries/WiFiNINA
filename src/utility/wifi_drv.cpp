@@ -189,7 +189,7 @@ int8_t WiFiDrv::wifiSetKey(const char* ssid, uint8_t ssid_len, uint8_t key_idx, 
     SpiDrv::sendParam((uint8_t*)ssid, ssid_len, NO_LAST_PARAM);
     SpiDrv::sendParam(&key_idx, KEY_IDX_LEN, NO_LAST_PARAM);
     SpiDrv::sendParam((uint8_t*)key, len, LAST_PARAM);
-    
+
     // pad to multiple of 4
     int commandSize = 8 + ssid_len + len;
     while (commandSize % 4) {
@@ -299,7 +299,7 @@ void WiFiDrv::setHostname(const char* hostname)
     }
     SpiDrv::spiSlaveDeselect();
 }
-                        
+
 int8_t WiFiDrv::disconnect()
 {
 	WAIT_FOR_SLAVE_SELECT();
@@ -381,7 +381,7 @@ uint8_t* WiFiDrv::getMacAddress()
 
     uint8_t _dummy = DUMMY_DATA;
     SpiDrv::sendParam(&_dummy, 1, LAST_PARAM);
-    
+
     // pad to multiple of 4
     SpiDrv::readChar();
     SpiDrv::readChar();
@@ -682,7 +682,7 @@ uint8_t* WiFiDrv::getBSSIDNetowrks(uint8_t networkItem, uint8_t* bssid)
 
     SpiDrv::spiSlaveDeselect();
 
-    return bssid;  
+    return bssid;
 }
 
 uint8_t WiFiDrv::getChannelNetowrks(uint8_t networkItem)
@@ -713,7 +713,7 @@ uint8_t WiFiDrv::getChannelNetowrks(uint8_t networkItem)
 
     SpiDrv::spiSlaveDeselect();
 
-    return channel;  
+    return channel;
 }
 
 int32_t WiFiDrv::getRSSINetoworks(uint8_t networkItem)
@@ -1015,7 +1015,7 @@ int16_t WiFiDrv::ping(uint32_t ipAddress, uint8_t ttl)
         _data = WL_PING_ERROR;
     }
     SpiDrv::spiSlaveDeselect();
-    return _data;  
+    return _data;
 }
 
 void WiFiDrv::debug(uint8_t on)
@@ -1041,7 +1041,7 @@ void WiFiDrv::debug(uint8_t on)
     uint8_t data = 0;
     SpiDrv::waitResponseCmd(SET_DEBUG_CMD, PARAM_NUMS_1, &data, &dataLen);
 
-    SpiDrv::spiSlaveDeselect(); 
+    SpiDrv::spiSlaveDeselect();
 }
 
 float WiFiDrv::getTemperature()
