@@ -106,6 +106,16 @@ enum {
     GET_DIGITAL_READ    = 0x53,
 	GET_ANALOG_READ     = 0x54,
 
+	// Prefrences api
+	PREFERENCES_BEGIN   = 0x55,
+	PREFERENCES_END     = 0x56,
+	PREFERENCES_CLEAR   = 0x57,
+	PREFERENCES_REMOVE  = 0x58,
+	PREFERENCES_LEN     = 0x59,
+	PREFERENCES_STAT    = 0x5A,
+	PREFERENCES_PUT     = 0x5B,
+	PREFERENCES_GET     = 0x5C,
+
     // regular format commands
     WRITE_FILE			= 0x60,
     READ_FILE			= 0x61,
