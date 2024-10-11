@@ -115,6 +115,7 @@ enum {
 	PREFERENCES_STAT    = 0x5A,
 	PREFERENCES_PUT     = 0x5B,
 	PREFERENCES_GET     = 0x5C,
+	PREFERENCES_GETTYPE = 0x5D,
 
     // regular format commands
     WRITE_FILE			= 0x60,

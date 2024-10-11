@@ -1320,7 +1320,7 @@ int8_t WiFiDrv::fileOperation(uint8_t operation, const char *filename, uint8_t f
     }
 
     // pad to multiple of 4
-    int commandSize = 4 + numParams + sizeof(offset) + sizeof(len) + filename_len;
+    int commandSize = 6 + numParams + sizeof(offset) + sizeof(len) + filename_len;
     while (commandSize % 4) {
         SpiDrv::readChar();
         commandSize++;
@@ -1349,6 +1349,288 @@ void WiFiDrv::applyOTA() {
     SpiDrv::spiSlaveDeselect();
 
     // don't wait for return; OTA operation should be fire and forget :)
+}
+
+
+bool WiFiDrv::prefBegin(const char * name, bool readOnly, const char* partition_label) {
+    WAIT_FOR_SLAVE_SELECT();
+
+    // calculated by considering: 1 byte for start_cmd + 1byte CMD + 1 byte param + end command
+    int commandSize = 4;
+    bool result = false;
+
+    SpiDrv::sendCmd(PREFERENCES_BEGIN, partition_label!=NULL ? PARAM_NUMS_3 : PARAM_NUMS_2);
+    SpiDrv::sendParam((uint8_t*)name, strlen(name));
+    commandSize += strlen(name) + 1; // number of bytes in name + 1 byte for the length field
+
+    SpiDrv::sendParam((uint8_t*)&readOnly, 1, partition_label!=NULL ? NO_LAST_PARAM : LAST_PARAM);
+    commandSize += 2;
+
+    if(partition_label!=NULL) {
+        SpiDrv::sendParam((uint8_t*)partition_label, strlen(partition_label), LAST_PARAM);
+        commandSize += strlen(partition_label)+1; // number of bytes in partition_label + 1 byte for the length field
+    }
+
+    // pad to multiple of 4
+    while (commandSize % 4 != 0) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t len = 1;
+    SpiDrv::waitResponseCmd(PREFERENCES_BEGIN, PARAM_NUMS_1, (uint8_t*)&result, &len);
+
+    SpiDrv::spiSlaveDeselect();
+
+    // if everything went ok the returned value is 0
+    return result == 0;
+}
+
+void WiFiDrv::prefEnd() {
+    WAIT_FOR_SLAVE_SELECT();
+
+    SpiDrv::sendCmd(PREFERENCES_END, PARAM_NUMS_0);
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    uint8_t len = 1;
+    bool result = false;
+    SpiDrv::waitResponseCmd(PREFERENCES_END, PARAM_NUMS_1, (uint8_t*)&result, &len);
+    SpiDrv::spiSlaveDeselect();
+}
+
+bool WiFiDrv::prefClear() {
+    WAIT_FOR_SLAVE_SELECT();
+
+    SpiDrv::sendCmd(PREFERENCES_CLEAR, PARAM_NUMS_0);
+
+    SpiDrv::readChar();
+    SpiDrv::readChar();
+    SpiDrv::readChar();
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+
+    // Wait for reply
+    uint8_t len = 1;
+    bool result = false;
+    SpiDrv::waitResponseCmd(PREFERENCES_CLEAR, PARAM_NUMS_1, (uint8_t*)&result, &len);
+    SpiDrv::spiSlaveDeselect();
+
+    // if everything went ok the returned value is 0
+    return result == 0;
+}
+
+bool WiFiDrv::prefRemove(const char * key) {
+    WAIT_FOR_SLAVE_SELECT();
+
+    bool result = false;
+    int commandSize = 4;
+    SpiDrv::sendCmd(PREFERENCES_REMOVE, PARAM_NUMS_1);
+
+    SpiDrv::sendParam((uint8_t*)key, strlen(key), LAST_PARAM);
+    commandSize += strlen(key) + 1; // number of bytes in key + 1 byte for the length field
+
+    // pad to multiple of 4
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t len = 1;
+    SpiDrv::waitResponseCmd(PREFERENCES_REMOVE, PARAM_NUMS_1, (uint8_t*)&result, &len);
+
+    SpiDrv::spiSlaveDeselect();
+    return result == 0;
+}
+
+size_t WiFiDrv::prefLen(const char * key) {
+    WAIT_FOR_SLAVE_SELECT();
+
+    uint32_t result = 0;
+    int commandSize = 4;
+    SpiDrv::sendCmd(PREFERENCES_LEN, PARAM_NUMS_1);
+
+    SpiDrv::sendParam((uint8_t*)key, strlen(key), LAST_PARAM);
+    commandSize += strlen(key) + 1; // number of bytes in key + 1 byte for the length field
+
+    // pad to multiple of 4
+    while (commandSize % 4 != 0) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t len = 4;
+    SpiDrv::waitResponseCmd(PREFERENCES_LEN, PARAM_NUMS_1, (uint8_t*)&result, &len);
+
+    SpiDrv::spiSlaveDeselect();
+
+    // if len == 1 it means that the command returned and error, in result the error code,
+    // as of now 255 may be returned if the number of parameters passed is wrong
+    return len == 1? 0 : result;
+}
+
+size_t WiFiDrv::prefStat() {
+    WAIT_FOR_SLAVE_SELECT();
+
+    SpiDrv::sendCmd(PREFERENCES_STAT, PARAM_NUMS_0);
+
+    SpiDrv::readChar();
+    SpiDrv::readChar();
+    SpiDrv::readChar();
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    size_t result = 0;
+    uint8_t len = 4;
+    SpiDrv::waitResponseCmd(PREFERENCES_STAT, PARAM_NUMS_1, (uint8_t*)&result, &len);
+    SpiDrv::spiSlaveDeselect();
+
+    return result;
+}
+
+size_t WiFiDrv::prefPut(const char * key, PreferenceType type, uint8_t value[], size_t len) {
+    WAIT_FOR_SLAVE_SELECT();
+
+    int commandSize = 4;
+    SpiDrv::sendCmd(PREFERENCES_PUT, PARAM_NUMS_3);
+
+    SpiDrv::sendParam((uint8_t*)key, strlen(key));
+    commandSize += strlen(key) + 1; // number of bytes in key + 1 byte for the length field
+
+    SpiDrv::sendParam((uint8_t*)&type, 1);
+    commandSize += 2;
+
+    SpiDrv::sendBuffer((uint8_t*)value, len, LAST_PARAM);
+    commandSize += len + 1;
+
+    // pad to multiple of 4
+    while (commandSize % 4 != 0) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    uint8_t res_len = 1;
+    uint32_t res = 0;
+    SpiDrv::waitResponseCmd(PREFERENCES_PUT, PARAM_NUMS_1, (uint8_t*)&res, &res_len);
+    SpiDrv::spiSlaveDeselect();
+
+    // if len == 1 it means that the command returned and error, in result the error code,
+    // as of now 255 may be returned if the number of parameters passed is wrong
+    // and 254 if the type passed as parameter is wrong
+    return res_len == 1? 0 : res;
+}
+
+size_t WiFiDrv::prefGet(const char * key, PreferenceType type, uint8_t value[], size_t len) {
+    WAIT_FOR_SLAVE_SELECT();
+
+    int commandSize = 4;
+    SpiDrv::sendCmd(PREFERENCES_GET, PARAM_NUMS_2);
+
+    SpiDrv::sendParam((uint8_t*)key, strlen(key));
+    commandSize += strlen(key) + 1; // number of bytes in key + 1 byte for the length field
+
+    SpiDrv::sendParam((uint8_t*)&type, 1, LAST_PARAM);
+    commandSize += 2;
+
+    // pad to multiple of 4
+    while (commandSize % 4 != 0) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // we need to account for \0 if it is a string
+    size_t res_len = type == PT_STR? len-1 : len;
+    SpiDrv::waitResponseData16(PREFERENCES_GET, value, (uint16_t*)&res_len);
+
+    SpiDrv::spiSlaveDeselect();
+
+    // if res_len == 0 it means that the command returned and error
+    if(res_len == 0) {
+        return 0;
+    }
+
+    // fix endianness
+    if(type != PT_STR && type != PT_BLOB) {
+        for(uint8_t i=0; i<res_len/2; i++) {
+
+            // XOR swap algorithm:
+            // a=a^b; b=a^b; a=b^a; with a != b
+            if(value[i] != value[res_len-i-1]) {
+                value[i]            = value[i]^value[res_len-i-1];
+                value[res_len-i-1]  = value[i]^value[res_len-i-1];
+                value[i]            = value[res_len-i-1]^value[i];
+            }
+        }
+    }
+
+    if(type == PT_STR) {
+        value[res_len] = '\0';
+    }
+
+    return res_len;
+}
+
+PreferenceType WiFiDrv::prefGetType(const char * key) {
+    WAIT_FOR_SLAVE_SELECT();
+
+    PreferenceType type = PT_INVALID;
+    int commandSize = 4;
+    SpiDrv::sendCmd(PREFERENCES_GETTYPE, PARAM_NUMS_1);
+
+    SpiDrv::sendParam((uint8_t*)key, strlen(key), LAST_PARAM);
+    commandSize += strlen(key) + 1; // number of bytes in key + 1 byte for the length field
+
+    // pad to multiple of 4
+    while (commandSize % 4 != 0) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    uint8_t len = 1;
+    SpiDrv::waitResponseCmd(PREFERENCES_GETTYPE, PARAM_NUMS_1, (uint8_t*)&type, (uint8_t*)&len);
+    SpiDrv::spiSlaveDeselect();
+
+    return type;
 }
 
 
