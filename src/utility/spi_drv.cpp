@@ -70,8 +70,12 @@ bool SpiDrv::initialized = false;
 
 extern WiFiClass WiFi;
 
-void SpiDrv::begin()
+void SpiDrv::begin(bool force)
 {
+    if(initialized && !force) {
+        return;
+    }
+
 #ifdef ARDUINO_SAMD_MKRVIDOR4000
       FPGA.begin();
 #endif

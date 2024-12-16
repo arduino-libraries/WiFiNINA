@@ -47,7 +47,7 @@ private:
 public:
     static bool initialized;
 
-    static void begin();
+    static void begin(bool force=false);
 
     static void end();
 
