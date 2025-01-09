@@ -99,6 +99,13 @@ enum {
     GET_DATABUF_TCP_CMD      = 0x45,
     INSERT_DATABUF_CMD       = 0x46,
 
+	BLE_BEGIN 				= 0x4A,
+	BLE_END 				= 0x4B,
+	BLE_AVAILABLE			= 0x4C,
+	BLE_PEEK 				= 0x4D,
+	BLE_READ 				= 0x4E,
+	BLE_WRITE 				= 0x4F,
+
     // regular format commands
     SET_PIN_MODE             = 0x50,
     SET_DIGITAL_WRITE        = 0x51,
