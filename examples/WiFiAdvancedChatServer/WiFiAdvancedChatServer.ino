@@ -45,8 +45,8 @@ void setup() {
     Serial.println("Please upgrade the firmware");
   }
 
-  if (fv < "1.5.1") {
-    Serial.println("Advanced WiFi Chat Server requires firmware version 1.5.1 or higher.");
+  if (fv < "1.6.0") {
+    Serial.println("Advanced WiFi Chat Server requires firmware version 1.6.0 or higher.");
     // don't continue
     while (true);
   }
