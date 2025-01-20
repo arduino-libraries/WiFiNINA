@@ -94,6 +94,9 @@ uint8_t WiFiServer::status() {
     }
 }
 
+WiFiServer::operator bool() {
+  return (_sock != NO_SOCKET_AVAIL);
+}
 
 size_t WiFiServer::write(uint8_t b)
 {
