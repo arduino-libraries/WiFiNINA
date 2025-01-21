@@ -59,7 +59,7 @@ public:
 
     static char spiTransfer(volatile char data);
 
-    static void waitForSlaveReady();
+    static void waitForSlaveReady(unsigned long timeout = 0); // timeout for wait, 0 means no timeout
 
     //static int waitSpiChar(char waitChar, char* readChar);
 

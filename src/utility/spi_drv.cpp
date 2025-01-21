@@ -215,13 +215,16 @@ void SpiDrv::waitForSlaveSign()
 	while (!waitSlaveSign());
 }
 
-void SpiDrv::waitForSlaveReady()
+void SpiDrv::waitForSlaveReady(unsigned long timeout)
 {
     unsigned long const start = millis();
-	while (!waitSlaveReady())
-    {
-        if ((millis() - start) < 10000) {
+    unsigned long wd_start = millis();
+    constexpr long wd_timeout = 2000;
+
+	while (!waitSlaveReady() && (timeout == 0 || (millis() - start) < timeout)) {
+        if ((millis() - wd_start) < wd_timeout) {
             WiFi.feedWatchdog();
+            wd_start = millis();
         }
     }
 }
