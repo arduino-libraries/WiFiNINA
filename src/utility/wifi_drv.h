@@ -26,6 +26,7 @@
 #include "IPAddress.h"
 #include "WiFiUdp.h"
 #include "WiFiClient.h"
+#include "Preferences.h"
 
 // Key index length
 #define KEY_IDX_LEN     1
@@ -323,6 +324,23 @@ public:
         *len = length;
         return length >= 0;
     };
+
+    static bool prefBegin(const char * name, bool readOnly=false, const char* partition_label=NULL);
+    static void prefEnd();
+    static bool prefClear();
+    static bool prefRemove(const char * key);
+    static size_t prefLen(const char * key);
+    static size_t prefStat();
+    static size_t prefPut(const char * key, PreferenceType type, uint8_t value[], size_t len);
+    static size_t prefGet(const char * key, PreferenceType type, uint8_t value[], size_t len);
+    static PreferenceType prefGetType(const char * key);
+
+    static int bleBegin();
+    static void bleEnd();
+    static int bleAvailable();
+    static int bleRead(uint8_t data[], size_t length);
+    static int blePeek(uint8_t data[], size_t length);
+    static size_t bleWrite(const uint8_t* data, size_t length);
 
     static void applyOTA();
 
