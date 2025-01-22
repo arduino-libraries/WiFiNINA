@@ -59,13 +59,7 @@ int WiFiClient::connect(IPAddress ip, uint16_t port) {
     _sock = ServerDrv::getSocket();
     if (_sock != NO_SOCKET_AVAIL)
     {
-    	ServerDrv::startClient(uint32_t(ip), port, _sock);
-
-    	unsigned long start = millis();
-
-    	// wait 4 second for the connection to close
-    	while (!connected() && millis() - start < 10000)
-    		delay(1);
+    	ServerDrv::startClient(nullptr, 0, uint32_t(ip), port, _sock, TCP_MODE, _connTimeout);
 
     	if (!connected())
        	{
@@ -88,13 +82,7 @@ int WiFiClient::connectSSL(IPAddress ip, uint16_t port)
     _sock = ServerDrv::getSocket();
     if (_sock != NO_SOCKET_AVAIL)
     {
-      ServerDrv::startClient(uint32_t(ip), port, _sock, TLS_MODE);
-
-      unsigned long start = millis();
-
-      // wait 4 second for the connection to close
-      while (!connected() && millis() - start < 10000)
-        delay(1);
+      ServerDrv::startClient(nullptr, 0, uint32_t(ip), port, _sock, TLS_MODE, _connTimeout);
 
       if (!connected())
         {
@@ -117,13 +105,7 @@ int WiFiClient::connectSSL(const char *host, uint16_t port)
     _sock = ServerDrv::getSocket();
     if (_sock != NO_SOCKET_AVAIL)
     {
-      ServerDrv::startClient(host, strlen(host), uint32_t(0), port, _sock, TLS_MODE);
-
-      unsigned long start = millis();
-
-      // wait 4 second for the connection to close
-      while (!connected() && millis() - start < 10000)
-        delay(1);
+      ServerDrv::startClient(host, strlen(host), uint32_t(0), port, _sock, TLS_MODE, _connTimeout);
 
       if (!connected())
         {
@@ -146,13 +128,7 @@ int WiFiClient::connectBearSSL(IPAddress ip, uint16_t port)
     _sock = ServerDrv::getSocket();
     if (_sock != NO_SOCKET_AVAIL)
     {
-      ServerDrv::startClient(uint32_t(ip), port, _sock, TLS_BEARSSL_MODE);
-
-      unsigned long start = millis();
-
-      // wait 4 second for the connection to close
-      while (!connected() && millis() - start < 10000)
-        delay(1);
+      ServerDrv::startClient(nullptr, 0, uint32_t(ip), port, _sock, TLS_BEARSSL_MODE, _connTimeout);
 
       if (!connected())
         {
@@ -175,13 +151,7 @@ int WiFiClient::connectBearSSL(const char *host, uint16_t port)
     _sock = ServerDrv::getSocket();
     if (_sock != NO_SOCKET_AVAIL)
     {
-      ServerDrv::startClient(host, strlen(host), uint32_t(0), port, _sock, TLS_BEARSSL_MODE);
-
-      unsigned long start = millis();
-
-      // wait 4 second for the connection to close
-      while (!connected() && millis() - start < 10000)
-        delay(1);
+      ServerDrv::startClient(host, strlen(host), uint32_t(0), port, _sock, TLS_BEARSSL_MODE, _connTimeout);
 
       if (!connected())
         {
