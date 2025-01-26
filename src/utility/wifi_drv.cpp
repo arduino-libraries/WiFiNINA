@@ -1093,7 +1093,11 @@ void WiFiDrv::pinMode(uint8_t pin, uint8_t mode)
     SpiDrv::spiSlaveDeselect();
 }
 
+#if defined(ARDUINO_ARCH_MBED)
 PinStatus WiFiDrv::digitalRead(uint8_t pin)
+#else
+int WiFiDrv::digitalRead(uint8_t pin)
+#endif
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
