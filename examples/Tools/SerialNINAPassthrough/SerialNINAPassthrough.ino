@@ -97,9 +97,7 @@ void loop() {
     dtr = -1;
 
     baud = Serial.baud();
-#ifndef ARDUINO_SAMD_MKRVIDOR4000
     SerialNina.begin(baud);
-#endif
   }
 #endif
 }
