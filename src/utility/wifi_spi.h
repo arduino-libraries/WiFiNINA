@@ -42,7 +42,7 @@
 #define CMD_POS			1		// Position of Command OpCode on SPI stream
 #define PARAM_LEN_POS 	2		// Position of Param len on SPI stream
 
-  
+
 enum {
 	SET_NET_CMD 		= 0x10,
 	SET_PASSPHRASE_CMD	= 0x11,
@@ -99,12 +99,30 @@ enum {
     GET_DATABUF_TCP_CMD		= 0x45,
     INSERT_DATABUF_CMD		= 0x46,
 
+	BLE_BEGIN 				= 0x4A,
+	BLE_END 				= 0x4B,
+	BLE_AVAILABLE			= 0x4C,
+	BLE_PEEK 				= 0x4D,
+	BLE_READ 				= 0x4E,
+	BLE_WRITE 				= 0x4F,
+
     // regular format commands
     SET_PIN_MODE		= 0x50,
     SET_DIGITAL_WRITE	= 0x51,
     SET_ANALOG_WRITE	= 0x52,
     GET_DIGITAL_READ    = 0x53,
 	GET_ANALOG_READ     = 0x54,
+
+	// Prefrences api
+	PREFERENCES_BEGIN   = 0x55,
+	PREFERENCES_END     = 0x56,
+	PREFERENCES_CLEAR   = 0x57,
+	PREFERENCES_REMOVE  = 0x58,
+	PREFERENCES_LEN     = 0x59,
+	PREFERENCES_STAT    = 0x5A,
+	PREFERENCES_PUT     = 0x5B,
+	PREFERENCES_GET     = 0x5C,
+	PREFERENCES_GETTYPE = 0x5D,
 
     // regular format commands
     WRITE_FILE			= 0x60,
@@ -119,17 +137,17 @@ enum {
 
 
 enum wl_tcp_state {
-  CLOSED      = 0,
-  LISTEN      = 1,
-  SYN_SENT    = 2,
-  SYN_RCVD    = 3,
-  ESTABLISHED = 4,
-  FIN_WAIT_1  = 5,
-  FIN_WAIT_2  = 6,
-  CLOSE_WAIT  = 7,
-  CLOSING     = 8,
-  LAST_ACK    = 9,
-  TIME_WAIT   = 10
+	CLOSED      = 0,
+	LISTEN      = 1,
+	SYN_SENT    = 2,
+	SYN_RCVD    = 3,
+	ESTABLISHED = 4,
+	FIN_WAIT_1  = 5,
+	FIN_WAIT_2  = 6,
+	CLOSE_WAIT  = 7,
+	CLOSING     = 8,
+	LAST_ACK    = 9,
+	TIME_WAIT   = 10
 };
 
 
@@ -200,7 +218,7 @@ typedef struct  __attribute__((__packed__))
 typedef struct  __attribute__((__packed__))
 {
 	uint8_t     paramLen;
-	uint8_t	param;
+	uint8_t		param;
 }tByteParam;
 
 #endif
