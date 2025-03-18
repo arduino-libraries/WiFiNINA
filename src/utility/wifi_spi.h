@@ -115,6 +115,10 @@ enum {
     APPLY_OTA_COMMAND	= 0x65,
 	RENAME_FILE			= 0x66,
 	DOWNLOAD_OTA		= 0x67,
+	BRSSL_SET_EC_TA     = 0x68,
+
+	// Low-level BSD-like sockets functions.
+	// From 0x70 to 0x7F
 };
 
 
