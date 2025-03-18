@@ -58,3 +58,8 @@ int WiFiBearSSLClient::connect(const char* host, uint16_t port)
 {
 	return WiFiClient::connectBearSSL(host, port);
 }
+
+int WiFiBearSSLClient::setECTrustAnchor(const uint8_t *dName, uint32_t dNameSize, uint16_t flags, uint16_t curve, const uint8_t *key, uint32_t keySize)
+{
+  return WiFiClient::setECTrustAnchorBearSSL(dName, dNameSize, flags, curve, key, keySize);
+}
