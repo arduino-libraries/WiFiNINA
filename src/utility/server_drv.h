@@ -64,6 +64,8 @@ public:
     static uint8_t getSocket();
 
     static uint8_t setECTrustAnchorBearSSL(const uint8_t *dName, uint32_t dNameSize, uint16_t flags, uint16_t curve, const uint8_t *key, uint32_t keySize);
+
+    static int errorCodeBearSSL();
 };
 
 extern ServerDrv serverDrv;
