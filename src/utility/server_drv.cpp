@@ -559,4 +559,26 @@ uint8_t ServerDrv::setECTrustAnchorBearSSL(const uint8_t *dName, uint32_t dNameS
     return result == 0;
 }
 
+int ServerDrv::errorCodeBearSSL()
+{
+    WAIT_FOR_SLAVE_SELECT();
+
+    // Send Command
+    SpiDrv::sendCmd(BRSSL_ERROR_CODE, PARAM_NUMS_0);
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    int _data = 0;
+    uint8_t _dataLen = 0;
+    SpiDrv::waitResponseCmd(BRSSL_ERROR_CODE, PARAM_NUMS_1, (uint8_t*)&_data, &_dataLen);
+
+    SpiDrv::spiSlaveDeselect();
+
+    return _data;
+}
+
 ServerDrv serverDrv;

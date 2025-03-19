@@ -199,6 +199,11 @@ int WiFiClient::setECTrustAnchorBearSSL(const uint8_t *dName, uint32_t dNameSize
   return ServerDrv::setECTrustAnchorBearSSL(dName, dNameSize, flags, curve, key, keySize);
 }
 
+int WiFiClient::errorCodeBearSSL()
+{
+  return ServerDrv::errorCodeBearSSL();
+}
+
 size_t WiFiClient::write(uint8_t b) {
 	  return write(&b, 1);
 }
