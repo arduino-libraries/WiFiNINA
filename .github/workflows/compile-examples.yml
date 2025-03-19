@@ -29,7 +29,26 @@ jobs:
 
     env:
       SKETCHES_REPORTS_PATH: sketches-reports
-
+      UNIVERSAL_SKETCH_PATHS: |
+        - examples/AP_SimpleWebServer
+        - examples/ConnectNoEncryption
+        - examples/ConnectWithWEP
+        - examples/ConnectWithWPA
+        - examples/ConnectWithWPA2Enterprise
+        - examples/Prefs2Struct
+        - examples/ScanNetworks
+        - examples/ScanNetworksAdvanced
+        - examples/SimpleWebServerWiFi
+        - examples/WiFiAdvancedChatServer
+        - examples/WiFiChatServer
+        - examples/WiFiPing
+        - examples/WiFiSSLClient
+        - examples/WiFiStorage
+        - examples/WiFiUdpNtpClient
+        - examples/WiFiUdpSendReceiveString
+        - examples/WiFiWebClient
+        - examples/WiFiWebClientRepeating
+        - examples/WiFiWebServer
     strategy:
       fail-fast: false
 
@@ -56,6 +75,35 @@ jobs:
               - name: arduino:mbed_nano
             artifact-name-suffix: arduino-mbed_nano-nanorp2040connect
 
+        include:
+          # mkrwifi1010
+          - board:
+              fqbn: arduino:samd:mkrwifi1010
+            sketch-paths: |
+              - examples/PreferencesCounter
+              - examples/PreferencesValidation
+          # mkrvidor4000
+          - board:
+              fqbn: arduino:samd:mkrvidor4000
+            sketch-paths: |
+              - examples/PreferencesCounter
+              - examples/PreferencesValidation
+          # nano_33_iot
+          - board:
+              fqbn: arduino:samd:nano_33_iot
+            sketch-paths: |
+              - examples/PreferencesCounter
+              - examples/PreferencesValidation
+          # uno2018
+          - board:
+              fqbn: arduino:megaavr:uno2018:mode=on
+          # nanorp2040connect
+          - board:
+              fqbn: arduino:mbed_nano:nanorp2040connect
+            sketch-paths: |
+              - examples/PreferencesCounter
+              - examples/PreferencesValidation
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -71,7 +119,7 @@ jobs:
             # Install library dependencies.
             - name: VidorPeripherals
           sketch-paths: |
-            - ./examples/
+            ${{ matrix.sketch-paths }}
           enable-deltas-report: true
           sketches-report-path: ${{ env.SKETCHES_REPORTS_PATH }}
 
