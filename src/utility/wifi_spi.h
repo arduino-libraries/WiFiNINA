@@ -117,6 +117,9 @@ enum {
 	PREFERENCES_GET     = 0x5C,
 	PREFERENCES_GETTYPE = 0x5D,
 
+	// regular format commands
+	SET_TIME_CMD        = 0x5F,
+
     // regular format commands
     WRITE_FILE			= 0x60,
     READ_FILE			= 0x61,

@@ -360,6 +360,11 @@ unsigned long WiFiClass::getTime()
 	return WiFiDrv::getTime();
 }
 
+int WiFiClass::setTime(unsigned long unixTime)
+{
+	return WiFiDrv::setTime(unixTime);
+}
+
 void WiFiClass::lowPowerMode()
 {
 	WiFiDrv::setPowerMode(1);
