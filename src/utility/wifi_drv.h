@@ -280,6 +280,7 @@ public:
     static const char* getFwVersion();
 
     static uint32_t getTime();
+    static int setTime(uint32_t epochTime);
 
     static void setPowerMode(uint8_t mode);
 

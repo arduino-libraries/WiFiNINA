@@ -112,6 +112,7 @@ enum {
     SET_ANALOG_WRITE	= 0x52,
     GET_DIGITAL_READ    = 0x53,
 	GET_ANALOG_READ     = 0x54,
+	SET_TIME_CMD        = 0x55,
 
 	// Prefrences api
 	PREFERENCES_BEGIN   = 0x55,
