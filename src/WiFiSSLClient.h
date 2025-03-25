@@ -40,6 +40,7 @@ public:
 
 	virtual int connect(IPAddress ip, uint16_t port);
 	virtual int connect(const char* host, uint16_t port);
+  virtual int setECTrustAnchor(const uint8_t *dName, uint32_t dNameSize, uint16_t flags, uint16_t curve, const uint8_t *key, uint32_t keySize);
 };
 
 #endif /* WIFISSLCLIENT_H */
