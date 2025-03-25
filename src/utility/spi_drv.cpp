@@ -45,7 +45,7 @@
 #define digitalWrite(pin, value) FPGA.digitalWrite(pin, value)
 #endif
 
-//#define _DEBUG_
+// #define _DEBUG_
 extern "C" {
 #include "utility/debug.h"
 }
@@ -70,8 +70,12 @@ bool SpiDrv::initialized = false;
 
 extern WiFiClass WiFi;
 
-void SpiDrv::begin()
+void SpiDrv::begin(bool force)
 {
+    if(initialized && !force) {
+        return;
+    }
+
 #ifdef ARDUINO_SAMD_MKRVIDOR4000
       FPGA.begin();
 #endif
@@ -94,7 +98,7 @@ void SpiDrv::begin()
       if (SLAVERESET > PINS_COUNT) {
         inverted_reset = true;
         SLAVERESET = ~SLAVERESET;
-      }      
+      }
 #endif
 
       pinMode(SLAVESELECT, OUTPUT);
@@ -252,12 +256,12 @@ int SpiDrv::waitResponseCmd(uint8_t cmd, uint8_t numParam, uint8_t* param, uint8
                 // Get Params data
                 //param[ii] = spiTransfer(DUMMY_DATA);
                 getParam(&param[ii]);
-            } 
-        }         
+            }
+        }
 
         readAndCheckChar(END_CMD, &_data);
-    }     
-    
+    }
+
     return 1;
 }
 /*
@@ -277,12 +281,12 @@ int SpiDrv::waitResponse(uint8_t cmd, uint8_t numParam, uint8_t* param, uint16_t
             {
                 // Get Params data
                 param[ii] = spiTransfer(DUMMY_DATA);
-            } 
-        }         
+            }
+        }
 
         readAndCheckChar(END_CMD, &_data);
-    }     
-    
+    }
+
     return 1;
 }
 */
@@ -298,18 +302,18 @@ int SpiDrv::waitResponseData16(uint8_t cmd, uint8_t* param, uint16_t* param_len)
 
         uint8_t numParam = readChar();
         if (numParam != 0)
-        {        
+        {
             readParamLen16(param_len);
             for (ii=0; ii<(*param_len); ++ii)
             {
                 // Get Params data
                 param[ii] = spiTransfer(DUMMY_DATA);
-            } 
-        }         
+            }
+        }
 
         readAndCheckChar(END_CMD, &_data);
-    }     
-    
+    }
+
     return 1;
 }
 
@@ -324,18 +328,18 @@ int SpiDrv::waitResponseData8(uint8_t cmd, uint8_t* param, uint8_t* param_len)
 
         uint8_t numParam = readChar();
         if (numParam != 0)
-        {        
+        {
             readParamLen8(param_len);
             for (ii=0; ii<(*param_len); ++ii)
             {
                 // Get Params data
                 param[ii] = spiTransfer(DUMMY_DATA);
-            } 
-        }         
+            }
+        }
 
         readAndCheckChar(END_CMD, &_data);
-    }     
-    
+    }
+
     return 1;
 }
 
@@ -351,7 +355,7 @@ int SpiDrv::waitResponseParams(uint8_t cmd, uint8_t numParam, tParam* params)
 
         uint8_t _numParam = readChar();
         if (_numParam != 0)
-        {        
+        {
             for (i=0; i<_numParam; ++i)
             {
                 params[i].paramLen = readParamLen8();
@@ -359,7 +363,7 @@ int SpiDrv::waitResponseParams(uint8_t cmd, uint8_t numParam, tParam* params)
                 {
                     // Get Params data
                     params[i].param[ii] = spiTransfer(DUMMY_DATA);
-                } 
+                }
             }
         } else
         {
@@ -374,7 +378,7 @@ int SpiDrv::waitResponseParams(uint8_t cmd, uint8_t numParam, tParam* params)
         }
 
         readAndCheckChar(END_CMD, &_data);
-    }         
+    }
     return 1;
 }
 
@@ -405,7 +409,7 @@ int SpiDrv::waitResponse(uint8_t cmd, tParam* params, uint8_t* numParamRead, uin
                 {
                     // Get Params data
                     params[i].param[ii] = spiTransfer(DUMMY_DATA);
-                } 
+                }
             }
         } else
         {
@@ -414,7 +418,7 @@ int SpiDrv::waitResponse(uint8_t cmd, tParam* params, uint8_t* numParamRead, uin
             return 0;
         }
         readAndCheckChar(END_CMD, &_data);
-    }         
+    }
     return 1;
 }
 */
