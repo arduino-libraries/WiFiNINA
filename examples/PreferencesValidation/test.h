@@ -62,6 +62,70 @@ bool test_preferences(T value,
   return true;
 }
 
+template<>
+bool test_preferences(String value,
+  std::function<size_t(const char*, String)> putf,
+  std::function<String(const char*)> getf,
+  Preferences *preferences) {
+// we are going now to test all the apis of kvstore:
+// .1 We check that the key do not exist
+// .2 we put a value inside the KVStore
+// .3 we check that the size returned is correct
+// .4 we check again the key exists
+// .5 we get the value contained
+// .6 we compare the value with what we inserted at the beginning
+// .7 we remove the value
+
+Serial.println("Testing isKey()");
+if(preferences->isKey(KEY)) {
+  Serial.println("[Error] kvstore already contains a key");
+  return false;
+}
+
+Serial.println("Testing put()");
+size_t s;
+if((s=putf(KEY, value)) != value.length()) {
+  Serial.println("[Error] kvstore put returned a size that is different from the expected one: ");
+  Serial.print(s);
+  Serial.print(" != ");
+  Serial.println(value.length());
+  return false;
+}
+
+Serial.println("Testing isKey()");
+if(!preferences->isKey(KEY)) {
+  Serial.println("[Error] The inserted key is not present in the KVStore");
+  return false;
+}
+
+Serial.println("Testing getBytesLength()");
+if((s=preferences->getBytesLength(KEY)) != value.length()+1) {
+  Serial.println("[Error] The length of the value do not match with the expected one");
+  Serial.print(s);
+  Serial.print(" != ");
+  Serial.println(value.length()+1);
+  return false;
+}
+
+Serial.println("Testing getf()");
+String val;
+if((val = getf(KEY)) != value) {
+  Serial.print("[Error] get of the previously inserted value returned a wrong value: ");
+  Serial.print(val);
+  Serial.print(" != ");
+  Serial.println(value);
+  return false;
+}
+
+Serial.println("Testing remove()");
+if(!preferences->remove(KEY)) {
+  Serial.println("[Error] Failed removing the inserted key");
+  return false;
+}
+
+return true;
+}
+
 bool test_preferences(char* value, Preferences *preferences) {
   // we are going now to test all the apis of preferences:
   // .1 We check that the key do not exist
