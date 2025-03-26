@@ -66,17 +66,14 @@ size_t Preferences::putUChar(const char* key, uint8_t value) {
 
 size_t Preferences::putShort(const char* key, int16_t value) {
     return WiFiDrv::prefPut(key, PT_I16, (uint8_t*) &value, sizeof(value));
-
 }
 
 size_t Preferences::putUShort(const char* key, uint16_t value) {
     return WiFiDrv::prefPut(key, PT_U16, (uint8_t*) &value, sizeof(value));
-
 }
 
 size_t Preferences::putInt(const char* key, int32_t value) {
     return WiFiDrv::prefPut(key, PT_I32, (uint8_t*) &value, sizeof(value));
-
 }
 
 size_t Preferences::putUInt(const char* key, uint32_t value) {
@@ -284,13 +281,18 @@ size_t Preferences::getString(const char* key, char* value, const size_t maxLen)
     return WiFiDrv::prefGet(key, PT_STR, (uint8_t*)value, maxLen);
 }
 
-String Preferences::getString(const char* key, const String defaultValue) { // TODO
-    Serial.println("This function is not implemented yet");
-    if(!isKey(key)) {
-        return defaultValue;
-    }
+String Preferences::getString(const char* key, const String defaultValue) {
+    size_t len = getBytesLength(key);
+    char *str = new char[len+1];
 
-    return defaultValue;
+    getString(key, str, len+1);
+    str[len] = '\0';
+
+    String res(str);
+    delete str;
+    str = nullptr;
+
+    return res;
 }
 
 size_t Preferences::getBytesLength(const char* key) {

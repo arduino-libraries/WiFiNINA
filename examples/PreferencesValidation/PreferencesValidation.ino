@@ -222,10 +222,25 @@ void setup() {
   Serial.println();
   Serial.println();
 
-  Serial.println("Testing String operations");
+  Serial.println("Testing C - String operations");
   if(!test_preferences("la mia stringsa asdasdafasdjdsnajdnaskjlasda\n\n\r\nsdafasdjdsnajdnaskjlasdasdafasdjdsnajdnaskjlasdasdafasdjdsnajdnaskjlasdasdafasdjdsnajdnaskjlasdasdafasdjdsnajdnaskjl\r\nOK\r\nERROR",
       &preferences)) {
-    Serial.println("String test failed");
+    Serial.println("C - String test failed");
+    preferences.remove(KEY);
+  }
+
+  Serial.println();
+  Serial.println();
+  Serial.println();
+
+  Serial.println("Testing Arduino - String operations");
+  if(!test_preferences<String>("la mia stringsa asdasdafasdjdsnajdnaskjlasda\n\n\r\nsdafasdjdsnajdnaskjlasdasdafasdjdsnajdnaskjlasdasdafasdjdsnajdnaskjlasdasdafasdjdsnajdnaskjlasdasdafasdjdsnajdnaskjl\r\nOK\r\nERROR",
+    std::bind(static_cast<size_t(Preferences::*)(const char*, String)>(&Preferences::putString), &preferences, std::placeholders::_1, std::placeholders::_2),
+    [&preferences](const char* key) { // we need a lambda, because it requires a default value from apis
+      return preferences.getString(key);
+    }, &preferences)) {
+
+    Serial.println("Arduino - String test failed");
     preferences.remove(KEY);
   }
 

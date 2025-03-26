@@ -28,11 +28,6 @@ void setup() {
     while(1) {};
   }
 
-  // Serial.println(">Clear");
-  // preferences.clear();
-  // Serial.println("<Clear");
-
-
   // Remove all preferences under the opened namespace
   //preferences.clear();
 
