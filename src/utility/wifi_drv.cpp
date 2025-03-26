@@ -862,6 +862,36 @@ uint32_t WiFiDrv::getTime()
     return _data;
 }
 
+int WiFiDrv::setTime(uint32_t epochTime)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(SET_TIME_CMD, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)&epochTime, sizeof(epochTime), LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 5 + sizeof(epochTime);
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(SET_TIME_CMD, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+    }
+    SpiDrv::spiSlaveDeselect();
+    return _data;
+}
+
 void WiFiDrv::setPowerMode(uint8_t mode)
 {
     WAIT_FOR_SLAVE_SELECT();

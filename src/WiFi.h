@@ -277,6 +277,7 @@ public:
     int hostByName(const char* aHostname, IPAddress& aResult);
 
     unsigned long getTime();
+    int setTime(unsigned long unixTime);
 
     void lowPowerMode();
     void noLowPowerMode();
