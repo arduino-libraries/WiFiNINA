@@ -21,7 +21,7 @@
 #ifndef WiFi_h
 #define WiFi_h
 
-#define WIFI_FIRMWARE_LATEST_VERSION "1.5.0"
+#define WIFI_FIRMWARE_LATEST_VERSION "2.0.0"
 #define WIFI_HAS_FEED_WATCHDOG_FUNC
 
 #include <inttypes.h>
@@ -178,6 +178,14 @@ public:
      */
    IPAddress gatewayIP();
 
+   /*
+    * Get the DNS server IP address.
+    * param n: index of the DNS server
+    * return: DNS server IP address value
+    * requires firmware version > 1.5.0
+    */
+   IPAddress dnsIP(int n = 0);
+
     /*
      * Return the current SSID associated with the network
      *
@@ -269,6 +277,7 @@ public:
     int hostByName(const char* aHostname, IPAddress& aResult);
 
     unsigned long getTime();
+    int setTime(unsigned long unixTime);
 
     void lowPowerMode();
     void noLowPowerMode();

@@ -278,7 +278,7 @@ uint16_t ServerDrv::availData(uint8_t sock)
     return len;
 }
 
-uint8_t ServerDrv::availServer(uint8_t sock)
+uint8_t ServerDrv::availServer(uint8_t sock, uint8_t accept)
 {
     if (!SpiDrv::available()) {
         return 255;
@@ -286,12 +286,9 @@ uint8_t ServerDrv::availServer(uint8_t sock)
 
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
-    SpiDrv::sendCmd(AVAIL_DATA_TCP_CMD, PARAM_NUMS_1);
-    SpiDrv::sendParam(&sock, sizeof(sock), LAST_PARAM);
-
-    // pad to multiple of 4
-    SpiDrv::readChar();
-    SpiDrv::readChar();
+    SpiDrv::sendCmd(AVAIL_DATA_TCP_CMD, PARAM_NUMS_2);
+    SpiDrv::sendParam(&sock, sizeof(sock));
+    SpiDrv::sendParam(&accept, sizeof(accept), LAST_PARAM);
 
     SpiDrv::spiSlaveDeselect();
     //Wait the reply elaboration
@@ -533,6 +530,73 @@ uint8_t ServerDrv::getSocket()
     uint8_t _data = -1;
     uint8_t _dataLen = 0;
     SpiDrv::waitResponseCmd(GET_SOCKET_CMD, PARAM_NUMS_1, &_data, &_dataLen);
+
+    SpiDrv::spiSlaveDeselect();
+
+    return _data;
+}
+
+uint8_t ServerDrv::setECTrustAnchorBearSSL(const uint8_t *dName, uint32_t dNameSize, uint16_t flags, uint16_t curve, const uint8_t *key, uint32_t keySize)
+{
+    WAIT_FOR_SLAVE_SELECT();
+
+    int commandSize = 4;
+    SpiDrv::sendCmd(BRSSL_SET_EC_TA, PARAM_NUMS_4);
+
+    /* Send distinguished name */
+    SpiDrv::sendBuffer((uint8_t*)dName, dNameSize);
+    commandSize += dNameSize + 1;
+
+    /* Send flags */
+    SpiDrv::sendParam(flags);
+    commandSize += 2;
+
+    /* Send curve */
+    SpiDrv::sendParam(curve);
+    commandSize += 2;
+
+    /* Send key */
+    SpiDrv::sendBuffer((uint8_t*)key, keySize, LAST_PARAM);
+    commandSize += keySize + 1;
+
+    // pad to multiple of 4
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t result = 0;
+    uint8_t len = 1;
+    SpiDrv::waitResponseCmd(BRSSL_SET_EC_TA, PARAM_NUMS_1, (uint8_t*)&result, &len);
+
+    SpiDrv::spiSlaveDeselect();
+
+    // if everything went ok the returned value is 0
+    return result == 0;
+}
+
+int ServerDrv::errorCodeBearSSL()
+{
+    WAIT_FOR_SLAVE_SELECT();
+
+    // Send Command
+    SpiDrv::sendCmd(BRSSL_ERROR_CODE, PARAM_NUMS_0);
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    int _data = 0;
+    uint8_t _dataLen = 0;
+    SpiDrv::waitResponseCmd(BRSSL_ERROR_CODE, PARAM_NUMS_1, (uint8_t*)&_data, &_dataLen);
 
     SpiDrv::spiSlaveDeselect();
 

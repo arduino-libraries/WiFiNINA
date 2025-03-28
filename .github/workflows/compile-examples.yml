@@ -29,17 +29,80 @@ jobs:
 
     env:
       SKETCHES_REPORTS_PATH: sketches-reports
-
+      UNIVERSAL_SKETCH_PATHS: |
+        - examples/AP_SimpleWebServer
+        - examples/ConnectNoEncryption
+        - examples/ConnectWithWEP
+        - examples/ConnectWithWPA
+        - examples/ConnectWithWPA2Enterprise
+        - examples/Prefs2Struct
+        - examples/ScanNetworks
+        - examples/ScanNetworksAdvanced
+        - examples/SimpleWebServerWiFi
+        - examples/WiFiAdvancedChatServer
+        - examples/WiFiChatServer
+        - examples/WiFiPing
+        - examples/WiFiSSLClient
+        - examples/WiFiStorage
+        - examples/WiFiUdpNtpClient
+        - examples/WiFiUdpSendReceiveString
+        - examples/WiFiWebClient
+        - examples/WiFiWebClientRepeating
+        - examples/WiFiWebServer
     strategy:
       fail-fast: false
 
       matrix:
         board:
           - fqbn: arduino:samd:mkrwifi1010
+            platforms: |
+              - name: arduino:samd
+            artifact-name-suffix: arduino-samd-mkrwifi1010
           - fqbn: arduino:samd:mkrvidor4000
+            platforms: |
+              - name: arduino:samd
+            artifact-name-suffix: arduino-samd-mkrvidor4000
           - fqbn: arduino:samd:nano_33_iot
+            platforms: |
+              - name: arduino:samd
+            artifact-name-suffix: arduino-samd-nano_33_iot
           - fqbn: arduino:megaavr:uno2018:mode=on
+            platforms: |
+              - name: arduino:megaavr
+            artifact-name-suffix: arduino-megaavr-uno2018
           - fqbn: arduino:mbed_nano:nanorp2040connect
+            platforms: |
+              - name: arduino:mbed_nano
+            artifact-name-suffix: arduino-mbed_nano-nanorp2040connect
+
+        include:
+          # mkrwifi1010
+          - board:
+              fqbn: arduino:samd:mkrwifi1010
+            sketch-paths: |
+              - examples/PreferencesCounter
+              - examples/PreferencesValidation
+          # mkrvidor4000
+          - board:
+              fqbn: arduino:samd:mkrvidor4000
+            sketch-paths: |
+              - examples/PreferencesCounter
+              - examples/PreferencesValidation
+          # nano_33_iot
+          - board:
+              fqbn: arduino:samd:nano_33_iot
+            sketch-paths: |
+              - examples/PreferencesCounter
+              - examples/PreferencesValidation
+          # uno2018
+          - board:
+              fqbn: arduino:megaavr:uno2018:mode=on
+          # nanorp2040connect
+          - board:
+              fqbn: arduino:mbed_nano:nanorp2040connect
+            sketch-paths: |
+              - examples/PreferencesCounter
+              - examples/PreferencesValidation
 
     steps:
       - name: Checkout
@@ -56,13 +119,13 @@ jobs:
             # Install library dependencies.
             - name: VidorPeripherals
           sketch-paths: |
-            - ./examples/
+            ${{ matrix.sketch-paths }}
           enable-deltas-report: true
           sketches-report-path: ${{ env.SKETCHES_REPORTS_PATH }}
 
       - name: Save memory usage change report as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
-          name: ${{ env.SKETCHES_REPORTS_PATH }}
           path: ${{ env.SKETCHES_REPORTS_PATH }}
+          name: sketches-report-${{ matrix.board.artifact-name-suffix }}

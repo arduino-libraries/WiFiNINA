@@ -26,6 +26,7 @@
 #include "IPAddress.h"
 #include "WiFiUdp.h"
 #include "WiFiClient.h"
+#include "WiFiPreferences.h"
 
 // Key index length
 #define KEY_IDX_LEN     1
@@ -182,6 +183,13 @@ public:
     static void getGatewayIP(IPAddress& ip);
 
     /*
+     * Get the DNS servers IP addresses.
+     *
+     * return: copy the DNS servers IP addresses into IPAddress objects
+     */
+    static void getDNS(IPAddress& dnsip0, IPAddress& dnsip1);
+
+    /*
      * Return the current SSID associated with the network
      *
      * return: SSID string
@@ -272,6 +280,7 @@ public:
     static const char* getFwVersion();
 
     static uint32_t getTime();
+    static int setTime(uint32_t epochTime);
 
     static void setPowerMode(uint8_t mode);
 
@@ -316,6 +325,16 @@ public:
         *len = length;
         return length >= 0;
     };
+
+    static bool prefBegin(const char * name, bool readOnly=false, const char* partition_label=NULL);
+    static void prefEnd();
+    static bool prefClear();
+    static bool prefRemove(const char * key);
+    static size_t prefLen(const char * key);
+    static size_t prefStat();
+    static size_t prefPut(const char * key, PreferenceType type, uint8_t value[], size_t len);
+    static size_t prefGet(const char * key, PreferenceType type, uint8_t value[], size_t len);
+    static PreferenceType prefGetType(const char * key);
 
     static void applyOTA();
 
