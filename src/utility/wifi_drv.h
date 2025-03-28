@@ -278,6 +278,7 @@ public:
      * result: version as string with this format a.b.c
      */
     static const char* getFwVersion();
+    static uint32_t getFwVersionU32();
 
     static uint32_t getTime();
     static int setTime(uint32_t epochTime);

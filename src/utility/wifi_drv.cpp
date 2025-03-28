@@ -840,6 +840,28 @@ const char*  WiFiDrv::getFwVersion()
     return fwVersion;
 }
 
+uint32_t  WiFiDrv::getFwVersionU32()
+{
+	WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(GET_FW_VERSION_U32_CMD, PARAM_NUMS_0);
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data[4] = {0,0,0,0};
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(GET_FW_VERSION_U32_CMD, PARAM_NUMS_1, _data, &_dataLen))
+    {
+        WARN("error waitResponse");
+    }
+    SpiDrv::spiSlaveDeselect();
+    return _data[0] << 16| _data[1] << 8 | _data[2];
+}
+
 uint32_t WiFiDrv::getTime()
 {
     WAIT_FOR_SLAVE_SELECT();

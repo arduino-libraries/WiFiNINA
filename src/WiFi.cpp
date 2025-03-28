@@ -41,6 +41,11 @@ const char* WiFiClass::firmwareVersion()
 	return WiFiDrv::getFwVersion();
 }
 
+uint32_t WiFiClass::firmwareVersionU32()
+{
+	return WiFiDrv::getFwVersionU32();
+}
+
 int WiFiClass::begin(const char* ssid)
 {
 	uint8_t status = WL_IDLE_STATUS;

@@ -118,6 +118,7 @@ enum {
     PREFERENCES_GETTYPE      = 0x5D,
 
     // regular format commands
+    GET_FW_VERSION_U32_CMD   = 0x5E,
     SET_TIME_CMD             = 0x5F,
 
     // regular format commands
