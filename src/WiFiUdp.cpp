@@ -21,7 +21,7 @@
 #include <string.h>
 
 extern "C" {
-  #include "utility/debug.h"
+  //#include "utility/debug.h"
   #include "utility/wifi_spi.h"
 }
 

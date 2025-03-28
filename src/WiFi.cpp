@@ -24,7 +24,7 @@
 extern "C" {
   #include "utility/wl_definitions.h"
   #include "utility/wl_types.h"
-  #include "utility/debug.h"
+  //#include "utility/debug.h"
 }
 
 WiFiClass::WiFiClass() : _timeout(50000), _feed_watchdog_func(0)
