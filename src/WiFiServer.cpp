@@ -29,6 +29,13 @@ extern "C" {
 #include "WiFiClient.h"
 #include "WiFiServer.h"
 
+WiFiServer::WiFiServer() :
+  _sock(NO_SOCKET_AVAIL),
+  _lastSock(NO_SOCKET_AVAIL)
+{
+    _port = 80;
+}
+
 WiFiServer::WiFiServer(uint16_t port) :
   _sock(NO_SOCKET_AVAIL),
   _lastSock(NO_SOCKET_AVAIL)
@@ -38,10 +45,27 @@ WiFiServer::WiFiServer(uint16_t port) :
 
 void WiFiServer::begin()
 {
+    end();
     _sock = ServerDrv::getSocket();
     if (_sock != NO_SOCKET_AVAIL)
     {
         ServerDrv::startServer(_port, _sock);
+    }
+}
+
+void WiFiServer::begin(uint16_t port)
+{
+    end();
+    _port = port;
+    begin();
+}
+
+void WiFiServer::end()
+{
+    if (_sock != NO_SOCKET_AVAIL) {
+      ServerDrv::stopServer(_sock);
+      _sock = NO_SOCKET_AVAIL;
+      _lastSock = NO_SOCKET_AVAIL;
     }
 }
 

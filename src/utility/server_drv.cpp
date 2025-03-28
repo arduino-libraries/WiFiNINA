@@ -84,6 +84,28 @@ void ServerDrv::startServer(uint32_t ipAddress, uint16_t port, uint8_t sock, uin
     SpiDrv::spiSlaveDeselect();
 }
 
+void ServerDrv::stopServer(uint8_t sock)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(STOP_SERVER_TCP_CMD, PARAM_NUMS_1);
+    SpiDrv::sendParam(&sock, 1, LAST_PARAM);
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(STOP_SERVER_TCP_CMD, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+    }
+    SpiDrv::spiSlaveDeselect();
+}
+
 // Start server TCP on port specified
 void ServerDrv::startClient(uint32_t ipAddress, uint16_t port, uint8_t sock, uint8_t protMode)
 {
