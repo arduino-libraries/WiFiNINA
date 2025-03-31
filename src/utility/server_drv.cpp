@@ -549,11 +549,11 @@ uint8_t ServerDrv::setECTrustAnchorBearSSL(const uint8_t *dName, uint32_t dNameS
 
     /* Send flags */
     SpiDrv::sendParam(flags);
-    commandSize += 2;
+    commandSize += 3;
 
     /* Send curve */
     SpiDrv::sendParam(curve);
-    commandSize += 2;
+    commandSize += 3;
 
     /* Send key */
     SpiDrv::sendBuffer((uint8_t*)key, keySize, LAST_PARAM);
