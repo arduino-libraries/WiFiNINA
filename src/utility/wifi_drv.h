@@ -332,7 +332,7 @@ public:
     static bool prefRemove(const char * key);
     static size_t prefLen(const char * key);
     static size_t prefStat();
-    static size_t prefPut(const char * key, PreferenceType type, uint8_t value[], size_t len);
+    static size_t prefPut(const char * key, PreferenceType type, const uint8_t value[], size_t len);
     static size_t prefGet(const char * key, PreferenceType type, uint8_t value[], size_t len);
     static PreferenceType prefGetType(const char * key);
 
