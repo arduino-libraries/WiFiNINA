@@ -83,19 +83,19 @@ public:
 */
     static int waitResponse(uint8_t cmd, uint8_t* numParamRead, uint8_t** params, uint8_t maxNumParams);
 
-    static void sendParam(uint8_t* param, uint8_t param_len, uint8_t lastParam = NO_LAST_PARAM);
+    static void sendParam(const uint8_t* param, uint8_t param_len, uint8_t lastParam = NO_LAST_PARAM);
 
-    static void sendParamNoLen(uint8_t* param, size_t param_len, uint8_t lastParam = NO_LAST_PARAM);
+    static void sendParamNoLen(const uint8_t* param, size_t param_len, uint8_t lastParam = NO_LAST_PARAM);
 
-    static void sendParamLen8(uint8_t param_len);
+    static void sendParamLen8(const uint8_t param_len);
 
-    static void sendParamLen16(uint16_t param_len);
+    static void sendParamLen16(const uint16_t param_len);
 
     static uint8_t readParamLen8(uint8_t* param_len = NULL);
 
     static uint16_t readParamLen16(uint16_t* param_len = NULL);
 
-    static void sendBuffer(uint8_t* param, uint16_t param_len, uint8_t lastParam = NO_LAST_PARAM);
+    static void sendBuffer(const uint8_t* param, uint16_t param_len, uint8_t lastParam = NO_LAST_PARAM);
 
     static void sendParam(uint16_t param, uint8_t lastParam = NO_LAST_PARAM);
 

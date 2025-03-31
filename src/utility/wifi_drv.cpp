@@ -1513,7 +1513,7 @@ size_t WiFiDrv::prefStat() {
     return result;
 }
 
-size_t WiFiDrv::prefPut(const char * key, PreferenceType type, uint8_t value[], size_t len) {
+size_t WiFiDrv::prefPut(const char * key, PreferenceType type, const uint8_t value[], size_t len) {
     WAIT_FOR_SLAVE_SELECT();
 
     int commandSize = 4;
@@ -1525,7 +1525,7 @@ size_t WiFiDrv::prefPut(const char * key, PreferenceType type, uint8_t value[], 
     SpiDrv::sendParam((uint8_t*)&type, 1);
     commandSize += 2;
 
-    SpiDrv::sendBuffer((uint8_t*)value, len, LAST_PARAM);
+    SpiDrv::sendBuffer(value, len, LAST_PARAM);
     commandSize += len + 1;
 
     // pad to multiple of 4
