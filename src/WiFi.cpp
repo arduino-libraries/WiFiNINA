@@ -192,19 +192,26 @@ uint8_t WiFiClass::beginEnterprise(const char* ssid, const char* username, const
 
 void WiFiClass::config(IPAddress local_ip)
 {
-	WiFiDrv::config(1, (uint32_t)local_ip, 0, 0);
+  // Assume the DNS server will be the machine on the same network as the local IP
+  // but with last octet being '1'
+  IPAddress dns = local_ip;
+  dns[3] = 1;
+  config(local_ip, dns);
 }
 
 void WiFiClass::config(IPAddress local_ip, IPAddress dns_server)
 {
-	WiFiDrv::config(1, (uint32_t)local_ip, 0, 0);
-	WiFiDrv::setDNS(1, (uint32_t)dns_server, 0);
+  // Assume the gateway will be the machine on the same network as the local IP
+  // but with last octet being '1'
+  IPAddress gateway = local_ip;
+  gateway[3] = 1;
+  config(local_ip, dns_server, gateway);
 }
 
 void WiFiClass::config(IPAddress local_ip, IPAddress dns_server, IPAddress gateway)
 {
-	WiFiDrv::config(2, (uint32_t)local_ip, (uint32_t)gateway, 0);
-	WiFiDrv::setDNS(1, (uint32_t)dns_server, 0);
+  IPAddress subnet(255, 255, 255, 0);
+  config(local_ip, dns_server, gateway, subnet);
 }
 
 void WiFiClass::config(IPAddress local_ip, IPAddress dns_server, IPAddress gateway, IPAddress subnet)
