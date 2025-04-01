@@ -24,24 +24,8 @@
 #include <inttypes.h>
 #include "utility/wl_definitions.h"
 
-#define CMD_FLAG            0
-#define REPLY_FLAG          1<<7
-#define DATA_FLAG           0x40
-
-#define WIFI_SPI_ACK        1
-#define WIFI_SPI_ERR        0xFF
-
-#define TIMEOUT_CHAR        1000
-
 //#define    MAX_SOCK_NUM     4    /**< Maximum number of socket  */
 #define NO_SOCKET_AVAIL     255
-
-#define START_CMD           0xE0
-#define END_CMD             0xEE
-#define ERR_CMD             0xEF
-#define CMD_POS             1        // Position of Command OpCode on SPI stream
-#define PARAM_LEN_POS       2        // Position of Param len on SPI stream
-
 
 enum {
     SET_NET_CMD              = 0x10,
