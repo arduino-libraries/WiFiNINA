@@ -545,7 +545,7 @@ uint8_t ServerDrv::setECTrustAnchorBearSSL(const uint8_t *dName, uint32_t dNameS
 
     /* Send distinguished name */
     SpiDrv::sendBuffer((uint8_t*)dName, dNameSize);
-    commandSize += dNameSize + 1;
+    commandSize += dNameSize;
 
     /* Send flags */
     SpiDrv::sendParam(flags);
@@ -557,7 +557,7 @@ uint8_t ServerDrv::setECTrustAnchorBearSSL(const uint8_t *dName, uint32_t dNameS
 
     /* Send key */
     SpiDrv::sendBuffer((uint8_t*)key, keySize, LAST_PARAM);
-    commandSize += keySize + 1;
+    commandSize += keySize;
 
     // pad to multiple of 4
     while (commandSize % 4) {
