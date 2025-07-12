@@ -88,6 +88,9 @@ void printEncryptionType(int thisType) {
     case ENC_TYPE_CCMP:
       Serial.println("WPA2");
       break;
+    case ENC_TYPE_GCMP:
+      Serial.println("WPA3");
+      break;
     case ENC_TYPE_NONE:
       Serial.println("None");
       break;
@@ -96,7 +99,9 @@ void printEncryptionType(int thisType) {
       break;
     case ENC_TYPE_UNKNOWN:
     default:
-      Serial.println("Unknown");
+      Serial.println("Unknown (");
+      Serial.print(thisType);
+      Serial.println(")");
       break;
   }
 }
