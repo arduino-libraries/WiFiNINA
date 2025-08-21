@@ -23,7 +23,7 @@
 
 #include <inttypes.h>
 #include "utility/wifi_spi.h"
-#include "IPAddress.h"
+#include "api/IPAddress.h"
 #include "WiFiUdp.h"
 #include "WiFiClient.h"
 
