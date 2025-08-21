@@ -63,9 +63,12 @@ int WiFiClient::connect(IPAddress ip, uint16_t port) {
 
     	unsigned long start = millis();
 
-    	// wait 4 second for the connection to close
+    	// wait 10 second for the connection to close
     	while (!connected() && millis() - start < 10000)
+        {
     		delay(1);
+            WiFi.feedWatchdog();
+        }
 
     	if (!connected())
        	{
@@ -92,9 +95,12 @@ int WiFiClient::connectSSL(IPAddress ip, uint16_t port)
 
       unsigned long start = millis();
 
-      // wait 4 second for the connection to close
+      // wait 10 second for the connection to close
       while (!connected() && millis() - start < 10000)
-        delay(1);
+      {
+          delay(1);
+          WiFi.feedWatchdog();
+      }
 
       if (!connected())
         {
@@ -121,9 +127,12 @@ int WiFiClient::connectSSL(const char *host, uint16_t port)
 
       unsigned long start = millis();
 
-      // wait 4 second for the connection to close
+      // wait 10 second for the connection to close
       while (!connected() && millis() - start < 10000)
-        delay(1);
+      {
+          delay(1);
+          WiFi.feedWatchdog();
+      }
 
       if (!connected())
         {
@@ -150,9 +159,12 @@ int WiFiClient::connectBearSSL(IPAddress ip, uint16_t port)
 
       unsigned long start = millis();
 
-      // wait 4 second for the connection to close
+      // wait 10 second for the connection to close
       while (!connected() && millis() - start < 10000)
-        delay(1);
+      {
+          delay(1);
+          WiFi.feedWatchdog();
+      }
 
       if (!connected())
         {
@@ -179,9 +191,12 @@ int WiFiClient::connectBearSSL(const char *host, uint16_t port)
 
       unsigned long start = millis();
 
-      // wait 4 second for the connection to close
+      // wait 10 second for the connection to close
       while (!connected() && millis() - start < 10000)
-        delay(1);
+      {
+          delay(1);
+          WiFi.feedWatchdog();
+      }
 
       if (!connected())
         {
@@ -301,7 +316,10 @@ void WiFiClient::stop() {
   int count = 0;
   // wait maximum 5 secs for the connection to close
   while (status() != CLOSED && ++count < 50)
-    delay(100);
+  {
+      delay(100);
+      WiFi.feedWatchdog();
+  }
 
   WiFiSocketBuffer.close(_sock);
   _sock = 255;
