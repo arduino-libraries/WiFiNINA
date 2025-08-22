@@ -25,6 +25,8 @@
 #define WIFI_HAS_FEED_WATCHDOG_FUNC
 
 #include <inttypes.h>
+#include <Arduino.h>
+#include <SPI.h>
 
 extern "C" {
 	#include "utility/wl_definitions.h"
@@ -285,6 +287,9 @@ public:
     int ping(const String &hostname, uint8_t ttl = 128);
     int ping(IPAddress host, uint8_t ttl = 128);
 
+
+    void setPins(int8_t cs=10, int8_t ready=7, int8_t reset=5, int8_t gpio0=6, SPIClass *spi = &SPI);
+    void setLEDs(uint8_t red, uint8_t green, uint8_t blue);
     void setTimeout(unsigned long timeout);
 
     void setFeedWatchdogFunc(FeedHostProcessorWatchdogFuncPointer func);
