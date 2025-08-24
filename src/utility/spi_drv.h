@@ -70,6 +70,8 @@ public:
     static char readChar();
 
     static int waitResponseParams(uint8_t cmd, uint8_t numParam, tParam* params);
+
+    static int waitResponseParams(uint8_t cmd, uint8_t numParam, tDataParam* params);
     
     static int waitResponseCmd(uint8_t cmd, uint8_t numParam, uint8_t* param, uint8_t* param_len);
 
