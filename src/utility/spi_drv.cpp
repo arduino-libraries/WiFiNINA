@@ -215,16 +215,16 @@ void SpiDrv::waitForSlaveSign()
 	while (!waitSlaveSign());
 }
 
-void SpiDrv::waitForSlaveReady(bool const feed_watchdog)
+void SpiDrv::waitForSlaveReady()
 {
-    unsigned long const start = millis();
+    unsigned long trigger_time = millis();
 	while (!waitSlaveReady())
     {
-        if (feed_watchdog) {
-            if ((millis() - start) < 10000) {
-                WiFi.feedWatchdog();
-            }
+        if (static_cast<int32_t>(trigger_time - millis()) <=0) {
+            WiFi.feedWatchdog();
+            trigger_time = millis() + 10000;
         }
+        delay(10);
     }
 }
 
