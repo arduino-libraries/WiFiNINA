@@ -47,7 +47,7 @@ void setup() {
   pinMode(NINA_RESETN, OUTPUT);
 #endif
 
-#ifdef ARDUINO_AVR_UNO_WIFI_REV2
+#if defined(ARDUINO_AVR_UNO_WIFI_REV2) || defined(ARDUINO_NANO_RP2040_CONNECT)
   // manually put the NINA in upload mode
   digitalWrite(NINA_GPIO0, LOW);
 
@@ -60,7 +60,7 @@ void setup() {
 }
 
 void loop() {
-#ifndef ARDUINO_AVR_UNO_WIFI_REV2
+#if !defined(ARDUINO_AVR_UNO_WIFI_REV2) && !defined(ARDUINO_NANO_RP2040_CONNECT)
   if (rts != Serial.rts()) {
 #ifdef ARDUINO_SAMD_MKRVIDOR4000
     FPGA.digitalWrite(FPGA_SPIWIFI_RESET, (Serial.rts() == 1) ? LOW : HIGH);
@@ -90,7 +90,7 @@ void loop() {
     Serial.write(SerialNina.read());
   }
 
-#ifndef ARDUINO_AVR_UNO_WIFI_REV2
+#if !defined(ARDUINO_AVR_UNO_WIFI_REV2) && !defined(ARDUINO_NANO_RP2040_CONNECT)
   // check if the USB virtual serial wants a new baud rate
   if (Serial.baud() != baud) {
     rts = -1;

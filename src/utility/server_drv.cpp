@@ -23,7 +23,7 @@
 #include "utility/server_drv.h"
 
 #include "Arduino.h"
-#include "utility/spi_drv.h"
+#include <spi_drv.h>
 
 extern "C" {
 #include "utility/wl_types.h"

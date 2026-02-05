@@ -22,7 +22,7 @@ extern "C" {
   #include "utility/wl_definitions.h"
   #include "utility/wl_types.h"
   #include "string.h"
-  #include "utility/debug.h"
+  //#include "utility/debug.h"
 }
 
 
