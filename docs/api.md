@@ -1877,7 +1877,7 @@ void loop() {
 }
 ```
 
-### `WiFiSSLClient`
+### `WiFiSSLClient()`
 
 #### Description
 This class allows to create a client that always connects in SSL to the specified IP address and port, even if client.connect() is used instead of client.connectSSL(). This is useful If you have a library that accepts only plain Client, but you want to force it to use SSL, keeping the same method names of the non SSL client.
