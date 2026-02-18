@@ -1806,13 +1806,13 @@ WiFi.getTime();
 
 ## Client Class
 
-### `Client()`
+### `Client`
 
 #### Description
 
 Client is the base class for all WiFi client based calls. It is not called directly, but invoked whenever you use a function that relies on it.
 
-### `WiFiClient()`
+### `WiFiClient`
 
 #### Description
 
@@ -2705,13 +2705,13 @@ The port of the remote host that the client is connected to
 
 ## Server Class
 
-### `Server()`
+### `Server`
 
 #### Description
 
 Server is the base class for all WiFi server based calls. It is not called directly, but invoked whenever you use a function that relies on it.
 
-### `WiFiServer()`
+### `WiFiServer`
 
 #### Description
 
