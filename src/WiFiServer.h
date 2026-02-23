@@ -25,7 +25,7 @@ extern "C" {
   #include "utility/wl_definitions.h"
 }
 
-#include "Server.h"
+#include "api/Server.h"
 
 class WiFiClient;
 
