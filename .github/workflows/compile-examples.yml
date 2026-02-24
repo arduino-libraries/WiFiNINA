@@ -118,6 +118,7 @@ jobs:
             - source-path: ./
             # Install library dependencies.
             - name: VidorPeripherals
+            - name: Arduino_SpiNINA
           sketch-paths: |
             ${{ matrix.sketch-paths }}
           enable-deltas-report: true
