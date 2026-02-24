@@ -32,12 +32,16 @@ public:
   WiFiClient(uint8_t sock);
 
   uint8_t status();
+  void setConnectionTimeout(uint16_t timeout) {_connTimeout = timeout;}
+
   virtual int connect(IPAddress ip, uint16_t port);
   virtual int connect(const char *host, uint16_t port);
   virtual int connectSSL(IPAddress ip, uint16_t port);
   virtual int connectSSL(const char *host, uint16_t port);
   virtual int connectBearSSL(IPAddress ip, uint16_t port);
   virtual int connectBearSSL(const char *host, uint16_t port);
+  virtual int setECTrustAnchorBearSSL(const uint8_t *dName, uint32_t dNameSize, uint16_t flags, uint16_t curve, const uint8_t *key, uint32_t keySize);
+  virtual int errorCodeBearSSL();
   virtual size_t write(uint8_t);
   virtual size_t write(const uint8_t *buf, size_t size);
   virtual size_t retry(const uint8_t *buf, size_t size, bool write);
@@ -61,8 +65,8 @@ public:
 
 private:
   static uint16_t _srcport;
-  uint8_t _sock;   //not used
-  uint16_t  _socket;
+  uint8_t _sock;
+  uint16_t  _connTimeout = 0;
   bool _retrySend;
 };
 

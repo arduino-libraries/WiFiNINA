@@ -22,7 +22,7 @@ extern "C" {
   #include "utility/wl_definitions.h"
   #include "utility/wl_types.h"
   #include "string.h"
-  #include "utility/debug.h"
+  //#include "utility/debug.h"
 }
 
 
@@ -59,13 +59,7 @@ int WiFiClient::connect(IPAddress ip, uint16_t port) {
     _sock = ServerDrv::getSocket();
     if (_sock != NO_SOCKET_AVAIL)
     {
-    	ServerDrv::startClient(uint32_t(ip), port, _sock);
-
-    	unsigned long start = millis();
-
-    	// wait 4 second for the connection to close
-    	while (!connected() && millis() - start < 10000)
-    		delay(1);
+    	ServerDrv::startClient(nullptr, 0, uint32_t(ip), port, _sock, TCP_MODE, _connTimeout);
 
     	if (!connected())
        	{
@@ -88,13 +82,7 @@ int WiFiClient::connectSSL(IPAddress ip, uint16_t port)
     _sock = ServerDrv::getSocket();
     if (_sock != NO_SOCKET_AVAIL)
     {
-      ServerDrv::startClient(uint32_t(ip), port, _sock, TLS_MODE);
-
-      unsigned long start = millis();
-
-      // wait 4 second for the connection to close
-      while (!connected() && millis() - start < 10000)
-        delay(1);
+      ServerDrv::startClient(nullptr, 0, uint32_t(ip), port, _sock, TLS_MODE, _connTimeout);
 
       if (!connected())
         {
@@ -117,13 +105,7 @@ int WiFiClient::connectSSL(const char *host, uint16_t port)
     _sock = ServerDrv::getSocket();
     if (_sock != NO_SOCKET_AVAIL)
     {
-      ServerDrv::startClient(host, strlen(host), uint32_t(0), port, _sock, TLS_MODE);
-
-      unsigned long start = millis();
-
-      // wait 4 second for the connection to close
-      while (!connected() && millis() - start < 10000)
-        delay(1);
+      ServerDrv::startClient(host, strlen(host), uint32_t(0), port, _sock, TLS_MODE, _connTimeout);
 
       if (!connected())
         {
@@ -146,13 +128,7 @@ int WiFiClient::connectBearSSL(IPAddress ip, uint16_t port)
     _sock = ServerDrv::getSocket();
     if (_sock != NO_SOCKET_AVAIL)
     {
-      ServerDrv::startClient(uint32_t(ip), port, _sock, TLS_BEARSSL_MODE);
-
-      unsigned long start = millis();
-
-      // wait 4 second for the connection to close
-      while (!connected() && millis() - start < 10000)
-        delay(1);
+      ServerDrv::startClient(nullptr, 0, uint32_t(ip), port, _sock, TLS_BEARSSL_MODE, _connTimeout);
 
       if (!connected())
         {
@@ -175,13 +151,7 @@ int WiFiClient::connectBearSSL(const char *host, uint16_t port)
     _sock = ServerDrv::getSocket();
     if (_sock != NO_SOCKET_AVAIL)
     {
-      ServerDrv::startClient(host, strlen(host), uint32_t(0), port, _sock, TLS_BEARSSL_MODE);
-
-      unsigned long start = millis();
-
-      // wait 4 second for the connection to close
-      while (!connected() && millis() - start < 10000)
-        delay(1);
+      ServerDrv::startClient(host, strlen(host), uint32_t(0), port, _sock, TLS_BEARSSL_MODE, _connTimeout);
 
       if (!connected())
         {
@@ -192,6 +162,16 @@ int WiFiClient::connectBearSSL(const char *host, uint16_t port)
       return 0;
     }
     return 1;
+}
+
+int WiFiClient::setECTrustAnchorBearSSL(const uint8_t *dName, uint32_t dNameSize, uint16_t flags, uint16_t curve, const uint8_t *key, uint32_t keySize)
+{
+  return ServerDrv::setECTrustAnchorBearSSL(dName, dNameSize, flags, curve, key, keySize);
+}
+
+int WiFiClient::errorCodeBearSSL()
+{
+  return ServerDrv::errorCodeBearSSL();
 }
 
 size_t WiFiClient::write(uint8_t b) {

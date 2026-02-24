@@ -21,7 +21,7 @@
 #ifndef WiFi_h
 #define WiFi_h
 
-#define WIFI_FIRMWARE_LATEST_VERSION "2.0.0"
+#define WIFI_FIRMWARE_LATEST_VERSION "3.0.1"
 #define WIFI_HAS_FEED_WATCHDOG_FUNC
 
 #include <inttypes.h>
@@ -53,6 +53,7 @@ public:
      * Get firmware version
      */
     static const char* firmwareVersion();
+    uint32_t firmwareVersionU32();
 
 
     /* Start WiFi connection for OPEN networks
@@ -277,6 +278,7 @@ public:
     int hostByName(const char* aHostname, IPAddress& aResult);
 
     unsigned long getTime();
+    int setTime(unsigned long unixTime);
 
     void lowPowerMode();
     void noLowPowerMode();

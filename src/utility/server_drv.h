@@ -35,12 +35,14 @@ public:
 
     static void startServer(uint32_t ipAddress, uint16_t port, uint8_t sock, uint8_t protMode=TCP_MODE);
 
+    static void stopServer(uint8_t sock);
+
     static void startClient(uint32_t ipAddress, uint16_t port, uint8_t sock, uint8_t protMode=TCP_MODE);
 
-    static void startClient(const char* host, uint8_t host_len, uint32_t ipAddress, uint16_t port, uint8_t sock, uint8_t protMode=TCP_MODE);
+    static void startClient(const char* host, uint8_t host_len, uint32_t ipAddress, uint16_t port, uint8_t sock, uint8_t protMode=TCP_MODE, uint16_t timeout = 0);
 
     static void stopClient(uint8_t sock);
-                                                                                  
+
     static uint8_t getServerState(uint8_t sock);
 
     static uint8_t getClientState(uint8_t sock);
@@ -62,6 +64,10 @@ public:
     static uint8_t checkDataSent(uint8_t sock);
 
     static uint8_t getSocket();
+
+    static uint8_t setECTrustAnchorBearSSL(const uint8_t *dName, uint32_t dNameSize, uint16_t flags, uint16_t curve, const uint8_t *key, uint32_t keySize);
+
+    static int errorCodeBearSSL();
 };
 
 extern ServerDrv serverDrv;
