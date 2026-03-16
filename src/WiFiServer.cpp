@@ -86,7 +86,9 @@ WiFiClient WiFiServer::available(byte* status)
       if (sock == NO_SOCKET_AVAIL) {
           // check for new client socket
           sock = ServerDrv::availServer(_sock);
-      }
+      } else {
+          _lastSock = NO_SOCKET_AVAIL;
+      }    
     }
 
     if (sock != NO_SOCKET_AVAIL) {
