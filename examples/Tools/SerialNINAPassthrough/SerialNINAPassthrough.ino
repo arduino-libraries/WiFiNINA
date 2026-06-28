@@ -47,7 +47,7 @@ void setup() {
   pinMode(NINA_RESETN, OUTPUT);
 #endif
 
-#if defined(ARDUINO_AVR_UNO_WIFI_REV2) || ((defined(ARDUINO_NANO_RP2040_CONNECT) && defined(ARDUINO_ARCH_ZEPHYR))
+#if defined(ARDUINO_AVR_UNO_WIFI_REV2) || ((defined(ARDUINO_NANO_RP2040_CONNECT) && defined(ARDUINO_ARCH_ZEPHYR)))
   // manually put the NINA in upload mode
   digitalWrite(NINA_GPIO0, LOW);
 
@@ -61,7 +61,7 @@ void setup() {
 
 void loop() {
 // on ArduinoCore-zephyr we cannot change dts/rts at runtime, at the cost of running serial at slower baudrate we cannot enable it
-#if !defined(ARDUINO_AVR_UNO_WIFI_REV2) && !((defined(ARDUINO_NANO_RP2040_CONNECT) && defined(ARDUINO_ARCH_ZEPHYR))
+#if !defined(ARDUINO_AVR_UNO_WIFI_REV2) && !((defined(ARDUINO_NANO_RP2040_CONNECT) && defined(ARDUINO_ARCH_ZEPHYR)))
   if (rts != Serial.rts()) {
 #ifdef ARDUINO_SAMD_MKRVIDOR4000
     FPGA.digitalWrite(FPGA_SPIWIFI_RESET, (Serial.rts() == 1) ? LOW : HIGH);
@@ -91,7 +91,7 @@ void loop() {
     Serial.write(SerialNina.read());
   }
 
-#if !defined(ARDUINO_AVR_UNO_WIFI_REV2) && !((defined(ARDUINO_NANO_RP2040_CONNECT) && defined(ARDUINO_ARCH_ZEPHYR))
+#if !defined(ARDUINO_AVR_UNO_WIFI_REV2) && !((defined(ARDUINO_NANO_RP2040_CONNECT) && defined(ARDUINO_ARCH_ZEPHYR)))
   // check if the USB virtual serial wants a new baud rate
   if (Serial.baud() != baud) {
     rts = -1;
