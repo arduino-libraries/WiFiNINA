@@ -1362,16 +1362,20 @@ int8_t WiFiDrv::fileOperation(uint8_t operation, const char *filename, uint8_t f
         numParams = PARAM_NUMS_4;
     }
 
-    SpiDrv::sendCmd(operation, numParams);
-    SpiDrv::sendParam((uint8_t*)&offset, sizeof(offset), NO_LAST_PARAM);
-    SpiDrv::sendParam((uint8_t*)&len, sizeof(len), NO_LAST_PARAM);
-    SpiDrv::sendParam((uint8_t*)filename, filename_len, (operation == WRITE_FILE) ? NO_LAST_PARAM : LAST_PARAM);
+    SpiDrv::sendCmd(operation, numParams); //send 3 bytes
+    SpiDrv::sendParam((uint8_t*)&offset, sizeof(offset), NO_LAST_PARAM); //send sizeof(offset) + 1 bytes
+    SpiDrv::sendParam((uint8_t*)&len, sizeof(len), NO_LAST_PARAM); //send sizeof(len) + 1 bytes
+    SpiDrv::sendParam((uint8_t*)filename, filename_len, (operation == WRITE_FILE) ? NO_LAST_PARAM : LAST_PARAM); // send filename_len + 1 bytes (*)
     if (operation == WRITE_FILE) {
-        SpiDrv::sendParamNoLen((uint8_t*)buffer, len, LAST_PARAM);
+        SpiDrv::sendParamNoLen((uint8_t*)buffer, len, LAST_PARAM); //send len + 1 bytes (*)
     }
+    // (*)send extra 1 byte if last param
 
     // pad to multiple of 4
-    int commandSize = 6 + numParams + sizeof(offset) + sizeof(len) + filename_len;
+    int commandSize = 4 + sizeof(offset) + sizeof(len) + filename_len + 3;
+    if (operation == WRITE_FILE) {
+        commandSize += len + 1;
+    }
     while (commandSize % 4) {
         SpiDrv::readChar();
         commandSize++;
