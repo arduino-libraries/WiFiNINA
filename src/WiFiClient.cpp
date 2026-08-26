@@ -302,8 +302,7 @@ uint8_t WiFiClient::connected() {
                       (s == CLOSE_WAIT));
 
     if (result == 0) {
-      WiFiSocketBuffer.close(_sock);
-      _sock = 255;
+      stop();
     }
 
     return result;
