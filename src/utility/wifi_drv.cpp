@@ -913,6 +913,35 @@ int WiFiDrv::setTime(uint32_t epochTime)
     return _data;
 }
 
+bool WiFiDrv::setScanMode(uint8_t mode)
+{
+    WAIT_FOR_SLAVE_SELECT();
+
+    // Send Command
+    SpiDrv::sendCmd(SET_SCAN_MODE_CMD, PARAM_NUMS_1);
+
+    SpiDrv::sendParam(&mode, 1, LAST_PARAM);
+
+    // pad to multiple of 4
+    SpiDrv::readChar();
+    SpiDrv::readChar();
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t dataLen = 0;
+    uint8_t data = 0;
+    uint8_t result = SpiDrv::waitResponseCmd(SET_SCAN_MODE_CMD, PARAM_NUMS_1, &data, &dataLen);
+
+    SpiDrv::spiSlaveDeselect();
+
+    // older firmware without this command answers with an error frame
+    return result != 0 && data == 1;
+}
+
 void WiFiDrv::setPowerMode(uint8_t mode)
 {
     WAIT_FOR_SLAVE_SELECT();
