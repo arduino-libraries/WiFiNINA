@@ -31,7 +31,7 @@ enum {
     SET_NET_CMD              = 0x10,
     SET_PASSPHRASE_CMD       = 0x11,
     SET_KEY_CMD              = 0x12,
-//    TEST_CMD                 = 0x13,
+    SET_SCAN_MODE_CMD        = 0x13,  // was TEST_CMD, long unused
     SET_IP_CONFIG_CMD        = 0x14,
     SET_DNS_CONFIG_CMD       = 0x15,
     SET_HOSTNAME_CMD         = 0x16,

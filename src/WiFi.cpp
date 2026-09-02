@@ -239,6 +239,11 @@ void WiFiClass::setHostname(const char* name)
     WiFiDrv::setHostname(name);
 }
 
+bool WiFiClass::setScanMethod(uint8_t scanMethod)
+{
+    return WiFiDrv::setScanMode(scanMethod);
+}
+
 int WiFiClass::disconnect()
 {
     return WiFiDrv::disconnect();

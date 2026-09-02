@@ -39,6 +39,10 @@ extern "C" {
 
 typedef void(*FeedHostProcessorWatchdogFuncPointer)();
 
+// values match ESP-IDF's wifi_scan_method_t on the NINA side
+#define WIFI_SCAN_MODE_FAST         0
+#define WIFI_SCAN_MODE_ALL_CHANNELS 1
+
 class WiFiClass
 {
 private:
@@ -141,6 +145,22 @@ public:
      *
      */
     void setHostname(const char* name);
+
+    /*
+     * Set the scan mode used when joining a network with begin().
+     *
+     * WIFI_SCAN_MODE_FAST (default): join the first matching access point
+     * found, scanning channels in ascending order.
+     * WIFI_SCAN_MODE_ALL_CHANNELS: scan every channel and join the matching
+     * access point with the strongest signal - recommended where several
+     * access points broadcast the same SSID (mesh / enterprise networks).
+     *
+     * Call before begin(). Takes effect on the next connection attempt.
+     *
+     * return: true on success, false if the NINA firmware predates this
+     * command (the mode is then unchanged, i.e. fast scan).
+     */
+    bool setScanMethod(uint8_t scanMethod);
 
     /*
      * Disconnect from the network

@@ -285,6 +285,8 @@ public:
 
     static void setPowerMode(uint8_t mode);
 
+    static bool setScanMode(uint8_t mode);
+
     static int8_t wifiSetApNetwork(const char* ssid, uint8_t ssid_len, uint8_t channel);
     static int8_t wifiSetApPassphrase(const char* ssid, uint8_t ssid_len, const char *passphrase, const uint8_t len, uint8_t channel);
     static int8_t wifiSetEnterprise(uint8_t eapType,
