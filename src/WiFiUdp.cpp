@@ -215,3 +215,27 @@ uint16_t  WiFiUDP::remotePort()
 	return port;
 }
 
+bool WiFiUDP::packetInfo(IPAddress* pSrcIp,
+                       uint16_t* pSrcPort,
+                       IPAddress* pDstIp)
+{
+	uint8_t rxRemoteSrcIp[4] = {0};
+  uint8_t rxRemoteSrcPort[2] = {0};
+  uint8_t rxRemoteDstIp[4] = {0};
+
+  bool result = WiFiDrv::getPacketInfo(_sock,
+                             rxRemoteSrcIp,
+                             rxRemoteSrcPort,
+                             rxRemoteDstIp);
+
+  *pSrcIp = IPAddress(rxRemoteSrcIp);
+
+  *pSrcPort = ((uint16_t)rxRemoteSrcPort[0] << 8)
+              | rxRemoteSrcPort[1];
+
+  if (pDstIp)
+		*pDstIp = IPAddress(rxRemoteDstIp);
+	
+	return result;
+}
+
