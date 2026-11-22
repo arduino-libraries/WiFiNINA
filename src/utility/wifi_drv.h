@@ -65,8 +65,8 @@ private:
      * Get remote Data information on UDP socket
      */
     static void getRemoteData(uint8_t sock, uint8_t *ip, uint8_t *port);
-		static bool getPacketInfo(
-			uint8_t sock, uint8_t *srcip, uint8_t *srcport, uint8_t *dstip);
+    static bool getPacketInfo(
+        uint8_t sock, uint8_t *srcip, uint8_t *srcport, uint8_t *dstip);
 
 public:
 
