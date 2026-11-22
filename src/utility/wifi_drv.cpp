@@ -102,6 +102,35 @@ void WiFiDrv::getRemoteData(uint8_t sock, uint8_t *ip, uint8_t *port)
     SpiDrv::spiSlaveDeselect();
 }
 
+bool WiFiDrv::getPacketInfo(uint8_t sock, 
+    uint8_t *srcip, uint8_t *srcport, uint8_t *dstip)
+{
+    uint8_t extended = 1;
+
+    tParam params[PARAM_NUMS_3] = { {0, (char*)srcip}, {0, (char*)srcport}, 
+      {0, (char*)dstip} };
+
+    WAIT_FOR_SLAVE_SELECT();
+
+    // Send Command
+    SpiDrv::sendCmd(GET_REMOTE_DATA_CMD, PARAM_NUMS_2);
+    SpiDrv::sendParam(&sock, sizeof(sock), NO_LAST_PARAM);
+    SpiDrv::sendParam(&extended, sizeof(extended), LAST_PARAM);
+
+    // The command is 8 bytes long; no padding is required.
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    int result = SpiDrv::waitResponseParams(GET_REMOTE_DATA_CMD, PARAM_NUMS_3, params);
+
+    SpiDrv::spiSlaveDeselect();
+
+    return result;
+}
 
 // Public Methods
 

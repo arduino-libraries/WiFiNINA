@@ -76,6 +76,13 @@ public:
   virtual IPAddress remoteIP();
   // Return the port of the host who sent the current incoming packet
   virtual uint16_t remotePort();
+  // Retrieve source IP, source port and destination IP of
+  // the current incoming packet in a single SPI transaction.
+  // Returns false if the extended request fails or is unsupported.
+  // A destination IP of 0.0.0.0 indicates unavailable information.
+  // The destination IP pointer may be nullptr.
+	// The source IP and source port pointers must not be nullptr.
+  bool packetInfo(IPAddress* pSrcIp, uint16_t* pSrcPort, IPAddress* pDstIp);
 
   friend class WiFiDrv;
 };
