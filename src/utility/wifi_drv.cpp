@@ -108,7 +108,7 @@ bool WiFiDrv::getPacketInfo(uint8_t sock,
     uint8_t extended = 1;
 
     tParam params[PARAM_NUMS_3] = { {0, (char*)srcip}, {0, (char*)srcport}, 
-		    {0, (char*)dstip} };
+      {0, (char*)dstip} };
 
     WAIT_FOR_SLAVE_SELECT();
 

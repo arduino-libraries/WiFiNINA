@@ -81,9 +81,8 @@ public:
   // Returns false if the extended request fails or is unsupported.
   // A destination IP of 0.0.0.0 indicates unavailable information.
   // The destination IP pointer may be nullptr.
-	bool packetInfo(IPAddress* pSrcIp,
-              uint16_t* pSrcPort,
-              IPAddress* pDstIp);
+	// The source IP and source port pointers must not be nullptr.
+  bool packetInfo(IPAddress* pSrcIp, uint16_t* pSrcPort, IPAddress* pDstIp);
 
   friend class WiFiDrv;
 };
